@@ -6,11 +6,9 @@
 #    By: mlebard <mlebard@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/01/05 16:05:10 by mlebard           #+#    #+#              #
-#    Updated: 2021/08/07 01:15:10 by mlebard          ###   ########.fr        #
+#    Updated: 2021/11/08 21:34:23 by mlebard          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
-
-SHELL			:=	/bin/zsh
 
 # NAME
 NAME			=	libft.a
@@ -34,7 +32,7 @@ OW3			=	\r\033[3A\033[K# OverWrite previous 3 lines
 
 
 # COMPILE
-CC			=	gcc
+CC			=	clang
 CFLAGS		=	-Werror -Wextra -Wall -I./
 
 LIBFT_SRCS		=	ft_atoi.c \
@@ -134,39 +132,32 @@ OBJS		=	$(addprefix $(O_DIR),$(LIBFT_OBJS))
 
 DEPEND		=	libft.h
 
-RM			=	rm -f
-
-ifdef SANITIZE
-	CFLAGS	+=	-fsanitize=address -g3
-endif
+RM			=	rm -r -f
 
 all			:
-			@echo "$(WHT)\033[4mBuilding $(NAME):\033[0m$(NC)"
+			@echo "Building $(NAME):"
 			@make --no-print-directory $(NAME)
 
 $(NAME)		:	$(OBJS) $(DEPEND)
 			@ar rc $(NAME) $(OBJS)
 			@ranlib $(NAME)
-			@echo "\n$(OW)$(GRN)$(NAME) built successfully!$(NC)"
+			@echo "$(NAME) built successfully!"
 
 $(OBJS)		:	$(O_DIR)%.o: $(S_DIR)%.c
-			@echo -n "\n$(OW)$(YLW)Compiling $<$(NC)"
+			@echo "Compiling $<"
 			@mkdir -p $(@D)
 			@$(CC) $(CFLAGS) -c $< -o $@
 
 norm		:
-			@echo "$(BLU)$(NAME): Checking norm for all source and header files$(NC)"
+			@echo "$(NAME): Checking norm for all source and header files"
 			norminette $(SRCS) $(DEPEND)
 
-sanitize	:	clean
-			make SANITIZE:=1 $(NAME)
-
 clean		:
-			@echo "$(BLU)$(NAME): cleaning objs$(NC)"
-			rm -r -f $(BIN_DIR)
+			@echo "$(NAME): cleaning objs"
+			$(RM) $(BIN_DIR)
 
 fclean		:	clean
-			@echo "$(BLU)$(NAME): cleaning $(NAME)$(NC)"
+			@echo "$(NAME): cleaning $(NAME)"
 			$(RM) $(NAME)
 
 re			:	fclean all
