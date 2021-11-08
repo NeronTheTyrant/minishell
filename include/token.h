@@ -6,14 +6,14 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 17:17:04 by mlebard           #+#    #+#             */
-/*   Updated: 2021/11/08 19:43:01 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/11/08 22:06:15 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TOKEN_H
 # define TOKEN_H
 
-#include <stdlib.h>
+#include <stddef.h>
 
 typedef enum e_toktype
 {
