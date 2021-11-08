@@ -6,11 +6,9 @@
 #    By: mlebard <mlebard@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/07/27 17:27:08 by mlebard           #+#    #+#              #
-#    Updated: 2021/11/08 19:24:37 by mlebard          ###   ########.fr        #
+#    Updated: 2021/11/08 22:00:45 by mlebard          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
-
-SHELL		:=	/bin/zsh
 
 # NAME
 NAME		=	minishell
@@ -20,62 +18,83 @@ S_DIR		=	srcs/
 I_DIR		=	include/
 BIN_DIR		=	bin/
 O_DIR		=	bin/obj/
+O_DBG_DIR	=	bin/obj/debug/
+O_FDBG_DIR	=	bin/obj/fdebug/
 LIB_DIR		=	libft/
 
-# COLORS
-YLW			=	\033[1;33m# Yellow
-GRN			=	\033[1;32m# Green
-WHT			=	\033[1;37m# White
-RED			=	\033[1;31m
-BLU			=	\033[1;34m
-NC			=	\033[0m# No Color
-
-OW			=	\r\033[1A\033[K# OverWrite previous line
-OW2			=	\r\033[2A\033[K# OverWrite previous 2 lines
-OW3			=	\r\033[3A\033[K# OverWrite previous 3 lines
-
 # COMPILE
-CC			=	gcc
+CC			=	clang
 CFLAGS		=	-Werror -Wextra -Wall -I$(I_DIR) -I$(LIB_DIR)
 LDFLAGS		=	-L $(LIB_DIR) -lft
-LEAKS		=	-fsanitize=address
+DBGFLAGS	=	-g3
+FDBGFLAGS	=	-g3 -fsanitize=address
 DEPEND		=	$(LIB_DIR)libft.h
 
 # SRCS
-SOURCES		=	main.c \
+SOURCES		=	main.c
 SRCS		=	$(addprefix $(S_DIR),$(SOURCES))
 
 # OBJS
 OBJECTS		=	$(SOURCES:.c=.o)
 OBJS		=	$(addprefix $(O_DIR),$(OBJECTS))
+DBG_OBJS	=	$(addprefix $(O_DBG_DIR),$(OBJECTS))
+FDBG_OBJS	=	$(addprefix $(O_FDBG_DIR),$(OBJECTS))
 
 all				:	libft
-				@echo "$(WHT)\033[4mBuilding $(NAME):\033[0m$(NC)"
+				@echo "Building $(NAME):"
 				@make --no-print-directory $(NAME)
 
 $(NAME)			:	$(OBJS)
-				@echo -n "\n$(OW)$(YLW)Linking $(NAME)...$(NC)"
+				@echo "Linking $(NAME)..."
 				@$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
-				@echo "\n$(OW)$(GRN)$(NAME) built successfully!$(NC)"
+				@echo "$(NAME) built successfully!"
 
 $(OBJS)			:	$(O_DIR)%.o: $(S_DIR)%.c $(DEPEND)
-				@echo -n "\n$(OW)$(YLW)Compiling $<$(NC)"
+				@echo "Compiling $<"
 				@mkdir -p $(@D)
 				@$(CC) $(CFLAGS) -c $< -o $@
+
+debug			:	libft
+				@echo "[DEBUG] Building $(NAME):"
+				@make --no-print-directory build_debug
+
+build_debug		:	$(DBG_OBJS)
+				@echo "[DEBUG] Linking $(NAME)..."
+				@$(CC) $(CFLAGS) $(DBGFLAGS) $^ -o $(NAME) $(LDFLAGS)
+				@echo "[DEBUG] $(NAME) built successfully!"
+
+$(DBG_OBJS)		:	$(O_DBG_DIR)%.o: $(S_DIR)%.c $(DEPEND)
+				@echo "Compiling $<"
+				@mkdir -p $(@D)
+				@$(CC) $(CFLAGS) $(DBGFLAGS) -c $< -o $@
+
+fdebug			:	libft
+				@echo "[FULL DEBUG] Building $(NAME):"
+				@make --no-print-directory build_fdebug
+
+build_fdebug	:	$(FDBG_OBJS)
+				@echo "[FULL DEBUG] Linking $(NAME)..."
+				@$(CC) $(CFLAGS) $(FDBGFLAGS) $^ -o $(NAME) $(LDFLAGS)
+				@echo "[FULL DEBUG] $(NAME) built successfully!"
+
+$(FDBG_OBJS)	:	$(O_FDBG_DIR)%.o: $(S_DIR)%.c $(DEPEND)
+				@echo "Compiling $<"
+				@mkdir -p $(@D)
+				@$(CC) $(CFLAGS) $(FDBGFLAGS) -c $< -o $@
 
 libft			:
 				@make --no-print-directory -C $(LIB_DIR)
 
 norm			:
-				@echo "$(BLU)$(NAME): Checking norm for all source and header files$(NC)"
+				@echo "$(NAME): Checking norm for all source and header files"
 				@norminette $(S_DIR) $(I_DIR) $(LIB_DIR)
 
 clean			:
-				@echo "$(BLU)$(NAME): cleaning objs$(NC)"
+				@echo "$(NAME): cleaning objs"
 				rm -r -f $(BIN_DIR)
 
 fclean			:	clean
-				@echo "$(BLU)$(NAME): cleaning binary$(NC)"
+				@echo "$(NAME): cleaning binary"
 				rm -r -f $(NAME)
 
 allclean		:	fclean
@@ -83,4 +102,4 @@ allclean		:	fclean
 
 re				:	fclean all
 
-.PHONY			:	all libft sanitize norm clean fclean allclean re
+.PHONY			:	all debug fdebug libft sanitize norm clean fclean allclean re
