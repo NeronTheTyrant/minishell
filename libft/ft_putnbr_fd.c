@@ -1,24 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   libft.h                                            :+:      :+:    :+:   */
+/*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: acabiac <acabiac@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/11/16 21:17:53 by acabiac           #+#    #+#             */
-/*   Updated: 2021/01/25 22:54:48 by Tsak             ###   ########.fr       */
+/*   Created: 2020/11/16 20:46:56 by acabiac           #+#    #+#             */
+/*   Updated: 2021/01/08 17:32:09 by acabiac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LIBFT_H
-# define LIBFT_H
+#include <stdlib.h>
+#include "ft_memory.h"
+#include "ft_print.h"
 
-# include "ft_string.h"
-# include "ft_memory.h"
-# include "ft_tools.h"
-# include "ft_print.h"
-# include "ft_list.h"
-# include "ft_dlist.h"
-# include "get_next_line.h"
+int	ft_putnbr_fd(int n, int fd)
+{
+	char	*nbr;
+	int		ret;
 
-#endif
+	nbr = ft_itoa(n);
+	if (!nbr)
+		return (-2);
+	ret = ft_putstr_fd(nbr, fd);
+	free(nbr);
+	return (ret);
+}

@@ -1,24 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   libft.h                                            :+:      :+:    :+:   */
+/*   ft_tab_size.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: acabiac <acabiac@student.42.fr>            +#+  +:+       +#+        */
+/*   By: acabiac <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/11/16 21:17:53 by acabiac           #+#    #+#             */
-/*   Updated: 2021/01/25 22:54:48 by Tsak             ###   ########.fr       */
+/*   Created: 2021/01/26 15:05:09 by acabiac           #+#    #+#             */
+/*   Updated: 2021/01/26 15:08:33 by acabiac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LIBFT_H
-# define LIBFT_H
+#include <stddef.h>
 
-# include "ft_string.h"
-# include "ft_memory.h"
-# include "ft_tools.h"
-# include "ft_print.h"
-# include "ft_list.h"
-# include "ft_dlist.h"
-# include "get_next_line.h"
+int	ft_tab_size(char **tab)
+{
+	int	i;
 
-#endif
+	if (!tab)
+		return (-1);
+	i = 0;
+	while (tab[i])
+		i++;
+	return (i);
+}

@@ -1,24 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   libft.h                                            :+:      :+:    :+:   */
+/*   ft_memset.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: acabiac <acabiac@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/11/16 21:17:53 by acabiac           #+#    #+#             */
-/*   Updated: 2021/01/25 22:54:48 by Tsak             ###   ########.fr       */
+/*   Created: 2020/11/16 20:44:28 by acabiac           #+#    #+#             */
+/*   Updated: 2021/01/09 00:02:11 by acabiac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LIBFT_H
-# define LIBFT_H
+#include <stddef.h>
 
-# include "ft_string.h"
-# include "ft_memory.h"
-# include "ft_tools.h"
-# include "ft_print.h"
-# include "ft_list.h"
-# include "ft_dlist.h"
-# include "get_next_line.h"
+void	*ft_memset(void *b, int c, size_t len)
+{
+	size_t			i;
+	unsigned char	*b_copy;
+	unsigned char	c_copy;
 
-#endif
+	b_copy = (unsigned char *)b;
+	c_copy = (unsigned char)c;
+	i = 0;
+	while (i < len)
+	{
+		b_copy[i] = c_copy;
+		i++;
+	}
+	return (b);
+}

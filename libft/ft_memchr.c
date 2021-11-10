@@ -1,24 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   libft.h                                            :+:      :+:    :+:   */
+/*   ft_memchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: acabiac <acabiac@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/11/16 21:17:53 by acabiac           #+#    #+#             */
-/*   Updated: 2021/01/25 22:54:48 by Tsak             ###   ########.fr       */
+/*   Created: 2020/11/16 20:37:05 by acabiac           #+#    #+#             */
+/*   Updated: 2021/01/07 23:31:06 by acabiac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LIBFT_H
-# define LIBFT_H
+#include <stddef.h>
 
-# include "ft_string.h"
-# include "ft_memory.h"
-# include "ft_tools.h"
-# include "ft_print.h"
-# include "ft_list.h"
-# include "ft_dlist.h"
-# include "get_next_line.h"
+void	*ft_memchr(const void *s, int c, size_t n)
+{
+	size_t			i;
+	unsigned char	*str;
+	unsigned char	letter;
 
-#endif
+	str = (unsigned char *)(s);
+	letter = (unsigned char)(c);
+	i = 0;
+	while (i < n)
+	{
+		if (*(str + i) == letter)
+			return (str + i);
+		i++;
+	}
+	return (NULL);
+}

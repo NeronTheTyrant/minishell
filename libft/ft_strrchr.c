@@ -1,24 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   libft.h                                            :+:      :+:    :+:   */
+/*   ft_strrchr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: acabiac <acabiac@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/11/16 21:17:53 by acabiac           #+#    #+#             */
-/*   Updated: 2021/01/25 22:54:48 by Tsak             ###   ########.fr       */
+/*   Created: 2020/11/16 21:07:09 by acabiac           #+#    #+#             */
+/*   Updated: 2021/01/09 00:02:59 by acabiac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LIBFT_H
-# define LIBFT_H
+#include <stddef.h>
+#include "ft_string.h"
 
-# include "ft_string.h"
-# include "ft_memory.h"
-# include "ft_tools.h"
-# include "ft_print.h"
-# include "ft_list.h"
-# include "ft_dlist.h"
-# include "get_next_line.h"
+char	*ft_strrchr(const char *s, int c)
+{
+	char	to_find;
+	char	*haystack;
 
-#endif
+	to_find = (char)(c);
+	haystack = (char *)(s + ft_strlen(s));
+	while (haystack >= (char *)s)
+	{
+		if (*haystack == to_find)
+			return (haystack);
+		haystack--;
+	}
+	return (NULL);
+}

@@ -1,86 +1,39 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: mlebard <mlebard@student.42.fr>            +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2021/07/27 17:27:08 by mlebard           #+#    #+#              #
-#    Updated: 2021/11/08 19:24:37 by mlebard          ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
+SRCFOLD		= srcs/
 
-SHELL		:=	/bin/zsh
+SRCS		=	${SRCFOLD}main.c
 
-# NAME
-NAME		=	minishell
+OBJS		= ${SRCS:.c=.o}
 
-# DIR
-S_DIR		=	srcs/
-I_DIR		=	include/
-BIN_DIR		=	bin/
-O_DIR		=	bin/obj/
-LIB_DIR		=	libft/
+NAME		= parser_tester
 
-# COLORS
-YLW			=	\033[1;33m# Yellow
-GRN			=	\033[1;32m# Green
-WHT			=	\033[1;37m# White
-RED			=	\033[1;31m
-BLU			=	\033[1;34m
-NC			=	\033[0m# No Color
+CC			= clang
 
-OW			=	\r\033[1A\033[K# OverWrite previous line
-OW2			=	\r\033[2A\033[K# OverWrite previous 2 lines
-OW3			=	\r\033[3A\033[K# OverWrite previous 3 lines
+CFLAGS		= -Wall -Wextra -Werror -g3
 
-# COMPILE
-CC			=	gcc
-CFLAGS		=	-Werror -Wextra -Wall -I$(I_DIR) -I$(LIB_DIR)
-LDFLAGS		=	-L $(LIB_DIR) -lft
-LEAKS		=	-fsanitize=address
-DEPEND		=	$(LIB_DIR)libft.h
+IFLAGS		= -Ilibft -Iincludes
 
-# SRCS
-SOURCES		=	main.c \
-SRCS		=	$(addprefix $(S_DIR),$(SOURCES))
+LFLAGS		= -Llibft -lft
 
-# OBJS
-OBJECTS		=	$(SOURCES:.c=.o)
-OBJS		=	$(addprefix $(O_DIR),$(OBJECTS))
+RM			= rm -f
 
-all				:	libft
-				@echo "$(WHT)\033[4mBuilding $(NAME):\033[0m$(NC)"
-				@make --no-print-directory $(NAME)
+%.o: %.c
+	${CC} ${CFLAGS} ${IFLAGS} -c $< -o ${<:.c=.o}
 
-$(NAME)			:	$(OBJS)
-				@echo -n "\n$(OW)$(YLW)Linking $(NAME)...$(NC)"
-				@$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
-				@echo "\n$(OW)$(GRN)$(NAME) built successfully!$(NC)"
+${NAME}:		 ${OBJS}
+	make -C libft
+	${CC} ${CFLAGS} ${IFLAGS} ${OBJS} -o ${NAME} ${LFLAGS}
 
-$(OBJS)			:	$(O_DIR)%.o: $(S_DIR)%.c $(DEPEND)
-				@echo -n "\n$(OW)$(YLW)Compiling $<$(NC)"
-				@mkdir -p $(@D)
-				@$(CC) $(CFLAGS) -c $< -o $@
+all:			${NAME}
 
-libft			:
-				@make --no-print-directory -C $(LIB_DIR)
+clean:
+	${RM} ${OBJS}
+	make clean -C libft/
 
-norm			:
-				@echo "$(BLU)$(NAME): Checking norm for all source and header files$(NC)"
-				@norminette $(S_DIR) $(I_DIR) $(LIB_DIR)
+fclean:			clean
+	${RM} ${NAME}
+	make fclean -C libft/
 
-clean			:
-				@echo "$(BLU)$(NAME): cleaning objs$(NC)"
-				rm -r -f $(BIN_DIR)
+re:				fclean all
 
-fclean			:	clean
-				@echo "$(BLU)$(NAME): cleaning binary$(NC)"
-				rm -r -f $(NAME)
+.PHONY:			all clean fclean re bonus
 
-allclean		:	fclean
-				@make fclean --no-print-directory -C $(LIB_DIR)
-
-re				:	fclean all
-
-.PHONY			:	all libft sanitize norm clean fclean allclean re

@@ -1,24 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   libft.h                                            :+:      :+:    :+:   */
+/*   ft_strndup.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: acabiac <acabiac@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/11/16 21:17:53 by acabiac           #+#    #+#             */
-/*   Updated: 2021/01/25 22:54:48 by Tsak             ###   ########.fr       */
+/*   Created: 2021/01/08 20:07:16 by acabiac           #+#    #+#             */
+/*   Updated: 2021/01/09 13:37:29 by acabiac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LIBFT_H
-# define LIBFT_H
+#include <stdlib.h>
+#include <stddef.h>
+#include "ft_string.h"
 
-# include "ft_string.h"
-# include "ft_memory.h"
-# include "ft_tools.h"
-# include "ft_print.h"
-# include "ft_list.h"
-# include "ft_dlist.h"
-# include "get_next_line.h"
+char	*ft_strndup(const char *src, size_t len)
+{
+	char	*dst;
 
-#endif
+	if (len > ft_strlen(src))
+		len = ft_strlen(src);
+	dst = (char *)malloc(sizeof(*dst) * (len + 1));
+	if (!dst)
+		return (NULL);
+	ft_memcpy(dst, src, len);
+	dst[len] = '\0';
+	return (dst);
+}

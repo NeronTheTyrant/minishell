@@ -1,174 +1,116 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: mlebard <mlebard@student.42.fr>            +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2021/01/05 16:05:10 by mlebard           #+#    #+#              #
-#    Updated: 2021/08/07 01:15:10 by mlebard          ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
+SRCS_MEMORY	= ft_calloc.c \
+			ft_substr.c \
+			ft_strjoin.c \
+			ft_strtrim.c \
+			ft_itoa.c \
+			ft_longtoa_base.c \
+			ft_strdup.c \
+			ft_strndup.c \
+			ft_strmapi.c \
+			ft_split.c \
+			ft_splitjoin.c \
+			ft_tabdup.c \
+			ft_add_str_to_tab.c \
+			ft_free_tab.c \
+			ft_tab_size.c
 
-SHELL			:=	/bin/zsh
+SRCS_PRINT = ft_putchar_fd.c \
+			ft_putstr_fd.c \
+			ft_putendl_fd.c \
+			ft_putnbr_fd.c
 
-# NAME
-NAME			=	libft.a
+SRCS_TOOLS 	= ft_atoi.c \
+			ft_atoi_n.c \
+			ft_get_signed_nb_len.c \
+			ft_tablen.c \
+			ft_check_base.c \
+			ft_abs.c \
+			ft_strtoll.c
 
-# DIR
-S_DIR		=	srcs/
-BIN_DIR		=	bin/
-O_DIR		=	bin/obj/
+SRCS_LIST	= ft_lstnew.c \
+			ft_lstadd_front.c \
+			ft_lstsize.c \
+			ft_lstlast.c \
+			ft_lstadd_back.c \
+			ft_lstdelone.c \
+			ft_lstclear.c \
+			ft_lstiter.c \
+			ft_lstdup.c \
+			ft_lstcontain_data.c \
+			ft_lstmap.c
 
-# COLORS
-YLW			=	\033[1;33m# Yellow
-GRN			=	\033[1;32m# Green
-WHT			=	\033[1;37m# White
-RED			=	\033[1;31m
-BLU			=	\033[1;34m
-NC			=	\033[0m# No Color
+SRCS_DLIST	= ft_dlstnew.c \
+			ft_dlstsize.c \
+			ft_dlstlast.c \
+			ft_dlstfirst.c \
+			ft_dlstadd_front.c \
+			ft_dlstadd_back.c \
+			ft_dlstadd_after.c \
+			ft_dlstadd_before.c \
+			ft_dlstdelone.c \
+			ft_dlstclear.c \
+			ft_dlstarg_to_list.c \
+			ft_dlstiter.c \
+			ft_dlstsplit.c \
+			ft_dlstdup.c \
+			ft_dlstmap.c
 
-OW			=	\r\033[1A\033[K# OverWrite previous line
-OW2			=	\r\033[2A\033[K# OverWrite previous 2 lines
-OW3			=	\r\033[3A\033[K# OverWrite previous 3 lines
+SRCS_STRING	= ft_memmove.c \
+			ft_bzero.c \
+			ft_strncmp.c \
+			ft_strcmp.c \
+			ft_memcpy.c \
+			ft_memccpy.c \
+			ft_memcmp.c \
+			ft_memchr.c \
+			ft_strrchr.c \
+			ft_strchr.c \
+			ft_strchr_charset.c \
+			ft_memset.c \
+			ft_strlcpy.c \
+			ft_strlcat.c \
+			ft_strnstr.c \
+			ft_isspace.c \
+			ft_isupper.c \
+			ft_islower.c \
+			ft_isalnum.c \
+			ft_isalpha.c \
+			ft_isascii.c \
+			ft_isdigit.c \
+			ft_isprint.c \
+			ft_tolower.c \
+			ft_toupper.c \
+			ft_strchr_index.c \
+			ft_strlen.c
 
+SRCS_GNL	= get_next_line.c \
+			get_next_line_utils.c
 
-# COMPILE
-CC			=	gcc
-CFLAGS		=	-Werror -Wextra -Wall -I./
+SRCS		= ${SRCS_GNL} ${SRCS_MEMORY} ${SRCS_PRINT} ${SRCS_TOOLS} ${SRCS_LIST} ${SRCS_DLIST} ${SRCS_STRING}
 
-LIBFT_SRCS		=	ft_atoi.c \
-					ft_atof.c \
-					ft_swap.c \
-					ft_itoa.c \
-					ft_itoa_abs.c \
-					ft_itoa_base.c \
-					ft_uitoa_base.c \
-					ft_uitoa_base_ptr.c \
-					ft_check_base.c \
-					ft_calloc.c \
-					ft_realloc.c \
-					ft_isalnum.c \
-					ft_isalpha.c \
-					ft_islowercase.c \
-					ft_isuppercase.c \
-					ft_isascii.c \
-					ft_isdigit.c \
-					ft_isnumber.c \
-					ft_isfloat.c \
-					ft_isprint.c \
-					ft_isspace.c \
-					ft_iswspace.c \
-					ft_tolower.c \
-					ft_toupper.c \
-					ft_ishigher.c \
-					ft_islower.c \
-					ft_abs.c \
-					ft_absd.c \
-					ft_pow.c \
-					ft_getnbrlen_us.c \
-					ft_bzero.c \
-					ft_memccpy.c \
-					ft_memchr.c \
-					ft_memcmp.c \
-					ft_memcpy.c \
-					ft_memmove.c \
-					ft_memset.c \
-					ft_memswap.c \
-					ft_putchar_fd.c \
-					ft_putendl_fd.c \
-					ft_putnbr_fd.c \
-					ft_putstr_fd.c \
-					get_next_line.c \
-					check_file_extension.c \
-					filecheck.c \
-					ft_strlen.c \
-					ft_isin.c \
-					ft_strchr.c \
-					ft_strcmp.c \
-					ft_strncmp.c \
-					ft_strnstr.c \
-					ft_strrchr.c \
-					ft_strwchr.c \
-					ft_split.c \
-					ft_splitset.c \
-					ft_strdup.c \
-					ft_strjoin.c \
-					ft_strtrim.c \
-					ft_substr.c \
-					strfill.c \
-					ft_strlcat.c \
-					ft_strlcpy.c \
-					ft_strncpy.c \
-					ft_strmapi.c \
-					ft_strcheck_each.c \
-					ft_tabint.c \
-					ft_argcheck_each.c \
-					ft_argcount.c \
-					ft_freeargs.c \
-					make_argb.c \
-					argb_to_a.c \
-					argb_to_r.c \
-					argb_to_g.c \
-					argb_to_b.c \
-					str_to_rgb.c \
-					ft_wctomb.c \
-					ft_wclen.c \
-					ft_wcslen.c \
-					ft_lstnew.c \
-					ft_lstadd_front.c \
-					ft_lstadd_back.c \
-					ft_lstlast.c \
-					ft_lstsize.c \
-					ft_lstdelone.c \
-					ft_lstclear.c \
-					ft_lstiter.c \
-					ft_lstmap.c \
-					ft_lstsortif.c \
-					ft_lstswapone.c \
-					ft_putlst.c
-SRCS			=	$(addprefix $(S_DIR),$(LIBFT_SRCS))
+OBJS		= ${SRCS:.c=.o}
 
-LIBFT_OBJS	=	$(LIBFT_SRCS:.c=.o)
-OBJS		=	$(addprefix $(O_DIR),$(LIBFT_OBJS))
+NAME		= libft.a
 
-DEPEND		=	libft.h
+CC			= clang
 
-RM			=	rm -f
+CFLAGS		= -g3 -Wall -Wextra -Werror -I.
 
-ifdef SANITIZE
-	CFLAGS	+=	-fsanitize=address -g3
-endif
+RM			= rm -f
 
-all			:
-			@echo "$(WHT)\033[4mBuilding $(NAME):\033[0m$(NC)"
-			@make --no-print-directory $(NAME)
+.c.o		= ${CC} ${CFLAGS} -c $< -o ${<:.c=.o}
 
-$(NAME)		:	$(OBJS) $(DEPEND)
-			@ar rc $(NAME) $(OBJS)
-			@ranlib $(NAME)
-			@echo "\n$(OW)$(GRN)$(NAME) built successfully!$(NC)"
+${NAME}:		${OBJS}
+			ar rcs ${NAME} ${OBJS}
 
-$(OBJS)		:	$(O_DIR)%.o: $(S_DIR)%.c
-			@echo -n "\n$(OW)$(YLW)Compiling $<$(NC)"
-			@mkdir -p $(@D)
-			@$(CC) $(CFLAGS) -c $< -o $@
+all:			${NAME}
 
-norm		:
-			@echo "$(BLU)$(NAME): Checking norm for all source and header files$(NC)"
-			norminette $(SRCS) $(DEPEND)
+clean:
+				${RM} ${OBJS}
 
-sanitize	:	clean
-			make SANITIZE:=1 $(NAME)
+fclean:			clean
+			${RM} ${NAME}
 
-clean		:
-			@echo "$(BLU)$(NAME): cleaning objs$(NC)"
-			rm -r -f $(BIN_DIR)
+re:				fclean all
 
-fclean		:	clean
-			@echo "$(BLU)$(NAME): cleaning $(NAME)$(NC)"
-			$(RM) $(NAME)
-
-re			:	fclean all
-
-.PHONY		:	all bonus clean fclean re
+.PHONY:			all clean fclean re
