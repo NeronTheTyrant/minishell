@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer.h                                        :+:      :+:    :+:   */
+/*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 18:24:27 by mlebard           #+#    #+#             */
-/*   Updated: 2021/11/10 02:32:43 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/11/10 20:01:53 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,16 +19,16 @@ typedef enum e_lexstate
 	STATE_WORD,
 	STATE_NAME,
 	STATE_ASSIGN,
-	STATE_ASSIGN_QUOTE,
-	STATE_ASSIGN_DBQUOTE,
-	STATE_QUOTE,
-	STATE_DBQUOTE,
+	STATE_ASSIGN_QUOTE, //Bad end
+	STATE_ASSIGN_DBQUOTE, //Bad end
+	STATE_QUOTE, //Bad end
+	STATE_DBQUOTE, //Bad end
 	STATE_PIPE,
 	STATE_RDIR_I,
 	STATE_RDIR_O,
-	STATE_EOF,
-	STATE_END,
-	STATE_CONT
+	STATE_EOF, //Bad end
+	STATE_END, //Bad end
+	STATE_CONT //Bad end
 }	t_lexstate;
 
 typedef enum e_lexchar
