@@ -19,7 +19,6 @@ typedef enum e_toktype
 {
 	WORD = 0,
 	NAME,
-	ASSIGNMENT_NAME,
 	RDIR_IN,
 	RDIR_OUT,
 	RDIR_HEREDOC,

@@ -49,8 +49,6 @@ char	*argstostr(char **args, int size, char *delim)
 	return (str);
 }
 
-
-
 t_lexchar	get_lexchar(char c)
 {
 	if (ft_iswspace(c) == 1)
@@ -77,7 +75,7 @@ t_lexchar	get_lexchar(char c)
 
 t_lexstate	get_next_lexstate(t_lexstate state, t_lexchar cat)
 {
-	static t_lexstate	statetab[12][10] = 
+	static t_lexstate	statetab[8][10] = 
 	{
 		// STATE_GENERAL
 		{STATE_WORD, STATE_NAME, STATE_CONT, STATE_QUOTE, STATE_DBQUOTE,
@@ -87,16 +85,7 @@ t_lexstate	get_next_lexstate(t_lexstate state, t_lexchar cat)
 		STATE_END, STATE_END, STATE_END, STATE_CONT, STATE_EOF},
 		// STATE_NAME
 		{STATE_WORD, STATE_NAME, STATE_END, STATE_QUOTE, STATE_DBQUOTE,
-		STATE_END, STATE_END, STATE_END, STATE_ASSIGN, STATE_EOF},
-		// STATE_ASSIGN
-		{STATE_CONT, STATE_ASSIGN, STATE_END, STATE_ASSIGN_QUOTE, STATE_ASSIGN_DBQUOTE,
-		STATE_PIPE, STATE_RDIR_I, STATE_RDIR_O, STATE_ASSIGN, STATE_EOF},
-		// STATE_ASSIGN_QUOTE
-		{STATE_CONT, STATE_CONT, STATE_CONT, STATE_ASSIGN, STATE_CONT,
-		STATE_CONT, STATE_CONT, STATE_CONT, STATE_CONT, STATE_EOF},
-		// STATE_ASSIGN_DBQUOTE
-		{STATE_CONT, STATE_CONT, STATE_CONT, STATE_CONT, STATE_ASSIGN,
-		STATE_CONT, STATE_CONT, STATE_CONT, STATE_CONT, STATE_EOF},
+		STATE_END, STATE_END, STATE_END, STATE_WORD, STATE_EOF},
 		// STATE_QUOTE
 		{STATE_CONT, STATE_CONT, STATE_CONT, STATE_WORD, STATE_CONT,
 		STATE_CONT, STATE_CONT, STATE_CONT, STATE_CONT, STATE_EOF},
@@ -133,8 +122,6 @@ t_toktype	get_token_type(t_lexstate state, size_t toklen)
 		return (WORD);
 	if (state == STATE_NAME)
 		return (NAME);
-	if (state == STATE_ASSIGN)
-		return (ASSIGNMENT_NAME);
 	if (state == STATE_PIPE)
 		return (PIPE);
 	if (state == STATE_RDIR_I && toklen == 1)
@@ -169,10 +156,6 @@ t_token	*generate_token(char *cmdline, t_lexstate state, size_t toklen)
 
 int	check_token_end(t_lexstate state, t_lexstate next_state, size_t toklen)
 {
-/*	static char *statestr[14] = 
-	{
-		"STATE_GENERAL", "STATE_WORD", "STATE_NAME", "STATE_ASSIGN",
-		"STATE_*/
 	if (next_state == STATE_END)
 		return (1);
 	else if (next_state == STATE_EOF && state != STATE_GENERAL)
@@ -190,12 +173,12 @@ int	check_token_valid(t_lexstate state)
 		printf("Error: ended on general state\n");
 		return (0);
 	}
-	else if (state == STATE_QUOTE || state == STATE_ASSIGN_QUOTE)
+	else if (state == STATE_QUOTE)
 	{
 		printf("Error: unclosed simple quote\n");
 		return (0);
 	}
-	else if (state == STATE_DBQUOTE || state == STATE_ASSIGN_DBQUOTE)
+	else if (state == STATE_DBQUOTE)
 	{
 		printf("Error: unclosed double quote\n");
 		return (0);
@@ -218,17 +201,13 @@ int	find_token(char **cmdline, t_token **token)
 {
 	t_lexstate	state;
 	t_lexstate	next_state;
-	t_lexchar	cat;
 	size_t		toklen;
 
 	state = STATE_GENERAL;
-	cat = CHAR_WHITESPACE;
 	toklen = 0;
 	while (state != STATE_EOF)
 	{
-		cat = get_lexchar(**cmdline);
-		next_state = get_next_lexstate(state, cat);
-	//	printf("cat = %d\nstate = %d\nnext_state = %d\n", cat, state, next_state);
+		next_state = get_next_lexstate(state, get_lexchar(**cmdline));
 		if (check_token_end(state, next_state, toklen) == 1)
 		{
 			if (check_token_valid(state) == 0)
@@ -238,7 +217,7 @@ int	find_token(char **cmdline, t_token **token)
 				return (-1); // Think about error handling... Maybe print errors directly and then just send a signal back to leave shell
 			return (1);
 		}
-		if (next_state != STATE_GENERAL && next_state != STATE_END && next_state != STATE_EOF)
+		else if (next_state != STATE_GENERAL)
 			toklen++;
 		state = next_state;
 		*cmdline = *cmdline + 1;
@@ -252,8 +231,6 @@ char	*token_type_to_str(t_toktype toktype)
 		return ("WORD");
 	if (toktype == NAME)
 		return ("NAME");
-	if (toktype == ASSIGNMENT_NAME)
-		return ("ASSIGNMENT_NAME");
 	if (toktype == RDIR_IN)
 		return ("RDIR_IN");
 	if (toktype == RDIR_OUT)
@@ -274,6 +251,29 @@ void	print_token(t_token token)
 	printf("Token length = %zu\n", token.toklen);
 }
 
+void	clear_token(t_token *token)
+{
+	free(token->tokstr);
+	free(token);
+}
+
+int	add_token_to_list(t_list **toklst, t_token *token)
+{
+	t_list	*new;
+
+	new = ft_lstnew(token);
+	if (new == NULL)
+	{
+		free(token);
+		ft_lstclear(toklst, &clear_token);
+		*toklst = NULL;
+		return (-1);
+	}
+	ft_lstadd_back(toklst, new);
+	return (0);
+}
+
+
 
 t_list	*lexer(char *cmdline)
 {
@@ -288,31 +288,37 @@ t_list	*lexer(char *cmdline)
 		if (ret == -1)
 		{
 			printf("Error!!!\n");
-			break ;
+			ft_lstclear(&toklst, &clear_token);
+			return (NULL);
 			//TODO ERROR
 		}
 		if (ret == 0)
 		{
 			printf("No Token Found!!!\n");
-			break ;
 			//TODO END
 		}
-		print_token(*token);
-		//add_token_to_list(&toklst, token);
+		if (add_token_to_list(&toklst, token) == -1)
+			return (NULL); // ERROR MALLOC
 	}
 	return (toklst);
 
 }
 
-// TODO FIX <<< and any other combination. 2 max!
-
 int	main(int argc, char **argv)
 {
 	char	*cmdline;
 	t_list	*toklst;
+	t_list	*ptr;
 
 	cmdline = argstostr(&argv[1], argc - 1, " ");
 	printf("cmdline:\n%s\n", cmdline);
 	toklst = lexer(cmdline);
+	ptr = toklst;
+	while (ptr != NULL)
+	{
+		print_token(*(t_token *)ptr->content);
+		ptr = ptr->next;
+	}
+	free(cmdline);
 	return (0);
 }

@@ -18,9 +18,6 @@ typedef enum e_lexstate
 	STATE_GENERAL,
 	STATE_WORD,
 	STATE_NAME,
-	STATE_ASSIGN,
-	STATE_ASSIGN_QUOTE, //Bad end
-	STATE_ASSIGN_DBQUOTE, //Bad end
 	STATE_QUOTE, //Bad end
 	STATE_DBQUOTE, //Bad end
 	STATE_PIPE,
