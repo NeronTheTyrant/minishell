@@ -4,6 +4,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+/*
+** Function passed to lstier to free each node
+*/
 void	free_token_node(void *content)
 {
 	t_token	*token;
@@ -11,6 +14,30 @@ void	free_token_node(void *content)
 	token = content;
 	free(token->tokstr);
 	free(token);
+}
+
+/*
+** Create a new string which is the result of the insertion of src into dst at its pos'th index
+** (what was on and after pos'th index in original dst will be following the inserted string
+*/
+char	*ft_strinsert(const char *dst, const char *src, size_t pos)
+{
+	char	*result;
+	size_t	src_len;
+	size_t	dst_len;
+
+	dst_len = ft_strlen(dst);
+	if (pos >= dst_len)
+		pos = dst_len;
+	src_len = ft_strlen(src);
+	result = malloc(sizeof(char) * (dst_len + src_len + 1));
+	if (!result)
+		return (NULL);
+	result[dst_len + src_len] = '\0';
+	ft_memcpy(result, dst, pos);
+	ft_memcpy(result + pos, src, src_len);
+	ft_memcpy(result + pos + src_len, dst + pos, dst_len - pos);
+	return (result);
 }
 
 /*
@@ -107,24 +134,41 @@ void	print_token_info(void *tokenaddr)
 }
 
 
-char	*ft_get_var(char *str)
+char	*ft_get_var(char *word, char *var, char **env)
 {
 	size_t	i;
+	size_t	j;
+	char	*expanded;
 
-	i = 0;
-	while (ft_isalnum(str[i]))
+	i = 1;
+	while (ft_isalnum(var[i]) || var[i] == '_')
 	{
 		i++;
 	}
-	return (ft_strndup(str, i));
+	j = 0;
+	while (env[j])
+	{
+		if (ft_strnstr(env[j], var + 1, i - 1))
+		{
+			ft_putendl_fd("DETECTED\n", 1);
+			expanded = ft_strdup(&env[j][i]);
+			if (expanded == NULL)
+				return (NULL);
+			else
+				return (expanded);
+		}
+		j++;
+	}
+	if (word)
+		return (ft_strdup(""));
+	return (ft_strdup(""));
 }
 
-int	expand_var(t_dlist *node, char *tokstr)
+int	expand_var(t_token *token, char *tokstr, char **env)
 {
 	size_t	i;
 	int		flag_single;
 	int		flag_double;
-	char	*to_expand;
 
 	i = 0;
 	flag_single = 0;
@@ -135,30 +179,28 @@ int	expand_var(t_dlist *node, char *tokstr)
 			flag_single = (flag_single == 0);
 		else if (tokstr[i] == '\"' && flag_single == 0)
 			flag_double = (flag_double == 0);
-		else if (tokstr[i] == '$' && flag_single == 0 && ft_isalnum(tokstr[i + 1]))
+		else if (tokstr[i] == '$' && flag_single == 0 && (ft_isalpha(tokstr[i + 1]) || tokstr[i + 1] == '_'))
 		{
-			to_expand = ft_get_var(tokstr + i + 1);
-			if (to_expand == NULL)
+			printf("token : \"%s\" become ", tokstr);
+			token->tokstr = ft_get_var(tokstr, tokstr + i, env);
+			printf("\"%s\"\n", token->tokstr);
+			if (token->tokstr== NULL)
 			{
 				return (-1);
 			}
 			else
 			{
-				printf("in token : \"%s\" we need to expand the var named \"%s\"\n", tokstr, to_expand);
-				free(to_expand);
 			}
 		}
 		i++;
 	}
-	if (node)
-		return (0);
 	return (0);
 }
 
 /*
 ** parsing the token list (atm the only goal is to
 */
-int	parsing_tokenlist(t_dlist *lst)
+int	parsing_tokenlist(t_dlist *lst, char **env)
 {
 	t_toktype	tok;
 	int			flag;
@@ -174,7 +216,7 @@ int	parsing_tokenlist(t_dlist *lst)
 		flag = (lst->prev != NULL && prevtok->toktype == RDIR_HEREDOC);
 		tok = currtok->toktype;
 		if ((tok == WORD || tok == NAME || tok == ASSIGNMENT_NAME) && !flag
-			&& expand_var(lst, currtok->tokstr))
+			&& expand_var(lst->content, currtok->tokstr, env))
 		{
 			return (-1);
 		}
@@ -183,7 +225,7 @@ int	parsing_tokenlist(t_dlist *lst)
 	return (0);
 }
 
-int	main(int ac, char **av)
+int	main(int ac, char **av, char **env)
 {
 	t_dlist	*tokenlst;
 
@@ -199,7 +241,11 @@ int	main(int ac, char **av)
 		return (1);
 	}
 	ft_dlstiter(tokenlst, &print_token_info);
-	parsing_tokenlist(tokenlst);
+	parsing_tokenlist(tokenlst, env);
+	char *test = ft_strinsert("this test", "is a ", 5);
+	if (test)
+		ft_putendl_fd(test, 1);
+	free(test);
 	ft_dlstclear(&tokenlst, &free_token_node);
 	return (0);
 }
