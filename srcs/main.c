@@ -133,30 +133,73 @@ void	print_token_info(void *tokenaddr)
 	printf("\n\n");
 }
 
+#include <stdio.h>
+
+char	*ft_strextract(const char *dst, size_t start, size_t len)
+{
+	size_t	dst_len;
+	size_t	tmp_len;
+	char	*result;
+
+	dst_len = ft_strlen(dst);
+	if (dst_len <= start)
+		return (ft_strdup(dst));
+	tmp_len = ft_strlen(dst + start);
+	if (tmp_len >= len)
+		return (ft_strndup(dst, tmp_len));
+	tmp_len = ft_strlen(dst + start + len);
+	result = malloc(sizeof(char) * (dst_len - len + 1));
+	if (result == NULL)
+		return (NULL);
+	result[dst_len - len] = '\0';
+	ft_memcpy(result, dst, start);
+	ft_memcpy(result + start, dst + start + len, tmp_len);
+	return (result);
+}
 
 char	*ft_get_var(char *word, char *var, char **env)
 {
 	size_t	i;
 	size_t	j;
 	char	*expanded;
+	char	*tmp;
 
 	i = 1;
+	printf("We start parsing word |%s|\n", word);
 	while (ft_isalnum(var[i]) || var[i] == '_')
 	{
 		i++;
 	}
+//	printf("i = %zu we encountered |%.*s| into |%s|\n",i, (int)(i) - 1, var + 1, word);
 	j = 0;
 	while (env[j])
 	{
-		if (ft_strnstr(env[j], var + 1, i - 1))
+		tmp = ft_strndup(var + 1, i - 1);
+		if (tmp == NULL)
 		{
-			ft_putendl_fd("DETECTED\n", 1);
+			return (NULL);
+		}
+//		printf("env[%zu] = |%s| tmp = |%s| i = %zu &env[j][i] = |%s|\n", j, env[j], var + 1, i, &env[j][i]);
+		if (ft_strnstr(env[j], tmp, i - 1))
+		{
+			printf("We found |%s| into |%s|\n", tmp, env[j]);
+			free(tmp);
+			tmp = NULL;
 			expanded = ft_strdup(&env[j][i]);
 			if (expanded == NULL)
 				return (NULL);
-			else
+			printf("We expanded into |%s|\n", expanded);
+			tmp = ft_strextract(word, var - word, i);
+			if (tmp == NULL)
+			{
+				free(expanded);
+				return (NULL);
+			}
+			printf("We extracted the original $var off: |%s|\n", tmp);
+
 				return (expanded);
 		}
+		free(tmp);
 		j++;
 	}
 	if (word)
@@ -169,6 +212,8 @@ int	expand_var(t_token *token, char *tokstr, char **env)
 	size_t	i;
 	int		flag_single;
 	int		flag_double;
+	char	*var;
+//	char	*tmp;
 
 	i = 0;
 	flag_single = 0;
@@ -181,15 +226,15 @@ int	expand_var(t_token *token, char *tokstr, char **env)
 			flag_double = (flag_double == 0);
 		else if (tokstr[i] == '$' && flag_single == 0 && (ft_isalpha(tokstr[i + 1]) || tokstr[i + 1] == '_'))
 		{
-			printf("token : \"%s\" become ", tokstr);
-			token->tokstr = ft_get_var(tokstr, tokstr + i, env);
-			printf("\"%s\"\n", token->tokstr);
-			if (token->tokstr== NULL)
+			var = ft_get_var(tokstr, tokstr + i, env);
+			if (var == NULL)
 			{
 				return (-1);
 			}
 			else
 			{
+				free(token->tokstr);
+				token->tokstr = var;
 			}
 		}
 		i++;
