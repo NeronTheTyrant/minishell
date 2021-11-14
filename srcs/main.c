@@ -142,17 +142,22 @@ char	*ft_strextract(const char *dst, size_t start, size_t len)
 	char	*result;
 
 	dst_len = ft_strlen(dst);
+//	printf("STR EXTRACT: dst = |%s| start = %zu len = %zu dst_len = %zu\n", dst, start, len, dst_len);
 	if (dst_len <= start)
 		return (ft_strdup(dst));
 	tmp_len = ft_strlen(dst + start);
-	if (tmp_len >= len)
-		return (ft_strndup(dst, tmp_len));
+//	printf("STR EXTRACT: strlen(dst+start) = %zu\n", tmp_len);
+	if (tmp_len <= len)
+		return (ft_strndup(dst, start));
 	tmp_len = ft_strlen(dst + start + len);
+//	printf("STR EXTRACT: strlen(dst+start+len) = %zu\n", tmp_len);
 	result = malloc(sizeof(char) * (dst_len - len + 1));
 	if (result == NULL)
 		return (NULL);
+//	ft_memset(result, 0, (dst_len - len + 1));
 	result[dst_len - len] = '\0';
 	ft_memcpy(result, dst, start);
+//	printf("STR EXTRACT: FIRST STEP [%s]\n", result);
 	ft_memcpy(result + start, dst + start + len, tmp_len);
 	return (result);
 }
@@ -163,6 +168,7 @@ char	*ft_get_var(char *word, char *var, char **env)
 	size_t	j;
 	char	*expanded;
 	char	*tmp;
+	char	*tmp2;
 
 	i = 1;
 	printf("We start parsing word |%s|\n", word);
@@ -170,7 +176,7 @@ char	*ft_get_var(char *word, char *var, char **env)
 	{
 		i++;
 	}
-//	printf("i = %zu we encountered |%.*s| into |%s|\n",i, (int)(i) - 1, var + 1, word);
+	printf("i = %zu we encountered |%.*s| into |%s|\n",i, (int)(i) - 1, var + 1, word);
 	j = 0;
 	while (env[j])
 	{
@@ -196,15 +202,19 @@ char	*ft_get_var(char *word, char *var, char **env)
 				return (NULL);
 			}
 			printf("We extracted the original $var off: |%s|\n", tmp);
-
-				return (expanded);
+			tmp2 = ft_strinsert(tmp, expanded, var - word);
+			free(expanded);
+			free(tmp);
+			if (tmp2)
+				printf("We return [%s]\n", tmp2);
+			return (tmp2);
 		}
-		free(tmp);
+		else
+			free(tmp);
 		j++;
 	}
-	if (word)
-		return (ft_strdup(""));
-	return (ft_strdup(""));
+	return (ft_strextract(word, var - word, i));
+//	return (ft_strdup(""));
 }
 
 int	expand_var(t_token *token, char *tokstr, char **env)
@@ -235,6 +245,8 @@ int	expand_var(t_token *token, char *tokstr, char **env)
 			{
 				free(token->tokstr);
 				token->tokstr = var;
+				tokstr = token->tokstr;
+				continue ;
 			}
 		}
 		i++;
@@ -287,10 +299,7 @@ int	main(int ac, char **av, char **env)
 	}
 	ft_dlstiter(tokenlst, &print_token_info);
 	parsing_tokenlist(tokenlst, env);
-	char *test = ft_strinsert("this test", "is a ", 5);
-	if (test)
-		ft_putendl_fd(test, 1);
-	free(test);
+	ft_dlstiter(tokenlst, &print_token_info);
 	ft_dlstclear(&tokenlst, &free_token_node);
 	return (0);
 }
