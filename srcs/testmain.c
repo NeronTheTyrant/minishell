@@ -5,38 +5,92 @@
 #include "lexer.h"
 #include <stdio.h>
 #include "core.h"
+#include "error.h"
+
+void	print_token_list(t_list *toklst)
+{
+	t_token	*token;
+
+	while (toklst != NULL)
+	{
+		token = (t_token *)toklst->content;
+		print_token(*token);
+		toklst = toklst->next;
+	}
+}
+
+void	free_lexer(t_term *t)
+{
+	if (t->toklst != NULL)
+		ft_lstclear(&t->toklst, &clear_token);
+}
+
+void	free_everything(t_term *t)
+{
+	if (t == NULL)
+		return ;
+	free_lexer(t);
+	free(t->cmdline);
+}
+
+void	handle_sig(t_term *t)
+{
+	if (t->sig == SIG_RESTART)
+	{
+		if (t != NULL)
+			free_lexer(t);
+	}
+	else if (t->sig == SIG_FATAL)
+	{
+		free_everything(t);
+		exit(1);
+	}
+}
+
+char	*rl_gets(char *prompt, char *prevline)
+{
+	char	*line;
+
+	line = readline(prompt);
+	if (line && *line)
+	{
+		if (prevline && ft_strcmp(line, prevline) == 0)
+		{
+			free(line);
+			return (prevline);
+		}
+		else
+		{
+			add_history(line);
+			if (prevline)
+				free(prevline);
+			return (line);
+		}
+	}
+	return (line);
+}
 
 int	main(void)
 {
-	t_term	t;
-	t_list	*ptr;
-	t_token	*token;
+	t_term	*t;
 
-	t.toklst = NULL;
+	t = malloc(sizeof(*t));
+	if (t == NULL)
+		return (error_fatal(ERR_MALLOC));
+	ft_bzero(t, sizeof(*t));
 	while (1)
 	{
-		t.cmdline = readline("minishell> ");
-		if (t.cmdline && *t.cmdline)
+		t->cmdline = rl_gets("minishell> ", t->cmdline);
+		if (!t->cmdline || !*t->cmdline)
+			continue ;
+		t->sig = lexer(t->cmdline, &t->toklst);
+		if (t->sig)
 		{
-			add_history(t.cmdline);
-			if (lexer(t.cmdline, &t.toklst) == -1)
-			{
-				free(t.cmdline);
-				if (t.toklst == NULL)
-					return (-10000); // FATAL ERROR
-				else
-					return (-1); // NON-FATAL ERROR
-			}
-			ptr = t.toklst;
-			printf("token -> %p", ptr->content);
-			while (ptr != NULL)
-			{
-				token = (t_token *)ptr->content;
-				print_token(*token);
-				ptr = ptr->next;
-			}
-			free(t.cmdline);
+			handle_sig(t);
+			continue ;
 		}
+		print_token_list(t->toklst);
+		free_lexer(t);
 	}
 	return (0);
 }

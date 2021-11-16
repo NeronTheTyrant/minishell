@@ -12,6 +12,8 @@
 
 #include "token.h"
 #include "lexer.h"
+#include "sig.h"
+#include "error.h"
 #include <stdio.h>
 
 int	check_token_end(t_lexstate state, t_lexstate next_state, size_t toklen)
@@ -28,12 +30,7 @@ int	check_token_end(t_lexstate state, t_lexstate next_state, size_t toklen)
 
 int	check_token_valid(t_lexstate state)
 {
-	if (state == STATE_GENERAL)
-	{
-		printf("Error: ended on general state\n");
-		return (0);
-	}
-	else if (state == STATE_QUOTE)
+	if (state == STATE_QUOTE)
 	{
 		printf("Error: unclosed simple quote\n");
 		return (0);
@@ -41,16 +38,6 @@ int	check_token_valid(t_lexstate state)
 	else if (state == STATE_DBQUOTE)
 	{
 		printf("Error: unclosed double quote\n");
-		return (0);
-	}
-	else if (state == STATE_EOF)
-	{
-		printf("Error: ended on EOF state\n");
-		return (0);
-	}
-	else if (state == STATE_END || state == STATE_CONT)
-	{
-		printf("Error: ended on END or CONT state\n");
 		return (0);
 	}
 	else
@@ -71,11 +58,11 @@ int	find_token(char **cmdline, t_token **token)
 		if (check_token_end(state, next_state, toklen) == 1)
 		{
 			if (check_token_valid(state) == 0)
-				return (-1); // Error - bad token, or other
+				return (SIG_RESTART); // Error - bad token, or other
 			*token = generate_token(*cmdline, state, toklen);
 			if (*token == NULL)
-				return (-1); // Think about error handling... Maybe print errors directly and then just send a signal back to leave shell
-			return (1);
+				return (error_fatal(ERR_MALLOC)); // Think about error handling... Maybe print errors directly and then just send a signal back to leave shell
+			return (0);
 		}
 		else if (next_state != STATE_GENERAL)
 			toklen++;

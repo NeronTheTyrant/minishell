@@ -18,10 +18,14 @@
 typedef struct s_term
 {
 	char	*cmdline;
+//	char	*pevline;
 	t_list	*toklst;
 	t_sig	sig;
 }	t_term;
 
 int	lexer(char *cmdline, t_list **toklst);
+
+void	free_everything(t_term *t);
+void	free_lexer(t_term *t);
 
 #endif

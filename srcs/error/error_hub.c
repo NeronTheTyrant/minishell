@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer.c                                            :+:      :+:    :+:   */
+/*   error_hub.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,32 +10,35 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "token.h"
-#include "lexer.h"
+#include "sig.h"
+#include "core.h"
 #include <stdio.h>
-#include "error.h"
 
-int	lexer(char *cmdline, t_list **toklst)
+t_sig	error_nonfatal(char *errstr)
 {
-	t_token	*token;
-	int		ret;
-
-	token = NULL;
-	while (cmdline && *cmdline)
-	{
-		ret = find_token(&cmdline, &token);
-		if (ret != 0)
-		{
-			free(token);
-			return (ret);
-		}
-		if (add_token_to_list(toklst, token) == -1)
-		{
-			free(token);
-			return (error_fatal(ERR_MALLOC)); // ERROR MALLOC
-		}
-		token = NULL;
-	}
-	return (0);
+	if (errstr == NULL)
+		perror(NULL);
+	else
+		printf("%s\n", errstr);
+	return (SIG_RESTART);
 }
 
+t_sig	error_fatal(char *errstr)
+{
+	if (errstr == NULL)
+		perror(NULL);
+	else
+		printf("%s\n", errstr);
+	return (SIG_FATAL);
+}
+
+void	error_exit(char *errstr, t_term *t)
+{
+	if (errstr == NULL)
+		perror(NULL);
+	else
+		printf("%s\n", errstr);
+	if (t != NULL)
+		free_everything(t);
+	exit(1);
+}

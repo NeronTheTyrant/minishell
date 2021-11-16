@@ -36,7 +36,8 @@ SOURCES		=	testmain.c \
 				lexer/find_token.c \
 				lexer/make_token.c \
 				lexer/state_cat.c \
-				lexer/token_utils.c
+				lexer/token_utils.c \
+				error/error_hub.c
 SRCS		=	$(addprefix $(S_DIR),$(SOURCES))
 
 # OBJS
