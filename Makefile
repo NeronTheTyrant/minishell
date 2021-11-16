@@ -6,7 +6,7 @@
 #    By: mlebard <mlebard@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/07/27 17:27:08 by mlebard           #+#    #+#              #
-#    Updated: 2021/11/08 22:00:45 by mlebard          ###   ########.fr        #
+#    Updated: 2021/11/16 16:21:38 by mlebard          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,7 @@ O_FDBG_DIR	=	bin/obj/fdebug/
 LIB_DIR		=	libft/
 
 # COMPILE
-CC			=	clang-9
+CC			=	clang
 CFLAGS		=	-Werror -Wextra -Wall -I$(I_DIR) -I$(LIB_DIR)
 LDFLAGS		=	-L $(LIB_DIR) -lft -lreadline
 DBGFLAGS	=	-g3

@@ -7,6 +7,23 @@
 #include "core.h"
 #include "error.h"
 
+char	**make_env(char **env)
+{
+	int		i;
+	char	**new_env;
+
+	new_env = NULL;
+	i = 0;
+	while (env[i])
+	{
+		new_env = ft_realloc(new_env, sizeof(*new_env) * (i + 1), sizeof(*new_env) * (i + 2));
+		new_env[i] = ft_strdup(env[i]);
+		i++;
+	}
+	new_env[i] = NULL;
+	return (new_env);
+}
+
 void	print_token_list(t_list *toklst)
 {
 	t_token	*token;
@@ -70,7 +87,7 @@ char	*rl_gets(char *prompt, char *prevline)
 	return (line);
 }
 
-int	main(void)
+int	main(int argc, char **argv, char **env)
 {
 	t_term	*t;
 
@@ -78,13 +95,16 @@ int	main(void)
 	if (t == NULL)
 		return (error_fatal(ERR_MALLOC));
 	ft_bzero(t, sizeof(*t));
+	(void)argc;
+	(void)argv;
+	t->env = make_env(env);
 	while (1)
 	{
 		t->cmdline = rl_gets("minishell> ", t->cmdline);
 		if (!t->cmdline || !*t->cmdline)
 			continue ;
 		t->sig = lexer(t->cmdline, &t->toklst);
-		if (t->sig)
+		if (t->sig > 0)
 		{
 			handle_sig(t);
 			continue ;

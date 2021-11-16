@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/13 07:47:03 by mlebard           #+#    #+#             */
-/*   Updated: 2021/11/13 07:57:24 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/11/16 16:32:01 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,5 +69,5 @@ int	find_token(char **cmdline, t_token **token)
 		state = next_state;
 		*cmdline = *cmdline + 1;
 	}
-	return (0);
+	return (-1);
 }

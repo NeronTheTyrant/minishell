@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 18:24:27 by mlebard           #+#    #+#             */
-/*   Updated: 2021/11/13 08:49:24 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/11/16 16:38:37 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 typedef enum e_sig
 {
+	SIG_NOTHING = -1,
 	SIG_RESTART = 1,
 	SIG_FATAL
 }	t_sig;
