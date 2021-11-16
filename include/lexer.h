@@ -13,6 +13,8 @@
 #ifndef LEXER_H
 # define LEXER_H
 
+# include "../libft/libft.h"
+
 typedef enum e_lexstate
 {
 	STATE_GENERAL,

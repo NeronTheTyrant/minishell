@@ -23,15 +23,20 @@ O_FDBG_DIR	=	bin/obj/fdebug/
 LIB_DIR		=	libft/
 
 # COMPILE
-CC			=	clang
+CC			=	clang-9
 CFLAGS		=	-Werror -Wextra -Wall -I$(I_DIR) -I$(LIB_DIR)
-LDFLAGS		=	-L $(LIB_DIR) -lft
+LDFLAGS		=	-L $(LIB_DIR) -lft -lreadline
 DBGFLAGS	=	-g3
 FDBGFLAGS	=	-g3 -fsanitize=address
 DEPEND		=	$(LIB_DIR)libft.h
 
 # SRCS
-SOURCES		=	main.c
+SOURCES		=	testmain.c \
+				lexer/lexer.c \
+				lexer/find_token.c \
+				lexer/make_token.c \
+				lexer/state_cat.c \
+				lexer/token_utils.c
 SRCS		=	$(addprefix $(S_DIR),$(SOURCES))
 
 # OBJS

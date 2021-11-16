@@ -32,7 +32,7 @@ OW3			=	\r\033[3A\033[K# OverWrite previous 3 lines
 
 
 # COMPILE
-CC			=	clang
+CC			=	clang-9
 CFLAGS		=	-Werror -Wextra -Wall -I./
 
 LIBFT_SRCS		=	ft_atoi.c \

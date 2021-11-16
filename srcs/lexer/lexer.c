@@ -12,10 +12,7 @@
 
 #include "token.h"
 #include "lexer.h"
-#include "../../libft/libft.h"
 #include <stdio.h>
-#include <readline/readline.h>
-#include <readline/history.h>
 
 int	lexer(char *cmdline, t_list **toklst)
 {
@@ -34,6 +31,7 @@ int	lexer(char *cmdline, t_list **toklst)
 		if (ret == 0)
 		{
 			printf("No Token Found!!!\n");
+			break ;
 			//TODO END
 		}
 		if (add_token_to_list(toklst, token) == -1)
@@ -46,37 +44,3 @@ int	lexer(char *cmdline, t_list **toklst)
 
 }
 
-int	main(void)
-{
-	char	*cmdline;
-	t_list	*toklst;
-	t_list	*ptr;
-	t_token	*token;
-
-	while (1)
-	{
-		cmdline = readline("minishell> ");
-		printf("cmdline:\n%s\n", cmdline);
-		if (cmdline && *cmdline)
-		{
-			add_history(cmdline);
-			if (lexer(cmdline, &toklst) == -1)
-			{
-				free(cmdline);
-				if (toklst == NULL)
-					return (-10000); // FATAL ERROR
-				else
-					return (-1); // NON-FATAL ERROR
-			}
-			ptr = toklst;
-			while (ptr != NULL)
-			{
-				token = (t_token *)ptr->content;
-				print_token(*token);
-				ptr = ptr->next;
-			}
-			free(cmdline);
-		}
-	}
-	return (0);
-}
