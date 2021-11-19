@@ -7,6 +7,24 @@
 #include "core.h"
 #include "error.h"
 
+char	*ft_getenv(char	*var, char **env)
+{
+	int	i;
+	int	varlen;
+
+	if (!var || !env)
+		return (NULL);
+	varlen = ft_strlen(var);
+	i = 0;
+	while (env[i])
+	{
+		if (ft_strncmp(var, env[i], varlen) == 0 && env[i][varlen] == '=')
+			return (&env[i][varlen + 1]);
+		i++;
+	}
+	return (NULL);
+}
+
 char	**make_env(char **env)
 {
 	int		i;
@@ -16,7 +34,8 @@ char	**make_env(char **env)
 	i = 0;
 	while (env[i])
 	{
-		new_env = ft_realloc(new_env, sizeof(*new_env) * (i + 1), sizeof(*new_env) * (i + 2));
+		new_env = ft_realloc(new_env, sizeof(*new_env) * (i + 1),
+			sizeof(*new_env) * (i + 2));
 		new_env[i] = ft_strdup(env[i]);
 		i++;
 	}
@@ -98,6 +117,7 @@ int	main(int argc, char **argv, char **env)
 	(void)argc;
 	(void)argv;
 	t->env = make_env(env);
+	printf("PATH=%s\n", ft_getenv("PATH", t->env));
 	while (1)
 	{
 		t->cmdline = rl_gets("minishell> ", t->cmdline);
