@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 17:17:04 by mlebard           #+#    #+#             */
-/*   Updated: 2021/11/09 19:55:51 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/11/23 17:26:34 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,27 @@
 
 #include <stddef.h>
 
+/******************************************************************************/
+/*                                                                            */
+/*                           Structures                                       */
+/*                                                                            */
+/******************************************************************************/
+
+/*
+**  t_toktype: token type
+**
+**  WORD           -> string of any characters
+**  NAME           -> alphanumeric string of characters
+**  RDIR_IN        -> in redirection ('<')
+**  RDIR_OUT       -> out redirection ('>')
+**  RDIR_HEREDOC   -> heredoc redirection ('<<')
+**  RDIR_A_OUT     -> appending out redirection ('>>')
+**  PIPE           -> pipe ('|')
+*/
+
 typedef enum e_toktype
 {
-	WORD = 0,
+	WORD,
 	NAME,
 	RDIR_IN,
 	RDIR_OUT,
@@ -25,6 +43,14 @@ typedef enum e_toktype
 	RDIR_A_OUT,
 	PIPE
 }	t_toktype;
+
+/*
+**  t_token: a token resulting from the lexer
+**
+** tokstr   -> string of characters associated to token
+** toktype  -> token type as described above
+** tokenlen -> length of token string
+*/
 
 typedef struct s_token
 {

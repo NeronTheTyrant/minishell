@@ -1,30 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sig.h                                              :+:      :+:    :+:   */
+/*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/09 18:24:27 by mlebard           #+#    #+#             */
-/*   Updated: 2021/11/23 15:56:11 by mlebard          ###   ########.fr       */
+/*   Created: 2021/11/23 15:03:58 by mlebard           #+#    #+#             */
+/*   Updated: 2021/11/23 15:04:39 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SIG_H
-# define SIG_H
+#include "core.h"
+#include "lexer.h"
 
-/*
-**  t_sig: signal returned by core minishell functionalities
-**
-**  SIG_NOTHING   -> Empty signal, used for < 0 comparisons
-**  SIG_RESTART   -> Non-fatal error, free core functionalities and restart loop
-**  SIG_FATAL     -> Fatal error, free everything and exit program
-*/
-typedef enum e_sig
+void	free_lexer(t_term *t)
 {
-	SIG_NOTHING = -1,
-	SIG_RESTART = 1,
-	SIG_FATAL
-}	t_sig;
+	if (t->toklst != NULL)
+		ft_lstclear(&t->toklst, &clear_token);
+}
 
-#endif
+void	free_everything(t_term *t)
+{
+	if (t == NULL)
+		return ;
+	free_lexer(t);
+	free(t->cmdline);
+}

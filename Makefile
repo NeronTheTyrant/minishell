@@ -6,7 +6,7 @@
 #    By: mlebard <mlebard@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/07/27 17:27:08 by mlebard           #+#    #+#              #
-#    Updated: 2021/11/16 16:21:38 by mlebard          ###   ########.fr        #
+#    Updated: 2021/11/23 15:06:36 by mlebard          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,6 +32,8 @@ DEPEND		=	$(LIB_DIR)libft.h
 
 # SRCS
 SOURCES		=	testmain.c \
+				free.c \
+				env.c \
 				lexer/lexer.c \
 				lexer/find_token.c \
 				lexer/make_token.c \

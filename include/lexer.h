@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 18:24:27 by mlebard           #+#    #+#             */
-/*   Updated: 2021/11/13 08:49:24 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/11/23 17:26:31 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,29 @@
 # define LEXER_H
 
 # include "../libft/libft.h"
+# include "token.h"
+
+/******************************************************************************/
+/*                                                                            */
+/*                           Structures                                       */
+/*                                                                            */
+/******************************************************************************/
+
+/*
+**  t_lexstate: state of token currently being lexed
+**
+**  STATE_GENERAL   -> General state, in whitespace / inbetween Tokens
+**  STATE_WORD      -> In a word (any string of characters)
+**  STATE_NAME      -> In a name (alphanumeric string of characters)
+**  STATE_QUOTE     -> Between two simple quotes ("'")
+**  STATE_DBQUOTE   -> Between two double quotes ('"')
+**  STATE_PIPE      -> On a pipe ('|'), immediately returns associated token
+**  STATE_RDIR_I    -> On an opening chevron ('<')
+**  STATE_RDIR_O    -> On a closing chevron ('>')
+**  STATE_EOF       -> On the command line's terminating null byte
+**  STATE_END       -> Signifies end of current state, generates a token
+**  STATE_CONT      -> Continue current state
+*/
 
 typedef enum e_lexstate
 {
@@ -29,6 +52,10 @@ typedef enum e_lexstate
 	STATE_END,
 	STATE_CONT
 }	t_lexstate;
+
+/*
+**  t_lexchar: current character category. These are self-explanatory.
+*/
 
 typedef enum e_lexchar
 {
@@ -73,5 +100,3 @@ void		clear_token(t_token *token);
 void		print_token(t_token token);
 
 #endif
-
-
