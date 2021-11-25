@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/17 10:54:00 by user42            #+#    #+#             */
-/*   Updated: 2021/09/13 18:48:13 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/11/25 18:45:13 by acabiac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,6 +141,7 @@ int				str_to_rgb(char *str);
 */
 
 char			*ft_strdup(const char *s1);
+char			*ft_strndup(const char *src, size_t len);
 char			*ft_substr(char const *s, unsigned int start, size_t len);
 char			*ft_strtrim(char const *s1, char const *set);
 char			*ft_strjoin(const char *s1, const char *s2);

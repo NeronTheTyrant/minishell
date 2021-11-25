@@ -6,7 +6,7 @@
 #    By: mlebard <mlebard@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/01/05 16:05:10 by mlebard           #+#    #+#              #
-#    Updated: 2021/11/16 16:22:00 by mlebard          ###   ########.fr        #
+#    Updated: 2021/11/25 18:42:11 by acabiac          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -91,6 +91,7 @@ LIBFT_SRCS		=	ft_atoi.c \
 					ft_split.c \
 					ft_splitset.c \
 					ft_strdup.c \
+					ft_strndup.c \
 					ft_strjoin.c \
 					ft_strtrim.c \
 					ft_substr.c \
