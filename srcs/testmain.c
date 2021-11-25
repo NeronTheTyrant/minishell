@@ -63,7 +63,6 @@ char	*rl_gets(char *prompt, char *prevline)
 t_list	*make_sudoenv(char **env)
 {
 	int			i;
-	char		*ptr;
 	t_list		*sudoenv;
 	t_list		*ptr;
 	t_envnode	*node;
@@ -76,6 +75,7 @@ t_list	*make_sudoenv(char **env)
 		if (node == NULL);
 			return (NULL);
 		node->var = ft_strndup(env[i], ft_strchr(env[i], '=') - env[i]);
+	}
 
 }
 

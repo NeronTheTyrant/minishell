@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/13 07:56:52 by mlebard           #+#    #+#             */
-/*   Updated: 2021/11/23 17:27:02 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/11/25 16:32:54 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ t_lexstate	get_statetab(t_lexstate state, t_lexchar cat)
 {
 	static t_lexstate	statetab[8][10] = 
 	{ 
-	
 		{STATE_WORD, STATE_NAME, STATE_CONT, STATE_QUOTE, STATE_DBQUOTE,
 		STATE_PIPE, STATE_RDIR_I, STATE_RDIR_O, STATE_WORD, STATE_EOF},
 		{STATE_CONT, STATE_CONT, STATE_END, STATE_QUOTE, STATE_DBQUOTE,
@@ -34,7 +33,7 @@ t_lexstate	get_statetab(t_lexstate state, t_lexchar cat)
 		{STATE_END, STATE_END, STATE_END, STATE_END, STATE_END,
 		STATE_END, STATE_RDIR_I, STATE_END, STATE_END, STATE_EOF},
 		{STATE_END, STATE_END, STATE_END, STATE_END, STATE_END,
-		STATE_END, STATE_END, STATE_RDIR_O, STATE_END, STATE_EOF},};
+		STATE_END, STATE_END, STATE_RDIR_O, STATE_END, STATE_EOF}};
 
 	return (statetab[state][cat]);
 }
@@ -45,7 +44,6 @@ t_lexstate	get_next_lexstate(t_lexstate state, t_lexchar cat)
 
 	if (state == STATE_EOF)
 	{
-		printf("What are YOUUUUUUU doing here????\n");
 		return (STATE_EOF);
 	}
 	next_state = get_statetab(state, cat);

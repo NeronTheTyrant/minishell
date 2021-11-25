@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 17:28:22 by mlebard           #+#    #+#             */
-/*   Updated: 2021/11/23 17:26:51 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/11/25 16:21:17 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ int	lexer(char *cmdline, t_list **toklst)
 	while (cmdline && *cmdline)
 	{
 		ret = find_token(&cmdline, &token);
-		printf("sig = %d\n", ret);
 		if (ret != 0)
 		{
 			if (ret != -1)
