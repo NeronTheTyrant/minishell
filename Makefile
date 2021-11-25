@@ -6,7 +6,7 @@
 #    By: mlebard <mlebard@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/07/27 17:27:08 by mlebard           #+#    #+#              #
-#    Updated: 2021/11/25 17:57:16 by acabiac          ###   ########.fr        #
+#    Updated: 2021/11/25 20:55:16 by mlebard          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,6 +34,7 @@ DEPEND		=	$(LIB_DIR)libft.h
 SOURCES		=	testmain.c \
 				free.c \
 				env.c \
+				sudoenv.c \
 				lexer/lexer.c \
 				parser/parser.c \
 				lexer/find_token.c \

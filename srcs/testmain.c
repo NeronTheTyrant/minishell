@@ -60,25 +60,6 @@ char	*rl_gets(char *prompt, char *prevline)
 	return (line);
 }
 
-t_list	*make_sudoenv(char **env)
-{
-	int			i;
-	t_list		*sudoenv;
-	t_list		*ptr;
-	t_envnode	*node;
-
-	i = 0;
-	ptr = NULL;
-	while (env[i])
-	{
-		node = malloc(sizeof(*node));
-		if (node == NULL);
-			return (NULL);
-		node->var = ft_strndup(env[i], ft_strchr(env[i], '=') - env[i]);
-	}
-
-}
-
 int	main(int argc, char **argv, char **env)
 {
 	t_term	*t;
@@ -90,7 +71,8 @@ int	main(int argc, char **argv, char **env)
 	(void)argc;
 	(void)argv;
 	t->env = make_env(env);
-	t->sudoenv = make_sudoenv(t->env);
+	if (make_sudoenv(t->env, &t->sudoenv) == -1)
+		return (1);
 	while (1)
 	{
 		t->cmdline = rl_gets("minishell> ", t->cmdline);
