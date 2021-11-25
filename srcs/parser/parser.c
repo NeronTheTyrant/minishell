@@ -102,7 +102,7 @@ char	*ft_strextract(const char *dst, size_t start, size_t len)
 	ft_memcpy(result + start, dst + start + len, tmp_len);
 	return (result);
 }
-
+/*
 char	*ft_get_var(char *word, char *var, char **env, size_t *end)
 {
 	size_t	i;
@@ -145,6 +145,38 @@ char	*ft_get_var(char *word, char *var, char **env, size_t *end)
 		j++;
 	}
 	return (ft_strextract(word, var - word, i));
+}*/
+
+char	*ft_get_var(char *word, char *var, char **env, size_t *end)
+{
+	size_t	i;
+	char	*expanded;
+	char	*tmp;
+	char	*tmp2;
+
+	i = 1;
+	*end = var - word;
+	while (ft_isalnum(var[i]) || var[i] == '_')
+		i++;
+	tmp = ft_strndup(var + 1, i - 1);
+	if (tmp == NULL)
+		return (NULL);
+	expanded = ft_getenv(tmp, env);
+	if (expanded == NULL)
+		return (ft_strextract(word, var - word, i));
+	expanded = ft_strdup(expanded);
+	free(tmp);
+	*end = var - word + ft_strlen(expanded);
+	tmp = ft_strextract(word, var - word, i);
+	if (tmp == NULL)
+	{
+		free(expanded);
+		return (NULL);
+	}
+	tmp2 = ft_strinsert(tmp, expanded, var - word);
+	free(expanded);
+	free(tmp);
+	return (tmp2);
 }
 
 int	expand_var(t_token *token, char *tokstr, char **env)
@@ -172,6 +204,7 @@ int	expand_var(t_token *token, char *tokstr, char **env)
 			{
 				free(token->tokstr);
 				token->tokstr = var;
+				token->toklen = ft_strlen(var);
 				tokstr = token->tokstr;
 				continue ;
 			}
