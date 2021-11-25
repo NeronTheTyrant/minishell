@@ -6,7 +6,7 @@
 #    By: mlebard <mlebard@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/07/27 17:27:08 by mlebard           #+#    #+#              #
-#    Updated: 2021/11/23 15:06:36 by mlebard          ###   ########.fr        #
+#    Updated: 2021/11/25 17:57:16 by acabiac          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,6 +35,7 @@ SOURCES		=	testmain.c \
 				free.c \
 				env.c \
 				lexer/lexer.c \
+				parser/parser.c \
 				lexer/find_token.c \
 				lexer/make_token.c \
 				lexer/state_cat.c \
