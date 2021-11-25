@@ -133,8 +133,6 @@ void	print_token_info(void *tokenaddr)
 	printf("\n\n");
 }
 
-#include <stdio.h>
-
 char	*ft_strextract(const char *dst, size_t start, size_t len)
 {
 	size_t	dst_len;
@@ -142,27 +140,22 @@ char	*ft_strextract(const char *dst, size_t start, size_t len)
 	char	*result;
 
 	dst_len = ft_strlen(dst);
-//	printf("STR EXTRACT: dst = |%s| start = %zu len = %zu dst_len = %zu\n", dst, start, len, dst_len);
 	if (dst_len <= start)
 		return (ft_strdup(dst));
 	tmp_len = ft_strlen(dst + start);
-//	printf("STR EXTRACT: strlen(dst+start) = %zu\n", tmp_len);
 	if (tmp_len <= len)
 		return (ft_strndup(dst, start));
 	tmp_len = ft_strlen(dst + start + len);
-//	printf("STR EXTRACT: strlen(dst+start+len) = %zu\n", tmp_len);
 	result = malloc(sizeof(char) * (dst_len - len + 1));
 	if (result == NULL)
 		return (NULL);
-//	ft_memset(result, 0, (dst_len - len + 1));
 	result[dst_len - len] = '\0';
 	ft_memcpy(result, dst, start);
-//	printf("STR EXTRACT: FIRST STEP [%s]\n", result);
 	ft_memcpy(result + start, dst + start + len, tmp_len);
 	return (result);
 }
 
-char	*ft_get_var(char *word, char *var, char **env)
+char	*ft_get_var(char *word, char *var, char **env, size_t *end)
 {
 	size_t	i;
 	size_t	j;
@@ -171,42 +164,32 @@ char	*ft_get_var(char *word, char *var, char **env)
 	char	*tmp2;
 
 	i = 1;
-	printf("We start parsing word |%s|\n", word);
+	*end = var - word;
 	while (ft_isalnum(var[i]) || var[i] == '_')
-	{
 		i++;
-	}
-	printf("i = %zu we encountered |%.*s| into |%s|\n",i, (int)(i) - 1, var + 1, word);
 	j = 0;
 	while (env[j])
 	{
 		tmp = ft_strndup(var + 1, i - 1);
 		if (tmp == NULL)
-		{
 			return (NULL);
-		}
-//		printf("env[%zu] = |%s| tmp = |%s| i = %zu &env[j][i] = |%s|\n", j, env[j], var + 1, i, &env[j][i]);
 		if (ft_strnstr(env[j], tmp, i - 1))
 		{
-			printf("We found |%s| into |%s|\n", tmp, env[j]);
 			free(tmp);
 			tmp = NULL;
 			expanded = ft_strdup(&env[j][i]);
 			if (expanded == NULL)
 				return (NULL);
-			printf("We expanded into |%s|\n", expanded);
+			*end = var - word + ft_strlen(expanded);
 			tmp = ft_strextract(word, var - word, i);
 			if (tmp == NULL)
 			{
 				free(expanded);
 				return (NULL);
 			}
-			printf("We extracted the original $var off: |%s|\n", tmp);
 			tmp2 = ft_strinsert(tmp, expanded, var - word);
 			free(expanded);
 			free(tmp);
-			if (tmp2)
-				printf("We return [%s]\n", tmp2);
 			return (tmp2);
 		}
 		else
@@ -214,7 +197,6 @@ char	*ft_get_var(char *word, char *var, char **env)
 		j++;
 	}
 	return (ft_strextract(word, var - word, i));
-//	return (ft_strdup(""));
 }
 
 int	expand_var(t_token *token, char *tokstr, char **env)
@@ -223,7 +205,6 @@ int	expand_var(t_token *token, char *tokstr, char **env)
 	int		flag_single;
 	int		flag_double;
 	char	*var;
-//	char	*tmp;
 
 	i = 0;
 	flag_single = 0;
@@ -236,11 +217,9 @@ int	expand_var(t_token *token, char *tokstr, char **env)
 			flag_double = (flag_double == 0);
 		else if (tokstr[i] == '$' && flag_single == 0 && (ft_isalpha(tokstr[i + 1]) || tokstr[i + 1] == '_'))
 		{
-			var = ft_get_var(tokstr, tokstr + i, env);
+			var = ft_get_var(tokstr, tokstr + i, env, &i);
 			if (var == NULL)
-			{
 				return (-1);
-			}
 			else
 			{
 				free(token->tokstr);
