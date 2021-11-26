@@ -85,13 +85,14 @@ int	main(int argc, char **argv, char **env)
 		}
 		printf("\nLEXER DEBUG\n");
 		print_token_list(t->toklst);
-		if (parsing_tokenlist(t->toklst, t->env))
+		t->sig = parsing_tokenlist(t->toklst, t->env);
+		if (t->sig > 0)
 		{
-			t->sig = SIG_FATAL;
 			handle_sig(t);
+			continue ;
 		}
 		printf("\nPARSER DEBUG\n");
-		ft_lstiter(t->toklst, &print_token_info);
+		print_token_list(t->toklst);
 		free_lexer(t);
 	}
 	return (0);

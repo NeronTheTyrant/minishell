@@ -6,16 +6,17 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/13 07:47:03 by mlebard           #+#    #+#             */
-/*   Updated: 2021/11/13 07:57:24 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/11/26 19:22:02 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef ERROR_H
 # define ERROR_H
 
-#include "sig.h"
+# include "sig.h"
 
 # define ERR_MALLOC	"Error: malloc failed"
+# define ERR_SYNTAX	"Error: Syntax"
 # define ERR_OTHER	"Error: Unknown"
 
 t_sig	error_nonfatal(char *errstr);

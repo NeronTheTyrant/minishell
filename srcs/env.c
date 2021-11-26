@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/23 14:28:41 by mlebard           #+#    #+#             */
-/*   Updated: 2021/11/23 17:27:31 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/11/26 19:32:27 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int	ft_setenv(char *var, char *val, char ***env)
 	if (varindex == -1)
 	{
 		*env = ft_realloc(*env, sizeof(**env) * (envlen),
-			sizeof(**env) * (envlen + 1));
+				sizeof(**env) * (envlen + 1));
 		if (*env == NULL)
 			return (-1);
 		*env[envlen] = envvar;
@@ -103,7 +103,7 @@ char	**make_env(char **env)
 	while (env[i])
 	{
 		new_env = ft_realloc(new_env, sizeof(*new_env) * (i + 1),
-			sizeof(*new_env) * (i + 2));
+				sizeof(*new_env) * (i + 2));
 		if (new_env == NULL)
 			return (NULL);
 		new_env[i] = ft_strdup(env[i]);

@@ -1,9 +1,10 @@
 #include "token.h"
 #include "env.h"
-#include "libft.h"
+#include "../libft/libft.h"
 #include <stddef.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include "error.h"
 
 /*
 ** Function passed to lstier to free each node
@@ -18,8 +19,9 @@ void	free_token_node(void *content)
 }
 
 /*
-** Create a new string which is the result of the insertion of src into dst at its pos'th index
-** (what was on and after pos'th index in original dst will be following the inserted string
+** Create a new string which is the result of the insertion of src into dst at 
+** its pos'th index (what was on and after pos'th index in original dst will 
+** be following the inserted string)
 */
 char	*ft_strinsert(const char *dst, const char *src, size_t pos)
 {
@@ -39,46 +41,6 @@ char	*ft_strinsert(const char *dst, const char *src, size_t pos)
 	ft_memcpy(result + pos, src, src_len);
 	ft_memcpy(result + pos + src_len, dst + pos, dst_len - pos);
 	return (result);
-}
-
-/*
-** prints infos of the current token, used in ft_dlistiter to show infos of all the tokenlist
-*/
-void	print_token_info(void *tokenaddr)
-{
-	t_token	*token;
-
-	token = tokenaddr;
-	printf("tokstr : %s\n", token->tokstr);
-	printf("toklen : %zu\n", token->toklen);
-	printf("token id : %d ", token->toktype);
-	switch (token->toktype)
-	{
-		case WORD:
-			printf("(WORD)");
-			break;
-		case NAME:
-			printf("(NAME)");
-			break;
-		case RDIR_IN:
-			printf("(RDIR_IN)");
-			break;
-		case RDIR_OUT:
-			printf("(RDIR_OUT)");
-			break;
-		case RDIR_HEREDOC:
-			printf("(RDIR_HEREDOC)");
-			break;
-		case RDIR_A_OUT:
-			printf("(RDIR_A_OUT)");
-			break;
-		case PIPE:
-			printf("(PIPE)");
-			break;
-		default:
-			break;
-	}
-	printf("\n\n");
 }
 
 char	*ft_strextract(const char *dst, size_t start, size_t len)
@@ -102,114 +64,157 @@ char	*ft_strextract(const char *dst, size_t start, size_t len)
 	ft_memcpy(result + start, dst + start + len, tmp_len);
 	return (result);
 }
-/*
-char	*ft_get_var(char *word, char *var, char **env, size_t *end)
-{
-	size_t	i;
-	size_t	j;
-	char	*expanded;
-	char	*tmp;
-	char	*tmp2;
 
-	i = 1;
-	*end = var - word;
-	while (ft_isalnum(var[i]) || var[i] == '_')
-		i++;
-	j = 0;
-	while (env[j])
+char	*find_var(char *current_ptr, int *flag_single, int *flag_double)
+{
+	int	i;
+
+	i = 0;
+	while (current_ptr[i])
 	{
-		tmp = ft_strndup(var + 1, i - 1);
-		if (tmp == NULL)
-			return (NULL);
-		if (ft_strnstr(env[j], tmp, i - 1))
-		{
-			free(tmp);
-			tmp = NULL;
-			expanded = ft_strdup(&env[j][i]);
-			if (expanded == NULL)
-				return (NULL);
-			*end = var - word + ft_strlen(expanded);
-			tmp = ft_strextract(word, var - word, i);
-			if (tmp == NULL)
-			{
-				free(expanded);
-				return (NULL);
-			}
-			tmp2 = ft_strinsert(tmp, expanded, var - word);
-			free(expanded);
-			free(tmp);
-			return (tmp2);
-		}
-		else
-			free(tmp);
-		j++;
+		if (current_ptr[i] == '\'' && *flag_double == 0)
+			*flag_single = (*flag_single == 0);
+		else if (current_ptr[i] == '\"' && *flag_single == 0)
+			*flag_double = (*flag_double == 0);
+		else if (current_ptr[i] == '$' && *flag_single == 0
+			&& (ft_isalpha(current_ptr[i + 1]) || current_ptr[i + 1] == '_'))
+			return (current_ptr + i);
+		i++;
 	}
-	return (ft_strextract(word, var - word, i));
-}*/
+	return (NULL);
+}
 
-char	*ft_get_var(char *word, char *var, char **env, size_t *end)
+char	*insert_expansion(char *word, char **var, char *expanded, size_t len)
 {
-	size_t	i;
-	char	*expanded;
 	char	*tmp;
 	char	*tmp2;
 
-	i = 1;
-	*end = var - word;
-	while (ft_isalnum(var[i]) || var[i] == '_')
-		i++;
-	tmp = ft_strndup(var + 1, i - 1);
+	tmp = ft_strextract(word, *var - word, len + 1);
+	if (tmp == NULL)
+		return (NULL);
+	if (expanded == NULL)
+	{
+		*var = tmp + (*var - word);
+		return (tmp);
+	}
+	else
+	{
+		tmp2 = ft_strinsert(tmp, expanded, *var - word);
+		free(tmp);
+		if (tmp2 == NULL)
+			return (NULL);
+		*var = tmp2 + (*var - word) + ft_strlen(expanded);
+		return (tmp2);
+	}
+}
+
+char	*expand_var(char *word, char **var, char **env)
+{
+	size_t	var_len;
+	char	*expanded;
+	char	*tmp;
+	char	*result;
+
+	var_len = 0;
+	while (ft_isalnum((*var)[var_len + 1]) || (*var)[var_len + 1] == '_')
+		var_len++;
+	tmp = ft_strndup(*var + 1, var_len);
 	if (tmp == NULL)
 		return (NULL);
 	expanded = ft_getenv(tmp, env);
-	if (expanded == NULL)
-		return (ft_strextract(word, var - word, i));
-	expanded = ft_strdup(expanded);
 	free(tmp);
-	*end = var - word + ft_strlen(expanded);
-	tmp = ft_strextract(word, var - word, i);
-	if (tmp == NULL)
-	{
-		free(expanded);
+	result = insert_expansion(word, var, expanded, var_len);
+	if (result == NULL)
 		return (NULL);
-	}
-	tmp2 = ft_strinsert(tmp, expanded, var - word);
-	free(expanded);
-	free(tmp);
-	return (tmp2);
+	return (result);
 }
 
-int	expand_var(t_token *token, char *tokstr, char **env)
+int	do_expand(t_token *token, char *tokstr, char **env)
 {
-	size_t	i;
 	int		flag_single;
 	int		flag_double;
-	char	*var;
+	char	*ptr;
+
+	flag_single = 0;
+	flag_double = 0;
+	ptr = tokstr;
+	while (ptr != NULL && *ptr != '\0')
+	{
+		ptr = find_var(ptr, &flag_single, &flag_double);
+		if (ptr == NULL)
+			return (0);
+		tokstr = expand_var(tokstr, &ptr, env);
+		if (ptr == NULL)
+			return (-1);
+		token->tokstr = tokstr;
+		token->toklen = ft_strlen(tokstr);
+	}
+	return (0);
+}
+
+//char	*ft_strextract(const char *dst, size_t start, size_t len);
+
+int	remove_quote(t_token *token, int index)
+{
+	char	*tmp;
+
+	tmp = ft_strextract(token->tokstr, index, 1);
+	if (tmp == NULL)
+		return (-1);
+	free(token->tokstr);
+	token->tokstr = tmp;
+	token->toklen--;
+	return (0);
+}
+
+int	handle_quotes(t_token *token)
+{
+	int		i;
+	int		flag_single;
+	int		flag_double;
 
 	i = 0;
 	flag_single = 0;
 	flag_double = 0;
-	while (tokstr[i])
+	while (token->tokstr[i])
 	{
-		if (tokstr[i] == '\'' && flag_double == 0)
-			flag_single = (flag_single == 0);
-		else if (tokstr[i] == '\"' && flag_single == 0)
-			flag_double = (flag_double == 0);
-		else if (tokstr[i] == '$' && flag_single == 0 && (ft_isalpha(tokstr[i + 1]) || tokstr[i + 1] == '_'))
+		if (token->tokstr[i] == '\'' && flag_double == 0)
 		{
-			var = ft_get_var(tokstr, tokstr + i, env, &i);
-			if (var == NULL)
+			if (remove_quote(token, i) == -1)
 				return (-1);
-			else
-			{
-				free(token->tokstr);
-				token->tokstr = var;
-				token->toklen = ft_strlen(var);
-				tokstr = token->tokstr;
-				continue ;
-			}
+			flag_single = (flag_single == 0);
 		}
-		i++;
+		else if (token->tokstr[i] == '\"' && flag_single == 0)
+		{
+			if (remove_quote(token, i) == -1)
+				return (-1);
+			flag_double = (flag_double == 0);
+		}
+		else
+			i++;
+	}
+	return (0);
+}
+
+int	check_syntax(t_token *token, t_list *next)
+{
+	t_toktype	currtype;
+	t_toktype	nexttype;
+
+	currtype = token->toktype;
+	if (next == NULL)
+		nexttype = END;
+	else
+		nexttype = ((t_token *)next->content)->toktype;
+	if (currtype != WORD && currtype != NAME && currtype != PIPE)
+	{
+		if (nexttype != WORD && nexttype != NAME)
+			return (-1);
+	}
+	else if (currtype == PIPE)
+	{
+		if (nexttype == PIPE || nexttype == END)
+			return (-1);
 	}
 	return (0);
 }
@@ -230,37 +235,16 @@ int	parsing_tokenlist(t_list *lst, char **env)
 		currtok = lst->content;
 		if (lst->prev != NULL)
 			prevtok = lst->prev->content;
+		if (check_syntax(currtok, lst->next) == -1)
+			return (error_nonfatal(ERR_SYNTAX));
 		flag = (lst->prev != NULL && prevtok->toktype == RDIR_HEREDOC);
 		tok = currtok->toktype;
-		if (tok == WORD && !flag && expand_var(lst->content, currtok->tokstr, env))
-		{
-			return (-1);
-		}
+		if (tok == WORD && !flag
+			&& do_expand(lst->content, currtok->tokstr, env))
+			return (error_fatal(ERR_MALLOC));
+		if (tok == WORD && handle_quotes(currtok))
+			return (error_fatal(ERR_MALLOC));
 		lst = lst->next;
 	}
 	return (0);
 }
-
-/*
-int	main(int ac, char **av, char **env)
-{
-	t_dlist	*tokenlst;
-
-	if (ac < 3 || (ac - 1) % 2 != 0)
-	{
-		ft_putendl_fd("Usage : ./parser_tester \"string\" token_id \"string2\" token2_id   (etc..)", 2);
-		return (1);
-	}
-	tokenlst = get_tokenlst(ac, av);
-	if (tokenlst == NULL)
-	{
-		ft_putendl_fd("Something went wrong when allocating the token list", 2);
-		return (1);
-	}
-	ft_dlstiter(tokenlst, &print_token_info);
-	parsing_tokenlist(tokenlst, env);
-	ft_dlstiter(tokenlst, &print_token_info);
-	ft_dlstclear(&tokenlst, &free_token_node);
-	return (0);
-}
-*/
