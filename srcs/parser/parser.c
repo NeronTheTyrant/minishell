@@ -5,216 +5,142 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "error.h"
+#include "parser.h"
 
-/*
-** Function passed to lstier to free each node
-*/
-void	free_token_node(void *content)
+t_redir	*tok_to_redir(t_token *tok, t_token *nexttok)
 {
+	t_redir	*redir;
+
+	redir = malloc(sizeof(*redir));
+	if (redir == NULL)
+		return (NULL);
+	if (tok->toktype == RDIR_IN)
+		redir->type = IN;
+	else if (tok->toktype == RDIR_OUT)
+		redir->type = OUT;
+	else if (tok->toktype == RDIR_HEREDOC)
+		redir->type = HEREDOC;
+	else if (tok->toktype == RDIR_A_OUT)
+		redir->type = APPEND;
+	redir->str = ft_strdup(nexttok->tokstr);
+	if (redir->str == NULL)
+	{
+		free(redir);
+		return (NULL);
+	}
+	return (redir);
+}
+
+int	make_redir_list(t_list *toklst, t_list **rdirlst)
+{
+	t_redir	*redir;
 	t_token	*token;
+	t_list	*new;
 
-	token = content;
-	free(token->tokstr);
-	free(token);
-}
-
-/*
-** Create a new string which is the result of the insertion of src into dst at 
-** its pos'th index (what was on and after pos'th index in original dst will 
-** be following the inserted string)
-*/
-char	*ft_strinsert(const char *dst, const char *src, size_t pos)
-{
-	char	*result;
-	size_t	src_len;
-	size_t	dst_len;
-
-	dst_len = ft_strlen(dst);
-	if (pos >= dst_len)
-		pos = dst_len;
-	src_len = ft_strlen(src);
-	result = malloc(sizeof(char) * (dst_len + src_len + 1));
-	if (!result)
-		return (NULL);
-	result[dst_len + src_len] = '\0';
-	ft_memcpy(result, dst, pos);
-	ft_memcpy(result + pos, src, src_len);
-	ft_memcpy(result + pos + src_len, dst + pos, dst_len - pos);
-	return (result);
-}
-
-char	*ft_strextract(const char *dst, size_t start, size_t len)
-{
-	size_t	dst_len;
-	size_t	tmp_len;
-	char	*result;
-
-	dst_len = ft_strlen(dst);
-	if (dst_len <= start)
-		return (ft_strdup(dst));
-	tmp_len = ft_strlen(dst + start);
-	if (tmp_len <= len)
-		return (ft_strndup(dst, start));
-	tmp_len = ft_strlen(dst + start + len);
-	result = malloc(sizeof(char) * (dst_len - len + 1));
-	if (result == NULL)
-		return (NULL);
-	result[dst_len - len] = '\0';
-	ft_memcpy(result, dst, start);
-	ft_memcpy(result + start, dst + start + len, tmp_len);
-	return (result);
-}
-
-char	*find_var(char *current_ptr, int *flag_single, int *flag_double)
-{
-	int	i;
-
-	i = 0;
-	while (current_ptr[i])
+	while (toklst)
 	{
-		if (current_ptr[i] == '\'' && *flag_double == 0)
-			*flag_single = (*flag_single == 0);
-		else if (current_ptr[i] == '\"' && *flag_single == 0)
-			*flag_double = (*flag_double == 0);
-		else if (current_ptr[i] == '$' && *flag_single == 0
-			&& (ft_isalpha(current_ptr[i + 1]) || current_ptr[i + 1] == '_'))
-			return (current_ptr + i);
-		i++;
-	}
-	return (NULL);
-}
-
-char	*insert_expansion(char *word, char **var, char *expanded, size_t len)
-{
-	char	*tmp;
-	char	*tmp2;
-
-	tmp = ft_strextract(word, *var - word, len + 1);
-	if (tmp == NULL)
-		return (NULL);
-	if (expanded == NULL)
-	{
-		*var = tmp + (*var - word);
-		return (tmp);
-	}
-	else
-	{
-		tmp2 = ft_strinsert(tmp, expanded, *var - word);
-		free(tmp);
-		if (tmp2 == NULL)
-			return (NULL);
-		*var = tmp2 + (*var - word) + ft_strlen(expanded);
-		return (tmp2);
-	}
-}
-
-char	*expand_var(char *word, char **var, char **env)
-{
-	size_t	var_len;
-	char	*expanded;
-	char	*tmp;
-	char	*result;
-
-	var_len = 0;
-	while (ft_isalnum((*var)[var_len + 1]) || (*var)[var_len + 1] == '_')
-		var_len++;
-	tmp = ft_strndup(*var + 1, var_len);
-	if (tmp == NULL)
-		return (NULL);
-	expanded = ft_getenv(tmp, env);
-	free(tmp);
-	result = insert_expansion(word, var, expanded, var_len);
-	if (result == NULL)
-		return (NULL);
-	return (result);
-}
-
-int	do_expand(t_token *token, char *tokstr, char **env)
-{
-	int		flag_single;
-	int		flag_double;
-	char	*ptr;
-
-	flag_single = 0;
-	flag_double = 0;
-	ptr = tokstr;
-	while (ptr != NULL && *ptr != '\0')
-	{
-		ptr = find_var(ptr, &flag_single, &flag_double);
-		if (ptr == NULL)
-			return (0);
-		tokstr = expand_var(tokstr, &ptr, env);
-		if (ptr == NULL)
-			return (-1);
-		token->tokstr = tokstr;
-		token->toklen = ft_strlen(tokstr);
+		token = toklst->content;
+		if (token->toktype == PIPE)
+			break ;
+		if (token->toktype != WORD && token->toktype != NAME && token->toktype)
+		{
+			redir = tok_to_redir(token, toklst->next->content);
+			if (redir == NULL)
+				return (error_fatal(ERR_MALLOC));
+			new = ft_lstnew(redir);
+			if (new == NULL)
+			{
+				free(redir);
+				return (error_fatal(ERR_MALLOC));
+			}
+			ft_lstadd_back(rdirlst, new);
+		}
+		toklst = toklst->next;
 	}
 	return (0);
 }
 
-//char	*ft_strextract(const char *dst, size_t start, size_t len);
-
-int	remove_quote(t_token *token, int index)
+int	get_cmd_size(t_list *toklst)
 {
-	char	*tmp;
+	int			size;
+	t_token		*token;
+	t_toktype	prevtok;
 
-	tmp = ft_strextract(token->tokstr, index, 1);
-	if (tmp == NULL)
-		return (-1);
-	free(token->tokstr);
-	token->tokstr = tmp;
-	token->toklen--;
-	return (0);
-}
-
-int	handle_quotes(t_token *token)
-{
-	int		i;
-	int		flag_single;
-	int		flag_double;
-
-	i = 0;
-	flag_single = 0;
-	flag_double = 0;
-	while (token->tokstr[i])
+	size = 0;
+	while (toklst)
 	{
-		if (token->tokstr[i] == '\'' && flag_double == 0)
-		{
-			if (remove_quote(token, i) == -1)
-				return (-1);
-			flag_single = (flag_single == 0);
-		}
-		else if (token->tokstr[i] == '\"' && flag_single == 0)
-		{
-			if (remove_quote(token, i) == -1)
-				return (-1);
-			flag_double = (flag_double == 0);
-		}
+		token = toklst->content;
+		if (token->toktype == PIPE)
+			break ;
+		if (toklst->prev == NULL)
+			prevtok = 0;
 		else
-			i++;
+			prevtok = ((t_token *)toklst->prev->content)->toktype;
+		if ((token->toktype == NAME || token->toktype == WORD)
+				&& (prevtok <= RDIR_IN || prevtok >= RDIR_A_OUT))
+			size++;
+		toklst = toklst->next;
 	}
+	return (size);
+}
+
+int	make_cmd(t_list **toklst, char ***cmd)
+{
+	char	**newcmd;
+	t_token		*token;
+	t_toktype	prevtok;
+	int		size;
+	int		i;
+
+	size = get_cmd_size(*toklst);
+	newcmd = malloc(sizeof(*newcmd) * (size + 1));
+	if (newcmd == NULL)
+		return (error_fatal(ERR_MALLOC));
+	i = 0;
+	while (*toklst)
+	{
+		token = (*toklst)->content;
+		if (token->toktype == PIPE)
+			break ;
+		if ((*toklst)->prev == NULL)
+			prevtok = 0;
+		else
+			prevtok = ((t_token *)(*toklst)->prev->content)->toktype;
+		if ((token->toktype == NAME || token->toktype == WORD)
+				&& (prevtok <= RDIR_IN || prevtok >= RDIR_A_OUT))
+		{
+			newcmd[i] = ft_strdup(token->tokstr);
+			if (newcmd[i] == NULL)
+				return (error_fatal(ERR_MALLOC));
+			i++;
+		}
+		*toklst = (*toklst)->next;
+	}
+	*cmd = newcmd;
 	return (0);
 }
 
-int	check_syntax(t_token *token, t_list *next)
+int	make_process_list(t_list *toklst, t_list **plst)
 {
-	t_toktype	currtype;
-	t_toktype	nexttype;
+	t_process	*p;
+	t_list		*rdirlst;
+	char		**cmd;
 
-	currtype = token->toktype;
-	if (next == NULL)
-		nexttype = END;
-	else
-		nexttype = ((t_token *)next->content)->toktype;
-	if (currtype != WORD && currtype != NAME && currtype != PIPE)
+	rdirlst = NULL;
+	while (toklst)
 	{
-		if (nexttype != WORD && nexttype != NAME)
-			return (-1);
-	}
-	else if (currtype == PIPE)
-	{
-		if (nexttype == PIPE || nexttype == END)
-			return (-1);
+
+		if (make_redir_list(toklst, &rdirlst) > 0)
+			return (SIG_FATAL);
+		if (make_cmd(&toklst, &cmd) > 0)
+			return (SIG_FATAL);
+		(void)plst;
+		(void)p;
+		// we want to do a 1st pass to make the *rdirlst
+		// we then want a second pass to make the **cmd
+		// we assign it to *p or we send *p directly to both of those handlers
+		// we add *p to *plst
+		// toklst should have been moved to reflect the start of new process
 	}
 	return (0);
 }
@@ -222,29 +148,13 @@ int	check_syntax(t_token *token, t_list *next)
 /*
 ** parsing the token list (atm the only goal is to
 */
-int	parsing_tokenlist(t_list *lst, char **env)
+int	parser(t_list *toklst, char **env, t_list **plst)
 {
-	t_toktype	tok;
-	int			flag;
-	t_token		*prevtok;
-	t_token		*currtok;
+	t_sig	sig;
 
-	while (lst)
-	{
-		prevtok = NULL;
-		currtok = lst->content;
-		if (lst->prev != NULL)
-			prevtok = lst->prev->content;
-		if (check_syntax(currtok, lst->next) == -1)
-			return (error_nonfatal(ERR_SYNTAX));
-		flag = (lst->prev != NULL && prevtok->toktype == RDIR_HEREDOC);
-		tok = currtok->toktype;
-		if (tok == WORD && !flag
-			&& do_expand(lst->content, currtok->tokstr, env))
-			return (error_fatal(ERR_MALLOC));
-		if (tok == WORD && handle_quotes(currtok))
-			return (error_fatal(ERR_MALLOC));
-		lst = lst->next;
-	}
+	sig = format(toklst, env);
+	if (sig > 0)
+		return (sig);
+	sig = make_process_list(toklst, plst);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/17 10:54:00 by user42            #+#    #+#             */
-/*   Updated: 2021/11/25 18:45:13 by acabiac          ###   ########.fr       */
+/*   Updated: 2021/11/27 16:04:12 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,8 @@ char			*ft_strnstr(const char *haystack, const char *needle,
 					size_t len);
 char			*ft_strrchr(const char *s, int c);
 int				ft_strcheck_each(char *str, int (*f)(char));
+char			*ft_strinsert(const char *dst, const char *src, size_t pos);
+char			*ft_strextract(const char *dst, size_t start, size_t len);
 
 /*
 ** Arg Operations

@@ -7,8 +7,7 @@
 #include "core.h"
 #include "error.h"
 #include "env.h"
-#include  "parser.h"
-
+#include "parser.h"
 
 void	print_token_list(t_list *toklst)
 {
@@ -21,7 +20,6 @@ void	print_token_list(t_list *toklst)
 		toklst = toklst->next;
 	}
 }
-
 
 void	handle_sig(t_term *t)
 {
@@ -71,7 +69,6 @@ int	main(int argc, char **argv, char **env)
 	(void)argc;
 	(void)argv;
 	t->env = make_env(env);
-	printf("PATH=%s\n", ft_getenv("PATH", t->env));
 	while (1)
 	{
 		t->cmdline = rl_gets("minishell> ", t->cmdline);
@@ -85,7 +82,7 @@ int	main(int argc, char **argv, char **env)
 		}
 		printf("\nLEXER DEBUG\n");
 		print_token_list(t->toklst);
-		t->sig = parsing_tokenlist(t->toklst, t->env);
+		t->sig = parser(t->toklst, t->env, &t->plst);
 		if (t->sig > 0)
 		{
 			handle_sig(t);
