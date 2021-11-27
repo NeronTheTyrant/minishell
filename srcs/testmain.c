@@ -80,16 +80,16 @@ int	main(int argc, char **argv, char **env)
 			handle_sig(t);
 			continue ;
 		}
-		printf("\nLEXER DEBUG\n");
-		print_token_list(t->toklst);
+//		printf("\nLEXER DEBUG\n");
+//		print_token_list(t->toklst);
 		t->sig = parser(t->toklst, t->env, &t->plst);
 		if (t->sig > 0)
 		{
 			handle_sig(t);
 			continue ;
 		}
-		printf("\nPARSER DEBUG\n");
-		print_token_list(t->toklst);
+//		printf("\nPARSER DEBUG\n");
+//		print_token_list(t->toklst);
 		free_lexer(t);
 	}
 	return (0);

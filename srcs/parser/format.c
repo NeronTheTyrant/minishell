@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/27 16:38:26 by mlebard           #+#    #+#             */
-/*   Updated: 2021/11/27 16:47:05 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/11/27 22:58:14 by acabiac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ int	format(t_list *lst, char **env)
 		currtok = lst->content;
 		if (lst->prev != NULL)
 			prevtok = lst->prev->content;
-		if (check_grammar(currtok, lst->next) == -1)
+		if (check_grammar(currtok, lst->next) == -1 || (prevtok == NULL && currtok->toktype == PIPE))
 			return (error_nonfatal(ERR_SYNTAX));
 		flag = (lst->prev != NULL && prevtok->toktype == RDIR_HEREDOC);
 		tok = currtok->toktype;
