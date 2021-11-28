@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/27 16:38:26 by mlebard           #+#    #+#             */
-/*   Updated: 2021/11/27 22:58:14 by acabiac          ###   ########.fr       */
+/*   Updated: 2021/11/28 19:15:47 by acabiac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,12 +58,14 @@ int	handle_quotes(t_token *token)
 	return (0);
 }
 
-int	check_grammar(t_token *token, t_list *next)
+int	check_grammar(t_token *token, t_token *prevtok, t_list *next)
 {
 	t_toktype	currtype;
 	t_toktype	nexttype;
 
 	currtype = token->toktype;
+	if (prevtok == NULL && token->toktype == PIPE)
+		return (-1);
 	if (next == NULL)
 		nexttype = END;
 	else
@@ -94,7 +96,7 @@ int	format(t_list *lst, char **env)
 		currtok = lst->content;
 		if (lst->prev != NULL)
 			prevtok = lst->prev->content;
-		if (check_grammar(currtok, lst->next) == -1 || (prevtok == NULL && currtok->toktype == PIPE))
+		if (check_grammar(currtok, prevtok, lst->next) == -1)
 			return (error_nonfatal(ERR_SYNTAX));
 		flag = (lst->prev != NULL && prevtok->toktype == RDIR_HEREDOC);
 		tok = currtok->toktype;

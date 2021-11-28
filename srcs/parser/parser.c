@@ -6,7 +6,7 @@
 /*   By: acabiac <acabiac@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/27 20:59:41 by acabiac           #+#    #+#             */
-/*   Updated: 2021/11/27 22:16:36 by acabiac          ###   ########.fr       */
+/*   Updated: 2021/11/28 19:51:38 by acabiac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,19 +96,12 @@ int	get_cmd_size(t_list *toklst)
 	return (size);
 }
 
-int	make_cmd(t_list **toklst, char ***cmd)
+int	fill_cmd(t_list **toklst, char **newcmd)
 {
-	char	**newcmd;
-	t_token		*token;
+	t_token	*token;
 	t_toktype	prevtok;
-	int		size;
-	int		i;
+	size_t	i;
 
-	size = get_cmd_size(*toklst);
-	newcmd = malloc(sizeof(*newcmd) * (size + 1));
-	if (newcmd == NULL)
-		return (error_fatal(ERR_MALLOC));
-	newcmd[size] = NULL;
 	i = 0;
 	while (*toklst)
 	{
@@ -129,6 +122,21 @@ int	make_cmd(t_list **toklst, char ***cmd)
 		}
 		*toklst = (*toklst)->next;
 	}
+	return (0);
+}
+
+int	make_cmd(t_list **toklst, char ***cmd)
+{
+	char	**newcmd;
+	int		size;
+
+	size = get_cmd_size(*toklst);
+	newcmd = malloc(sizeof(*newcmd) * (size + 1));
+	if (newcmd == NULL)
+		return (error_fatal(ERR_MALLOC));
+	newcmd[size] = NULL;
+	if (fill_cmd(toklst, newcmd) > 0)
+		return (SIG_FATAL);
 	*cmd = newcmd;
 	return (0);
 }
@@ -167,7 +175,7 @@ void	print_cmd_list(char **cmd)
 {
 	size_t	i = 0;
 
-	printf("PRINTING CMD LIST :\n");
+//	printf("PRINTING CMD LIST :\n");
 	while (cmd[i])
 	{
 		printf("cmd[%zu] = \"%s\"\n", i, cmd[i]);
@@ -176,42 +184,48 @@ void	print_cmd_list(char **cmd)
 	printf("\n");
 }
 
+void	ft_clear_redir(t_redir *redir)
+{
+	free(redir->str);
+	free(redir);
+}
+
 int	make_process_list(t_list *toklst, t_list **plst)
 {
 	t_process	*p;
-	t_list		*rdirlst;
 	t_list		*new;
-	char		**cmd;
 
-	rdirlst = NULL;
 	while (toklst)
 	{
-		printf("BEFORE REDIR LIST CREATION\n");
-		if (make_redir_list(toklst, &rdirlst) > 0)
-			return (SIG_FATAL);
-		printf("BEFORE CMD LIST CREATION\n");
-		if (make_cmd(&toklst, &cmd) > 0)
-			return (SIG_FATAL);
-		printf("AFTER CMD LIST CREATION\n");
-		if (toklst && ((t_token *)toklst->content)->toktype == PIPE)
-			toklst = toklst->next;
-		print_rdir_list(rdirlst);
-		print_cmd_list(cmd);
-		printf("\n");
 		p = malloc(sizeof(*p));
 		if (p == NULL)
+			return (error_fatal(ERR_MALLOC));
+		ft_bzero(p, sizeof(*p));
+		if (make_redir_list(toklst, &p->redir) > 0)
 		{
+			free(p);
 			return (SIG_FATAL);
 		}
-		p->redir = rdirlst;
-		p->cmd = cmd;
+		if (make_cmd(&toklst, &p->cmd) > 0)
+		{
+			ft_lstclear(&p->redir, &ft_clear_redir);
+			free(p);
+			return (SIG_FATAL);
+		}
+//		printf("AFTER CMD LIST CREATION\n");
+		if (toklst && ((t_token *)toklst->content)->toktype == PIPE)
+			toklst = toklst->next;
+		print_rdir_list(p->redir);
+		print_cmd_list(p->cmd);
+//		printf("\n");
 		new = ft_lstnew(p);
 		if (new == NULL)
 		{
-			return (SIG_FATAL);
+			ft_lstclear(&p->redir, &ft_clear_redir);
+			free(p);
+			return (error_fatal(ERR_MALLOC));
 		}
 		ft_lstadd_back(plst, new);
-		rdirlst = NULL;
 		// we want to do a 1st pass to make the *rdirlst
 		// we then want a second pass to make the **cmd
 		// we assign it to *p or we send *p directly to both of those handlers
@@ -225,12 +239,12 @@ int	parser(t_list *toklst, char **env, t_list **plst)
 {
 	t_sig	sig;
 
-	printf("\nBEFORE FORMAT\n");
+//	printf("\nBEFORE FORMAT\n");
 	sig = format(toklst, env);
 	if (sig > 0)
 		return (sig);
-	printf("AFTER FORMAT\n");
+//	printf("AFTER FORMAT\n");
 	sig = make_process_list(toklst, plst);
-	printf("AFTER PROCESS LIST CREATION\n");
+//	printf("AFTER PROCESS LIST CREATION\n");
 	return (0);
 }
