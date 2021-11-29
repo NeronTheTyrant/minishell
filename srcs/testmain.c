@@ -7,8 +7,7 @@
 #include "core.h"
 #include "error.h"
 #include "env.h"
-#include  "parser.h"
-
+#include "parser.h"
 
 void	print_token_list(t_list *toklst)
 {
@@ -21,7 +20,6 @@ void	print_token_list(t_list *toklst)
 		toklst = toklst->next;
 	}
 }
-
 
 void	handle_sig(t_term *t)
 {
@@ -84,15 +82,16 @@ int	main(int argc, char **argv, char **env)
 			handle_sig(t);
 			continue ;
 		}
-		printf("\nLEXER DEBUG\n");
-		print_token_list(t->toklst);
-		if (parsing_tokenlist(t->toklst, t->env))
+//		printf("\nLEXER DEBUG\n");
+//		print_token_list(t->toklst);
+		t->sig = parser(t->toklst, t->env, &t->plst);
+		if (t->sig > 0)
 		{
-			t->sig = SIG_FATAL;
 			handle_sig(t);
+			continue ;
 		}
-		printf("\nPARSER DEBUG\n");
-		ft_lstiter(t->toklst, &print_token_info);
+//		printf("\nPARSER DEBUG\n");
+//		print_token_list(t->toklst);
 		free_lexer(t);
 	}
 	return (0);

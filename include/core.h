@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 18:24:27 by mlebard           #+#    #+#             */
-/*   Updated: 2021/11/25 18:42:57 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/11/29 18:08:51 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,12 @@
 
 typedef struct s_term
 {
-	t_list	*sudoenv;
-	char	**env;
-	char	*cmdline;
-	t_list	*toklst;
-	t_sig	sig;
+	t_list		*sudoenv;
+	char		**env;
+	char		*cmdline;
+	t_list		*toklst;
+	t_list		*plst;
+	t_sig		sig;
 }	t_term;
 
 /******************************************************************************/
