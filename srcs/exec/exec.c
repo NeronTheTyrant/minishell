@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 18:28:39 by mlebard           #+#    #+#             */
-/*   Updated: 2021/11/29 19:08:14 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/11/29 20:14:48 by acabiac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,21 +44,37 @@ int	exec_cmd(char **cmd, char **env, char **paths)
 	char	*cmd_path;
 	size_t	cmd_len;
 
-	execve(cmd[0], cmd, env);
 	i = 0;
-	while (paths[i])
+	if (cmd[0][0] == '/')
+		execve(cmd[0], cmd, env);
+	else if (ft_strchr(cmd[0], '/'))
 	{
-		cmd_len = ft_strlen(paths[i]) + ft_strlen(cmd[0]) + 1;
-		cmd_path = malloc(sizeof(*cmd_path) * cmd_len + 1);
+		cmd_len = ft_strlen(cmd[0]) + 2;
+		cmd_path = malloc(sizeof(*cmd_path) * (cmd_len) + 1);
 		if (cmd_path == NULL)
 			return (error_fatal(ERR_MALLOC));
 		ft_bzero(cmd_path, sizeof(*cmd_path) * cmd_len + 1);
-		ft_strlcat(cmd_path, paths[i], cmd_len + 1);
-		ft_strlcat(cmd_path, "/", cmd_len + 1);
+		ft_strlcat(cmd_path, "./", cmd_len + 1);
 		ft_strlcat(cmd_path, cmd[0], cmd_len + 1);
 		execve(cmd_path, cmd, env);
 		free(cmd_path);
-		i++;
+	}	
+	else
+	{
+		while (paths[i])
+		{
+			cmd_len = ft_strlen(paths[i]) + ft_strlen(cmd[0]) + 1;
+			cmd_path = malloc(sizeof(*cmd_path) * (cmd_len + 1));
+			if (cmd_path == NULL)
+				return (error_fatal(ERR_MALLOC));
+			ft_bzero(cmd_path, sizeof(*cmd_path) * cmd_len + 1);
+			ft_strlcat(cmd_path, paths[i], cmd_len + 1);
+			ft_strlcat(cmd_path, "/", cmd_len + 1);
+			ft_strlcat(cmd_path, cmd[0], cmd_len + 1);
+			execve(cmd_path, cmd, env);
+			free(cmd_path);
+			i++;
+		}
 	}
 	return (0);
 }
