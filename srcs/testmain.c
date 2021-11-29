@@ -93,6 +93,12 @@ int	main(int argc, char **argv, char **env)
 //		printf("\nPARSER DEBUG\n");
 //		print_token_list(t->toklst);
 		free_lexer(t);
+		t->sig = exec(t->plst, &t->env, &t->sudoenv);
+		if (t->sig > 0)
+		{
+			handle_sig(t);
+			continue ;
+		}
 	}
 	return (0);
 }

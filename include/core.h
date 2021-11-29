@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 18:24:27 by mlebard           #+#    #+#             */
-/*   Updated: 2021/11/29 18:08:51 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/11/29 19:09:01 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ typedef struct s_term
 /******************************************************************************/
 
 int		lexer(char *cmdline, t_list **toklst);
+int		exec(t_list *plist, char ***env, t_list **sudoenv);
 
 /******************************************************************************/
 /*                                                                            */
@@ -56,5 +57,6 @@ int		lexer(char *cmdline, t_list **toklst);
 
 void	free_everything(t_term *t);
 void	free_lexer(t_term *t);
+void	free_parser(t_term *t);
 
 #endif
