@@ -6,7 +6,7 @@
 #    By: mlebard <mlebard@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/07/27 17:27:08 by mlebard           #+#    #+#              #
-#    Updated: 2021/11/27 16:38:12 by mlebard          ###   ########.fr        #
+#    Updated: 2021/11/29 18:02:46 by mlebard          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,6 +38,9 @@ SOURCES		=	testmain.c \
 				parser/parser.c \
 				parser/expansion.c \
 				parser/format.c \
+				parser/make_cmd.c \
+				parser/make_plist.c \
+				parser/make_redirlist.c \
 				lexer/find_token.c \
 				lexer/make_token.c \
 				lexer/state_cat.c \
