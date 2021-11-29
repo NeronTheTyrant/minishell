@@ -6,7 +6,7 @@
 /*   By: acabiac <acabiac@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/27 20:59:41 by acabiac           #+#    #+#             */
-/*   Updated: 2021/11/28 19:51:38 by acabiac          ###   ########.fr       */
+/*   Updated: 2021/11/29 02:40:34 by acabiac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,10 +190,30 @@ void	ft_clear_redir(t_redir *redir)
 	free(redir);
 }
 
+void	ft_clear_process(t_process *p)
+{
+	if (p->redir != NULL)
+	ft_lstclear(&p->redir, &ft_clear_redir);
+	free(p);
+}
+
+int	make_process(t_process *p, t_list **plst)
+{
+	t_list		*new;
+
+	new = ft_lstnew(p);
+	if (new == NULL)
+	{
+		ft_clear_process(p);
+		return (error_fatal(ERR_MALLOC));
+	}
+	ft_lstadd_back(plst, new);
+	return (0);
+}
+
 int	make_process_list(t_list *toklst, t_list **plst)
 {
 	t_process	*p;
-	t_list		*new;
 
 	while (toklst)
 	{
@@ -203,13 +223,12 @@ int	make_process_list(t_list *toklst, t_list **plst)
 		ft_bzero(p, sizeof(*p));
 		if (make_redir_list(toklst, &p->redir) > 0)
 		{
-			free(p);
+			ft_clear_process(p);
 			return (SIG_FATAL);
 		}
 		if (make_cmd(&toklst, &p->cmd) > 0)
 		{
-			ft_lstclear(&p->redir, &ft_clear_redir);
-			free(p);
+			ft_clear_process(p);
 			return (SIG_FATAL);
 		}
 //		printf("AFTER CMD LIST CREATION\n");
@@ -218,14 +237,8 @@ int	make_process_list(t_list *toklst, t_list **plst)
 		print_rdir_list(p->redir);
 		print_cmd_list(p->cmd);
 //		printf("\n");
-		new = ft_lstnew(p);
-		if (new == NULL)
-		{
-			ft_lstclear(&p->redir, &ft_clear_redir);
-			free(p);
-			return (error_fatal(ERR_MALLOC));
-		}
-		ft_lstadd_back(plst, new);
+		if (make_process(p, plst))
+			return (SIG_FATAL);
 		// we want to do a 1st pass to make the *rdirlst
 		// we then want a second pass to make the **cmd
 		// we assign it to *p or we send *p directly to both of those handlers
