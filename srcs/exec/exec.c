@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 18:28:39 by mlebard           #+#    #+#             */
-/*   Updated: 2021/11/29 19:08:14 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/11/30 14:38:20 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@
 #include "redir.h"
 #include <sys/types.h>
 #include <sys/wait.h>
-
 
 int	make_path(char **env, char ***paths)
 {
@@ -79,8 +78,8 @@ int	exec(t_list *plist, char ***env, t_list **sudoenv)
 		else if (pid == 0)
 		{
 			process = ((t_process *)plist->content);
-			if (exec_cmd(process->cmd, *env, paths))
-				printf("CMD WAS NOT EXECUTED\n");
+			if (exec_cmd(process->cmd, *env, paths) == 0)
+				printf("%s: command not found\n", process->cmd[0]);
 			exit(1);
 		}
 		plist = plist->next;
