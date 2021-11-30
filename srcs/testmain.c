@@ -99,6 +99,7 @@ int	main(int argc, char **argv, char **env)
 			handle_sig(t);
 			continue ;
 		}
+		free_parser(t);
 	}
 	return (0);
 }
