@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 18:28:39 by mlebard           #+#    #+#             */
-/*   Updated: 2021/11/30 14:40:12 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/11/30 14:55:31 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,44 +37,54 @@ int	make_path(char **env, char ***paths)
 	return (0);
 }
 
-int	exec_cmd(char **cmd, char **env, char **paths)
+int	try_envpath(char **cmd, char **env, char **paths)
 {
 	size_t	i;
 	char	*cmd_path;
 	size_t	cmd_len;
 
 	i = 0;
-	if (cmd[0][0] == '/')
-		execve(cmd[0], cmd, env);
-	else if (ft_strchr(cmd[0], '/'))
+	while (paths[i])
 	{
-		cmd_len = ft_strlen(cmd[0]) + 2;
-		cmd_path = malloc(sizeof(*cmd_path) * (cmd_len) + 1);
+		cmd_len = ft_strlen(paths[i]) + ft_strlen(cmd[0]) + 1;
+		cmd_path = malloc(sizeof(*cmd_path) * (cmd_len + 1));
 		if (cmd_path == NULL)
 			return (error_fatal(ERR_MALLOC));
 		ft_bzero(cmd_path, sizeof(*cmd_path) * cmd_len + 1);
-		ft_strlcat(cmd_path, "./", cmd_len + 1);
+		ft_strlcat(cmd_path, paths[i], cmd_len + 1);
+		ft_strlcat(cmd_path, "/", cmd_len + 1);
 		ft_strlcat(cmd_path, cmd[0], cmd_len + 1);
 		execve(cmd_path, cmd, env);
 		free(cmd_path);
-	}	
-	else
-	{
-		while (paths[i])
-		{
-			cmd_len = ft_strlen(paths[i]) + ft_strlen(cmd[0]) + 1;
-			cmd_path = malloc(sizeof(*cmd_path) * (cmd_len + 1));
-			if (cmd_path == NULL)
-				return (error_fatal(ERR_MALLOC));
-			ft_bzero(cmd_path, sizeof(*cmd_path) * cmd_len + 1);
-			ft_strlcat(cmd_path, paths[i], cmd_len + 1);
-			ft_strlcat(cmd_path, "/", cmd_len + 1);
-			ft_strlcat(cmd_path, cmd[0], cmd_len + 1);
-			execve(cmd_path, cmd, env);
-			free(cmd_path);
-			i++;
-		}
+		i++;
 	}
+	return (0);
+}
+
+int	try_relative_path(char **cmd, char **env)
+{
+	char	*cmd_path;
+	size_t	cmd_len;
+
+	cmd_len = ft_strlen(cmd[0]) + 2;
+	cmd_path = malloc(sizeof(*cmd_path) * (cmd_len) + 1);
+	if (cmd_path == NULL)
+		return (error_fatal(ERR_MALLOC));
+	ft_bzero(cmd_path, sizeof(*cmd_path) * cmd_len + 1);
+	ft_strlcat(cmd_path, "./", cmd_len + 1);
+	ft_strlcat(cmd_path, cmd[0], cmd_len + 1);
+	execve(cmd_path, cmd, env);
+	free(cmd_path);
+	return (0);
+}
+int	exec_cmd(char **cmd, char **env, char **paths)
+{
+	if (cmd[0][0] == '/')
+		execve(cmd[0], cmd, env);
+	else if (ft_strchr(cmd[0], '/'))
+		try_relative_path(cmd, env);
+	else
+		try_envpath(cmd, env, paths);
 	return (0);
 }
 

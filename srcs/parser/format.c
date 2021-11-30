@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/27 16:38:26 by mlebard           #+#    #+#             */
-/*   Updated: 2021/11/28 19:15:47 by acabiac          ###   ########.fr       */
+/*   Updated: 2021/11/30 18:08:19 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ int	format(t_list *lst, char **env)
 		if (tok == WORD && !flag
 			&& do_expand(lst->content, currtok->tokstr, env))
 			return (error_fatal(ERR_MALLOC));
-		if (tok == WORD && handle_quotes(currtok))
+		if (tok == WORD && !flag && handle_quotes(currtok))
 			return (error_fatal(ERR_MALLOC));
 		lst = lst->next;
 	}
