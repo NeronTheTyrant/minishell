@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 17:54:11 by mlebard           #+#    #+#             */
-/*   Updated: 2021/11/29 18:00:47 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/01 17:05:07 by acabiac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "error.h"
 #include "sig.h"
 #include "token.h"
+#include <stdio.h>
 
 void	ft_clear_process(t_process *p)
 {
@@ -24,6 +25,8 @@ void	ft_clear_process(t_process *p)
 			ft_lstclear(&p->redir, &ft_clear_redir);
 		if (p->cmd != NULL)
 			ft_freeargs(p->cmd);
+		if (p->heredoc_filename)
+			free(p->heredoc_filename);
 		free(p);
 	}
 }
@@ -40,6 +43,29 @@ int	make_process(t_process *p, t_list **plst)
 	}
 	ft_lstadd_back(plst, new);
 	return (0);
+}
+
+void	print_plist(t_list *plist)
+{
+	size_t	i;
+	t_process *process;
+
+	i = 1;
+	printf("PRINTING PROCESSES LIST INFOS :\n\n");
+	while (plist)
+	{
+		process = ((t_process *)plist->content);
+		printf("Process #%zu:\n", i);
+		if (process->cmd)
+			print_cmd_list(process->cmd);
+		if (process->redir)
+			print_rdir_list(process->redir);
+		if (process->heredoc_filename)
+			printf("heredocs will use this temp file : \"%s\"\n", process->heredoc_filename);
+		printf("\n");
+		i++;
+		plist = plist->next;
+	}
 }
 
 int	make_process_list(t_list *toklst, t_list **plst)

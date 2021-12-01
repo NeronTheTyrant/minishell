@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 18:28:39 by mlebard           #+#    #+#             */
-/*   Updated: 2021/11/30 14:55:31 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/01 18:13:06 by acabiac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 #include "redir.h"
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <limits.h>
 
 int	make_path(char **env, char ***paths)
 {
@@ -88,14 +89,81 @@ int	exec_cmd(char **cmd, char **env, char **paths)
 	return (0);
 }
 
+char	*create_unique_filename(char *prefix)
+{
+	int	i;
+	char	*result;
+	char	*suffix;
+	char	*tmp;
+
+	i = 0;
+	if (access(prefix, F_OK) != 0)
+		return (ft_strdup(prefix));
+	while (i <= INT_MAX)
+	{
+		tmp = ft_strdup(prefix);
+		if (tmp == NULL)
+			return (NULL);
+		suffix = ft_itoa(i);
+		if (suffix == NULL)
+		{
+			free(tmp);
+			return (NULL);
+		}
+		result = ft_strjoin(tmp, suffix);
+		free(tmp);
+		free(suffix);
+		if (result == NULL)
+			return (NULL);
+		if (access(result, F_OK) != 0)
+			return (result);
+		free(result);
+		i++;
+	}
+	return (NULL);
+}
+
+int	process_contain_heredoc(t_list *redirlst)
+{
+	t_redir	*redir;
+
+	while (redirlst)
+	{
+		redir = ((t_redir *)redirlst->content);
+		if (redir->type == HEREDOC)
+			return (1);
+		redirlst = redirlst->next;
+	}
+	return (0);
+}
+
+int	create_heredocs_filenames(t_list *plist)
+{
+	t_process	*process;
+
+	while (plist)
+	{
+		process = ((t_process *)plist->content);
+		if (process->redir && process_contain_heredoc(process->redir) == 1)
+		{
+			process->heredoc_filename = create_unique_filename(".heredoc");
+			if (process->heredoc_filename == NULL)
+				return (1);
+		}
+		plist = plist->next;
+	}
+	return (0);
+}
+
 int	exec(t_list *plist, char ***env, t_list **sudoenv)
 {
 	int			pid;
 	char		**paths;
 	t_process	*process;
 
-	if (make_path(*env, &paths) > 0)
+	if (make_path(*env, &paths) > 0 || create_heredocs_filenames(plist) > 0)
 		return (error_fatal(ERR_MALLOC));
+	print_plist(plist);
 	while (plist)
 	{
 		pid = fork();

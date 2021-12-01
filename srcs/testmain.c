@@ -59,40 +59,6 @@ char	*rl_gets(char *prompt, char *prevline)
 	return (line);
 }
 
-char	*create_unique_filename(char *prefix)
-{
-	int	i;
-	char	*result;
-	char	*suffix;
-	char	*tmp;
-
-	i = 0;
-	if (access(prefix, F_OK) != 0)
-		return (ft_strdup(prefix));
-	while (i <= INT_MAX)
-	{
-		tmp = ft_strdup(prefix);
-		if (tmp == NULL)
-			return (NULL);
-		suffix = ft_itoa(i);
-		if (suffix == NULL)
-		{
-			free(tmp);
-			return (NULL);
-		}
-		result = ft_strjoin(tmp, suffix);
-		free(tmp);
-		free(suffix);
-		if (result == NULL)
-			return (NULL);
-		if (access(result, F_OK) != 0)
-			return (result);
-		free(result);
-		i++;
-	}
-	return (NULL);
-}
-
 int	main(int argc, char **argv, char **env)
 {
 	t_term	*t;
