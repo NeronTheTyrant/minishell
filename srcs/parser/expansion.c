@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/27 16:35:07 by mlebard           #+#    #+#             */
-/*   Updated: 2021/11/27 16:36:00 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/02 17:40:31 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ char	*expand_var(char *word, char **var, char **env)
 	tmp = ft_strndup(*var + 1, var_len);
 	if (tmp == NULL)
 		return (NULL);
+	printf("DEBUG : var passed to get env : %s\n", tmp);
 	expanded = ft_getenv(tmp, env);
 	free(tmp);
 	result = insert_expansion(word, var, expanded, var_len);
@@ -79,6 +80,7 @@ char	*expand_var(char *word, char **var, char **env)
 		return (NULL);
 	return (result);
 }
+
 
 int	do_expand(t_token *token, char *tokstr, char **env)
 {
@@ -95,7 +97,7 @@ int	do_expand(t_token *token, char *tokstr, char **env)
 		if (ptr == NULL)
 			return (0);
 		tokstr = expand_var(tokstr, &ptr, env);
-		if (ptr == NULL)
+		if (tokstr == NULL)
 			return (-1);
 		token->tokstr = tokstr;
 		token->toklen = ft_strlen(tokstr);
