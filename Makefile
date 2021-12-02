@@ -6,7 +6,7 @@
 #    By: mlebard <mlebard@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/07/27 17:27:08 by mlebard           #+#    #+#              #
-#    Updated: 2021/11/29 19:09:13 by mlebard          ###   ########.fr        #
+#    Updated: 2021/12/02 19:56:23 by mlebard          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,6 +32,7 @@ DEPEND		=	$(LIB_DIR)libft.h
 
 # SRCS
 SOURCES		=	testmain.c \
+				file_utils.c \
 				free.c \
 				env.c \
 				sudoenv.c \
@@ -43,6 +44,8 @@ SOURCES		=	testmain.c \
 				parser/make_plist.c \
 				parser/make_redirlist.c \
 				exec/exec.c \
+				exec/heredoc_input.c \
+				exec/heredoc_format.c \
 				lexer/find_token.c \
 				lexer/make_token.c \
 				lexer/state_cat.c \
