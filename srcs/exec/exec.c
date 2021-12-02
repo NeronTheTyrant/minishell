@@ -137,6 +137,27 @@ int	process_contain_heredoc(t_list *redirlst)
 	return (0);
 }
 
+int	init_heredocs(t_process *process)
+{
+	t_redir	*redir;
+	t_list	*redirlst;
+
+	redirlst = process->redir;
+	while (redirlst)
+	{
+		redir = ((t_redir *)redirlst->content);
+		if (redir->type == HEREDOC)
+		{
+			redir->fd = open(process->heredoc_filename, O_RDWR | O_CREAT | O_TRUNC, 0777);
+			if (redir->fd == -1)
+				return (1);
+			close(redir->fd);
+		}
+		redirlst = redirlst->next;
+	}
+	return (0);
+}
+
 int	create_heredocs_filenames(t_list *plist)
 {
 	t_process	*process;
@@ -148,7 +169,13 @@ int	create_heredocs_filenames(t_list *plist)
 		{
 			process->heredoc_filename = create_unique_filename(".heredoc");
 			if (process->heredoc_filename == NULL)
+			{
 				return (1);
+			}
+			if (init_heredocs(process) > 0)
+			{
+				return (1);
+			}
 		}
 		plist = plist->next;
 	}
