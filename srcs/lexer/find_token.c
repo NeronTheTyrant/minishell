@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/13 07:47:03 by mlebard           #+#    #+#             */
-/*   Updated: 2021/11/25 16:22:19 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/03 07:22:28 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int	find_token(char **cmdline, t_token **token)
 				return (SIG_RESTART);
 			*token = generate_token(*cmdline, state, toklen);
 			if (*token == NULL)
-				return (error_fatal(ERR_MALLOC));
+				return (error_fatal(ERR_MALLOC, NULL));
 			return (0);
 		}
 		else if (next_state != STATE_GENERAL)

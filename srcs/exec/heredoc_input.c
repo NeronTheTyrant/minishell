@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/02 18:43:05 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/02 19:53:54 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/03 07:20:07 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	fill_heredoc(int fd, char **limiter, char **env)
 
 	flag = 0;
 	if (handle_quotes_limiter(limiter, &flag) != 0)
-		return (error_fatal(ERR_MALLOC));
+		return (error_fatal(ERR_MALLOC, NULL));
 	line = readline("> ");
 	while (line)
 	{
@@ -53,7 +53,7 @@ int	fill_heredoc(int fd, char **limiter, char **env)
 			if (do_expand_heredoc(&line, env) != 0)
 			{
 				free(line);
-				return (error_fatal(ERR_MALLOC));
+				return (error_fatal(ERR_MALLOC, NULL));
 			}
 		}
 		ft_putendl_fd(line, fd);

@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/27 16:38:26 by mlebard           #+#    #+#             */
-/*   Updated: 2021/11/30 18:08:19 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/03 07:21:31 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,14 +97,14 @@ int	format(t_list *lst, char **env)
 		if (lst->prev != NULL)
 			prevtok = lst->prev->content;
 		if (check_grammar(currtok, prevtok, lst->next) == -1)
-			return (error_nonfatal(ERR_SYNTAX));
+			return (error_nonfatal(ERR_SYNTAX, currtok->tokstr));
 		flag = (lst->prev != NULL && prevtok->toktype == RDIR_HEREDOC);
 		tok = currtok->toktype;
 		if (tok == WORD && !flag
 			&& do_expand(lst->content, currtok->tokstr, env))
-			return (error_fatal(ERR_MALLOC));
+			return (error_fatal(ERR_MALLOC, NULL));
 		if (tok == WORD && !flag && handle_quotes(currtok))
-			return (error_fatal(ERR_MALLOC));
+			return (error_fatal(ERR_MALLOC, NULL));
 		lst = lst->next;
 	}
 	return (0);

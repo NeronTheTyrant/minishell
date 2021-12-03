@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 17:28:22 by mlebard           #+#    #+#             */
-/*   Updated: 2021/11/13 08:42:38 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/03 08:04:05 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,27 @@
 #include "core.h"
 #include <stdio.h>
 
-t_sig	error_nonfatal(char *errstr)
+t_sig	error_nonfatal(char *errstr, char *name)
 {
+	if (name != NULL)
+	{
+		ft_putstr_fd(name, 2);
+		ft_putstr_fd(":", 2);
+	}
 	if (errstr == NULL)
 		perror(NULL);
 	else
-		printf("%s\n", errstr);
+		ft_putendl_fd(errstr, 2);
 	return (SIG_RESTART);
 }
 
-t_sig	error_fatal(char *errstr)
+t_sig	error_fatal(char *errstr, char *name)
 {
+	if (name != NULL)
+	{
+		ft_putstr_fd(name, 2);
+		ft_putstr_fd(":", 2);
+	}
 	if (errstr == NULL)
 		perror(NULL);
 	else
@@ -32,8 +42,13 @@ t_sig	error_fatal(char *errstr)
 	return (SIG_FATAL);
 }
 
-void	error_exit(char *errstr, t_term *t)
+void	error_exit(char *errstr, char *name, t_term *t)
 {
+	if (name != NULL)
+	{
+		ft_putstr_fd(name, 2);
+		ft_putstr_fd(":", 2);
+	}
 	if (errstr == NULL)
 		perror(NULL);
 	else

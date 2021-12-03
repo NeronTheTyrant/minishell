@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 17:48:38 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/02 19:17:45 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/03 06:56:46 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define PROCESS_H
 
 #include "../libft/libft.h"
+#include "core.h"
 
 typedef struct s_process
 {
@@ -30,5 +31,8 @@ void	print_plist(t_list *p);
 int		make_cmd(t_list **toklst, char ***cmd);
 int		fill_cmd(t_list **toklst, char **newcmd);
 int		get_cmd_size(t_list *toklst);
+
+int		pipe_cmd(t_list *plist, t_term *t, char **paths, int cmdnum);
+int		exec_cmd(char **cmd, char **env, char **paths);
 
 #endif

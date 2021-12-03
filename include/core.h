@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 18:24:27 by mlebard           #+#    #+#             */
-/*   Updated: 2021/11/29 19:09:01 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/03 08:04:04 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@ typedef struct s_term
 	t_list		*sudoenv;
 	char		**env;
 	char		*cmdline;
+	int			pfd[2];
+	int			*pid;
 	t_list		*toklst;
 	t_list		*plst;
 	t_sig		sig;
@@ -47,7 +49,7 @@ typedef struct s_term
 /******************************************************************************/
 
 int		lexer(char *cmdline, t_list **toklst);
-int		exec(t_list *plist, char ***env, t_list **sudoenv);
+int		exec(t_list *plist, t_term *t);
 
 /******************************************************************************/
 /*                                                                            */
@@ -56,7 +58,9 @@ int		exec(t_list *plist, char ***env, t_list **sudoenv);
 /******************************************************************************/
 
 void	free_everything(t_term *t);
+void	reset_memory(t_term *t);
 void	free_lexer(t_term *t);
 void	free_parser(t_term *t);
+void	free_exec(t_term *t);
 
 #endif

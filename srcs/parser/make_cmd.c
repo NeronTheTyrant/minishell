@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 17:51:46 by mlebard           #+#    #+#             */
-/*   Updated: 2021/11/29 17:54:07 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/03 07:21:44 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ int	fill_cmd(t_list **toklst, char **newcmd)
 		{
 			newcmd[i] = ft_strdup(token->tokstr);
 			if (newcmd[i] == NULL)
-				return (error_fatal(ERR_MALLOC));
+				return (error_fatal(ERR_MALLOC, NULL));
 			i++;
 		}
 		*toklst = (*toklst)->next;
@@ -90,7 +90,7 @@ int	make_cmd(t_list **toklst, char ***cmd)
 	size = get_cmd_size(*toklst);
 	newcmd = malloc(sizeof(*newcmd) * (size + 1));
 	if (newcmd == NULL)
-		return (error_fatal(ERR_MALLOC));
+		return (error_fatal(ERR_MALLOC, NULL));
 	newcmd[size] = NULL;
 	if (fill_cmd(toklst, newcmd) > 0)
 		return (SIG_FATAL);

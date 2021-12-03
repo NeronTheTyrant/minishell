@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 17:28:22 by mlebard           #+#    #+#             */
-/*   Updated: 2021/11/29 18:09:59 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/03 07:22:33 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	lexer(char *cmdline, t_list **toklst)
 		if (add_token_to_list(toklst, token) == -1)
 		{
 			free(token);
-			return (error_fatal(ERR_MALLOC));
+			return (error_fatal(ERR_MALLOC, NULL));
 		}
 		token = NULL;
 	}

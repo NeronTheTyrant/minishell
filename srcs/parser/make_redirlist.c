@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 17:57:48 by mlebard           #+#    #+#             */
-/*   Updated: 2021/11/29 18:01:37 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/03 07:22:10 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,12 +90,12 @@ int	make_redir_list(t_list *toklst, t_list **rdirlst)
 		{
 			redir = tok_to_redir(token, toklst->next->content);
 			if (redir == NULL)
-				return (error_fatal(ERR_MALLOC));
+				return (error_fatal(ERR_MALLOC, NULL));
 			new = ft_lstnew(redir);
 			if (new == NULL)
 			{
 				free(redir);
-				return (error_fatal(ERR_MALLOC));
+				return (error_fatal(ERR_MALLOC, NULL));
 			}
 			ft_lstadd_back(rdirlst, new);
 		}

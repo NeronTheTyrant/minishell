@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 18:28:39 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/02 19:55:40 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/03 08:03:59 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,7 @@
 #include "process.h"
 #include "redir.h"
 #include "parser.h"
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <limits.h>
+#include "core.h"
 
 int	make_path(char **env, char ***paths)
 {
@@ -51,7 +49,7 @@ int	try_envpath(char **cmd, char **env, char **paths)
 		cmd_len = ft_strlen(paths[i]) + ft_strlen(cmd[0]) + 1;
 		cmd_path = malloc(sizeof(*cmd_path) * (cmd_len + 1));
 		if (cmd_path == NULL)
-			return (error_fatal(ERR_MALLOC));
+			return (error_fatal(ERR_MALLOC, NULL));
 		ft_bzero(cmd_path, sizeof(*cmd_path) * cmd_len + 1);
 		ft_strlcat(cmd_path, paths[i], cmd_len + 1);
 		ft_strlcat(cmd_path, "/", cmd_len + 1);
@@ -71,7 +69,7 @@ int	try_relative_path(char **cmd, char **env)
 	cmd_len = ft_strlen(cmd[0]) + 2;
 	cmd_path = malloc(sizeof(*cmd_path) * (cmd_len) + 1);
 	if (cmd_path == NULL)
-		return (error_fatal(ERR_MALLOC));
+		return (error_fatal(ERR_MALLOC, NULL));
 	ft_bzero(cmd_path, sizeof(*cmd_path) * cmd_len + 1);
 	ft_strlcat(cmd_path, "./", cmd_len + 1);
 	ft_strlcat(cmd_path, cmd[0], cmd_len + 1);
@@ -91,34 +89,33 @@ int	exec_cmd(char **cmd, char **env, char **paths)
 	return (0);
 }
 
-int	exec(t_list *plist, char ***env, t_list **sudoenv)
+int	exec(t_list *plist, t_term *t)
 {
-	int			pid;
+	int			cmdnum;
 	char		**paths;
-	t_process	*process;
+	int			i;
 
-	errno = 0;
-	if (make_path(*env, &paths) > 0 || create_heredocs(plist, *env) > 0)
-		return (error_fatal(ERR_MALLOC));
-	print_plist(plist);
+	if (make_path(t->env, &paths) > 0 || create_heredocs(plist, t->env) > 0)
+		return (error_fatal(ERR_MALLOC, NULL));
+//	print_plist(plist);
+	cmdnum = ft_lstsize(plist);
+	t->pid = malloc(sizeof(*t->pid) * cmdnum);
+	if (t->pid == NULL)
+		return (error_fatal(ERR_MALLOC, NULL));
+	i = 0;
 	while (plist)
 	{
-		pid = fork();
-		if (pid == -1)
-			return (error_fatal(NULL));
-		else if (pid == 0)
-		{
-			process = ((t_process *)plist->content);
-			if (exec_cmd(process->cmd, *env, paths) == 0)
-				printf("%s: command not found\n", process->cmd[0]);
-			exit(1);
-		}
+		pipe_cmd(plist, t, paths, i);
 		plist = plist->next;
+		i++;
 	}
-	while (errno != ECHILD)
-		wait(NULL);
-	printf("processes are finished!\n");
+	i = 0;
+	while (i < cmdnum)
+	{
+		waitpid(t->pid[i], NULL, 0);
+		i++;
+	}
+//	printf("processes are finished!\n");
 	ft_freeargs(paths);
-	(void)sudoenv;
 	return (0);
 }

@@ -65,7 +65,7 @@ int	main(int argc, char **argv, char **env)
 
 	t = malloc(sizeof(*t));
 	if (t == NULL)
-		return (error_fatal(ERR_MALLOC));
+		return (error_fatal(ERR_MALLOC, NULL));
 	ft_bzero(t, sizeof(*t));
 	(void)argc;
 	(void)argv;
@@ -93,14 +93,13 @@ int	main(int argc, char **argv, char **env)
 		}
 //		printf("\nPARSER DEBUG\n");
 //		print_token_list(t->toklst);
-		free_lexer(t);
-		t->sig = exec(t->plst, &t->env, &t->sudoenv);
+		t->sig = exec(t->plst, t);
 		if (t->sig > 0)
 		{
 			handle_sig(t);
 			continue ;
 		}
-		free_parser(t);
+		reset_memory(t);
 	}
 	return (0);
 }
