@@ -72,7 +72,6 @@ char	*expand_var(char *word, char **var, char **env)
 	tmp = ft_strndup(*var + 1, var_len);
 	if (tmp == NULL)
 		return (NULL);
-	printf("DEBUG : var passed to get env : %s\n", tmp);
 	expanded = ft_getenv(tmp, env);
 	free(tmp);
 	result = insert_expansion(word, var, expanded, var_len);

@@ -15,6 +15,7 @@
 #include "process.h"
 #include "error.h"
 #include "redir.h"
+#include <stdio.h>
 
 void	close_pipe(int pfd[2])
 {

@@ -20,6 +20,8 @@
 #include "redir.h"
 #include "parser.h"
 #include "core.h"
+#include <sys/types.h>
+#include <sys/wait.h>
 
 int	make_path(char **env, char ***paths)
 {

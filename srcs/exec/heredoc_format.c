@@ -68,7 +68,6 @@ int	do_expand_heredoc(char **str, char **env)
 				break ;
 			ptr++;
 		}
-		printf("AFTERWHILE *ptr = %d\n", (int)*ptr);
 		if (*ptr == '\0')
 			return (0);
 		*str = expand_var(*str, &ptr, env);
