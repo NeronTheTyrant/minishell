@@ -75,8 +75,20 @@ int	main(int argc, char **argv, char **env)
 	while (1)
 	{
 		t->cmdline = rl_gets("minishell> ", t->cmdline);
-		if (!t->cmdline || !*t->cmdline)
+		if (!t->cmdline)
+		{
+			ft_putendl_fd("exit", 2);
+			t->cmdline = strdup("exit");
+			if (t->cmdline == NULL)
+			{
+				t->sig = error_fatal(ERR_MALLOC, NULL);
+				handle_sig(t);
+			}
+		}
+		else if (!*t->cmdline)
+		{
 			continue ;
+		}
 		t->sig = lexer(t->cmdline, &t->toklst);
 		if (t->sig > 0)
 		{

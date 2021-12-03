@@ -91,11 +91,78 @@ int	exec_cmd(char **cmd, char **env, char **paths)
 	return (0);
 }
 
+int	ft_echo(char **args)
+{
+	(void)args;
+	return (0);
+}
+
+int	ft_cd(char **args)
+{
+	(void)args;
+	return (0);
+}
+
+int	ft_pwd(char **args)
+{
+	(void)args;
+	return (0);
+}
+
+int	ft_export(char **args)
+{
+	(void)args;
+	return (0);
+}
+
+int	ft_unset(char **args)
+{
+	(void)args;
+	return (0);
+}
+
+int	ft_env(char **args)
+{
+	(void)args;
+	return (0);
+}
+
+int	ft_exit(char **args)
+{
+	(void)args;
+	exit(0);
+}
+
+int	is_builtin(char *cmd)
+{
+	static char *builtin_names[] = {"echo", "cd", "pwd", "export", "unset"
+		, "env", "exit"};
+	int	i;
+
+	i = 0;
+	while (i < 7)
+	{
+		if (ft_strcmp(cmd, builtin_names[i]) == 0)
+			return (i);
+		i++;
+	}
+	return (-1);
+}
+
+int	exec_builtin(int i, char **args)
+{
+	static int (*builtin_func[])(char **) = {&ft_echo, &ft_cd, &ft_pwd
+		, &ft_export, &ft_unset, &ft_env, &ft_exit};
+	
+	return ((*builtin_func[i])(args));
+}
+
 int	exec(t_list *plist, t_term *t)
 {
 	int			cmdnum;
 	char		**paths;
 	int			i;
+	t_process	*process;
 
 	if (make_path(t->env, &paths) > 0 || create_heredocs(plist, t->env) > 0)
 		return (error_fatal(ERR_MALLOC, NULL));
@@ -104,9 +171,16 @@ int	exec(t_list *plist, t_term *t)
 	t->pid = malloc(sizeof(*t->pid) * cmdnum);
 	if (t->pid == NULL)
 		return (error_fatal(ERR_MALLOC, NULL));
-	i = 0;
+	process = ((t_process *)plist->content);
+	i = is_builtin(process->cmd[0]);
+	if (plist && plist->next == NULL && i >= 0)
+	{
+		do_redir(process->redir, process, t);
+		return (exec_builtin(i, process->cmd));
+	}
 	while (plist)
 	{
+		i = 0;
 		pipe_cmd(plist, t, paths, i);
 		plist = plist->next;
 		i++;

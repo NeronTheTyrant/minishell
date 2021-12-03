@@ -38,7 +38,7 @@ t_sig	error_fatal(char *errstr, char *name)
 	if (errstr == NULL)
 		perror(NULL);
 	else
-		printf("%s\n", errstr);
+		ft_putendl_fd(errstr, 2);
 	return (SIG_FATAL);
 }
 
@@ -52,7 +52,7 @@ void	error_exit(char *errstr, char *name, t_term *t)
 	if (errstr == NULL)
 		perror(NULL);
 	else
-		printf("%s\n", errstr);
+		ft_putendl_fd(errstr, 2);
 	if (t != NULL)
 		free_everything(t);
 	exit(1);

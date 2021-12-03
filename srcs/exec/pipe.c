@@ -15,6 +15,7 @@
 #include "process.h"
 #include "error.h"
 #include "redir.h"
+#include "builtin.h"
 #include <stdio.h>
 
 void	close_pipe(int pfd[2])
@@ -26,6 +27,8 @@ void	close_pipe(int pfd[2])
 void	pipe_child(t_list *plist, t_term *t, char **paths, int new_pfd[2])
 {
 	t_process	*process;
+	int			i;
+	int			ret;
 
 	if (plist->prev != NULL)
 	{
@@ -40,8 +43,17 @@ void	pipe_child(t_list *plist, t_term *t, char **paths, int new_pfd[2])
 	}
 	process = ((t_process *)plist->content);
 	do_redir(process->redir, process, t);
-	if (exec_cmd(process->cmd, t->env, paths) == 0)
-		printf("%s: command not found\n", process->cmd[0]);
+	i = is_builtin(process->cmd[0]);
+	if (i >= 0)
+	{
+		ret = exec_builtin(i, process->cmd);
+		exit(ret);
+	}
+	else if (exec_cmd(process->cmd, t->env, paths) == 0)
+	{
+		ft_putstr_fd(process->cmd[0], 2);
+		ft_putendl_fd(": command not found", 2);
+	}
 	exit(1);
 }
 
