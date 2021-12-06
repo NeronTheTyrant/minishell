@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/23 15:03:58 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/03 08:04:01 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/06 14:29:24 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,8 @@ void	reset_memory(t_term *t)
 	free_lexer(t);
 	free_parser(t);
 	free_exec(t);
-	dup2(STDIN_FILENO, t->std[0]);
-	dup2(STDOUT_FILENO, t->std[1]);
+	dup2(t->std[0], STDIN_FILENO);
+	dup2(t->std[1], STDOUT_FILENO);
 }
 
 void	free_everything(t_term *t)
