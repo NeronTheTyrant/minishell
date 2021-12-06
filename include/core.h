@@ -36,6 +36,7 @@ typedef struct s_term
 	char		**env;
 	char		*cmdline;
 	int			pfd[2];
+	int			std[2];
 	int			*pid;
 	t_list		*toklst;
 	t_list		*plst;

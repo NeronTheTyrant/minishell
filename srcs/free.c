@@ -43,6 +43,8 @@ void	reset_memory(t_term *t)
 	free_lexer(t);
 	free_parser(t);
 	free_exec(t);
+	dup2(STDIN_FILENO, t->std[0]);
+	dup2(STDOUT_FILENO, t->std[1]);
 }
 
 void	free_everything(t_term *t)
@@ -58,4 +60,6 @@ void	free_everything(t_term *t)
 		ft_lstclear(&t->sudoenv, &free_envnode); 
 	free(t->cmdline);
 	free(t);
+	close(t->std[0]);
+	close(t->std[1]);
 }

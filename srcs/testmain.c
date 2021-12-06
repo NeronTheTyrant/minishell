@@ -72,21 +72,25 @@ int	main(int argc, char **argv, char **env)
 	t->env = make_env(env);
 	if (make_sudoenv(t->env, &t->sudoenv) == -1)
 		return (1);
+	t->std[0] = dup(STDIN_FILENO);
+	t->std[1] = dup(STDOUT_FILENO);
 	while (1)
 	{
+		reset_memory(t);
 		t->cmdline = rl_gets("minishell> ", t->cmdline);
-		if (!t->cmdline)
+	//	if (!t->cmdline)
+	//	{
+	//		ft_putendl_fd("exit", 2);
+	//		t->cmdline = strdup("exit");
+	//		if (t->cmdline == NULL)
+	//		{
+	//			t->sig = error_fatal(ERR_MALLOC, NULL);
+	//			handle_sig(t);
+	//		}
+	//	}
+	/*	else */if (!t->cmdline || !*t->cmdline)
 		{
-			ft_putendl_fd("exit", 2);
-			t->cmdline = strdup("exit");
-			if (t->cmdline == NULL)
-			{
-				t->sig = error_fatal(ERR_MALLOC, NULL);
-				handle_sig(t);
-			}
-		}
-		else if (!*t->cmdline)
-		{
+			ft_putendl_fd("CMD NULL", 2);
 			continue ;
 		}
 		t->sig = lexer(t->cmdline, &t->toklst);
@@ -111,7 +115,6 @@ int	main(int argc, char **argv, char **env)
 			handle_sig(t);
 			continue ;
 		}
-		reset_memory(t);
 	}
 	return (0);
 }
