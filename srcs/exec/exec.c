@@ -91,45 +91,73 @@ int	exec_cmd(char **cmd, char **env, char **paths)
 	return (0);
 }
 
-int	ft_echo(char **args)
+int	ft_echo(char **args, t_term *t)
 {
-	(void)args;
+	size_t	i;
+	size_t	len;
+	int		newline;
+
+	(void)t;
+	i = 1;
+	newline = 0;
+	while (ft_strcmp(args[i] , "-n") == 0)
+	{
+		newline++;;
+		i++;
+	}
+	while (args[i])
+	{
+		if (i > 1 + (size_t)newline && write(1, " ", 1) != 1)
+			return (1);
+		len = ft_strlen(args[i]);
+		if (write(1, args[i], len) != (int)len)
+			return (1);
+		i++;
+	}
+	if (newline == 0 && write(1, "\n", 1) != 1)
+		return (1);
 	return (0);
 }
 
-int	ft_cd(char **args)
+int	ft_cd(char **args, t_term *t)
 {
 	(void)args;
+	(void)t;
 	return (0);
 }
 
-int	ft_pwd(char **args)
+int	ft_pwd(char **args, t_term *t)
 {
 	(void)args;
+	(void)t;
 	return (0);
 }
 
-int	ft_export(char **args)
+int	ft_export(char **args, t_term *t)
 {
 	(void)args;
+	(void)t;
 	return (0);
 }
 
-int	ft_unset(char **args)
+int	ft_unset(char **args, t_term *t)
 {
 	(void)args;
+	(void)t;
 	return (0);
 }
 
-int	ft_env(char **args)
+int	ft_env(char **args, t_term *t)
 {
 	(void)args;
+	(void)t;
 	return (0);
 }
 
-int	ft_exit(char **args)
+int	ft_exit(char **args, t_term *t)
 {
 	(void)args;
+	(void)t;
 	exit(0);
 }
 
@@ -149,12 +177,12 @@ int	is_builtin(char *cmd)
 	return (-1);
 }
 
-int	exec_builtin(int i, char **args)
+int	exec_builtin(int i, char **args, t_term *t)
 {
-	static int (*builtin_func[])(char **) = {&ft_echo, &ft_cd, &ft_pwd
-		, &ft_export, &ft_unset, &ft_env, &ft_exit};
+	static int (*builtin_func[])(char **, t_term *t) = {&ft_echo, &ft_cd
+		, &ft_pwd, &ft_export, &ft_unset, &ft_env, &ft_exit};
 	
-	return ((*builtin_func[i])(args));
+	return ((*builtin_func[i])(args, t));
 }
 
 int	exec(t_list *plist, t_term *t)
@@ -176,7 +204,7 @@ int	exec(t_list *plist, t_term *t)
 	if (plist && plist->next == NULL && i >= 0)
 	{
 		do_redir(process->redir, process, t);
-		return (exec_builtin(i, process->cmd));
+		return (exec_builtin(i, process->cmd, t));
 	}
 	while (plist)
 	{

@@ -46,7 +46,7 @@ void	pipe_child(t_list *plist, t_term *t, char **paths, int new_pfd[2])
 	i = is_builtin(process->cmd[0]);
 	if (i >= 0)
 	{
-		ret = exec_builtin(i, process->cmd);
+		ret = exec_builtin(i, process->cmd, t);
 		exit(ret);
 	}
 	else if (exec_cmd(process->cmd, t->env, paths) == 0)
