@@ -15,6 +15,7 @@
 #include <stdlib.h>
 #include "error.h"
 #include "parser.h"
+#include "lexer.h"
 
 int	remove_quote(t_token *token, int index)
 {
@@ -83,13 +84,18 @@ int	check_grammar(t_token *token, t_token *prevtok, t_list *next)
 	return (0);
 }
 
-int	format(t_list *lst, char **env)
+int	format(t_list **toklst, char **env)
 {
 	t_toktype	tok;
 	int			flag;
 	t_token		*prevtok;
 	t_token		*currtok;
+	t_list		*lst;
+	t_list		*tmp;
 
+	lst = NULL;
+	if (toklst != NULL)
+		lst = *toklst;
 	while (lst)
 	{
 		prevtok = NULL;
@@ -102,7 +108,16 @@ int	format(t_list *lst, char **env)
 		tok = currtok->toktype;
 		if (tok == WORD && !flag
 			&& do_expand(lst->content, currtok->tokstr, env))
+		{
 			return (error_fatal(ERR_MALLOC, NULL));
+		}
+		if (tok == WORD && !flag && currtok->tokstr && currtok->tokstr[0] == '\0')
+		{
+			tmp = lst;
+			lst = lst->next;
+			ft_lstdelone(toklst, tmp, &clear_token);
+			continue ;
+		}
 		if (tok == WORD && !flag && handle_quotes(currtok))
 			return (error_fatal(ERR_MALLOC, NULL));
 		lst = lst->next;

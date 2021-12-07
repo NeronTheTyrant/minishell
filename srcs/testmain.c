@@ -101,7 +101,7 @@ int	main(int argc, char **argv, char **env)
 		}
 //		printf("\nLEXER DEBUG\n");
 //		print_token_list(t->toklst);
-		t->sig = parser(t->toklst, t->env, &t->plst);
+		t->sig = parser(&t->toklst, t->env, &t->plst);
 		if (t->sig > 0)
 		{
 			handle_sig(t);

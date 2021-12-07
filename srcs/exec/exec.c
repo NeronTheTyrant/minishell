@@ -82,6 +82,8 @@ int	try_relative_path(char **cmd, char **env)
 
 int	exec_cmd(char **cmd, char **env, char **paths)
 {
+	if (cmd == NULL || cmd[0] == NULL)
+		return (1);
 	if (cmd[0][0] == '/')
 		execve(cmd[0], cmd, env);
 	else if (ft_strchr(cmd[0], '/'))
@@ -167,6 +169,8 @@ int	is_builtin(char *cmd)
 		, "env", "exit"};
 	int	i;
 
+	if (cmd == NULL)
+		return (-1);
 	i = 0;
 	while (i < 7)
 	{
@@ -199,6 +203,8 @@ int	exec(t_list *plist, t_term *t)
 	t->pid = malloc(sizeof(*t->pid) * cmdnum);
 	if (t->pid == NULL)
 		return (error_fatal(ERR_MALLOC, NULL));
+	if (plist == NULL)
+		return (0);
 	process = ((t_process *)plist->content);
 	i = is_builtin(process->cmd[0]);
 	if (plist && plist->next == NULL && i >= 0)

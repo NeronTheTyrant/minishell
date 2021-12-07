@@ -18,7 +18,7 @@
 
 char	*expand_var(char *word, char **var, char **env);
 int		do_expand(t_token *token, char *tokstr, char **env);
-int		parser(t_list *lst, char **env, t_list **plst);
-int		format(t_list *lst, char **env);
+int		parser(t_list **lst, char **env, t_list **plst);
+int		format(t_list **lst, char **env);
 
 #endif

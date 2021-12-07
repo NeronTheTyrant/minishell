@@ -16,7 +16,7 @@
 #include "process.h"
 #include "sig.h"
 
-int	parser(t_list *toklst, char **env, t_list **plst)
+int	parser(t_list **toklst, char **env, t_list **plst)
 {
 	t_sig	sig;
 
@@ -25,7 +25,7 @@ int	parser(t_list *toklst, char **env, t_list **plst)
 	if (sig > 0)
 		return (sig);
 //	printf("AFTER FORMAT\n");
-	sig = make_process_list(toklst, plst);
+	sig = make_process_list(*toklst, plst);
 	if (sig > 0)
 		return (sig);
 //	printf("AFTER PROCESS LIST CREATION\n");

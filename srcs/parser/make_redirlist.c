@@ -86,7 +86,7 @@ int	make_redir_list(t_list *toklst, t_list **rdirlst)
 		token = toklst->content;
 		if (token->toktype == PIPE)
 			break ;
-		if (token->toktype != WORD && token->toktype != NAME)
+		if (token->toktype != WORD && token->toktype != NAME && toklst->next)
 		{
 			redir = tok_to_redir(token, toklst->next->content);
 			if (redir == NULL)
