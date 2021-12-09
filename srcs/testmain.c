@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 19:53:46 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/09 21:00:58 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/09 21:18:29 by acabiac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,9 @@
 #include "parser.h"
 #include "builtin.h"
 #include <signal.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <errno.h>
 
 void	print_token_list(t_list *toklst)
 {
@@ -80,7 +83,8 @@ void	handle_signals(int sig)
 		rl_replace_line("", 0);
 		rl_on_new_line();
 		ft_putstr_fd("\n", 1);
-		rl_redisplay();
+		if (waitpid(-1, NULL, 0) == -1 && errno == ECHILD)
+			rl_redisplay();
 	}
 }
 
@@ -109,8 +113,6 @@ int	main(int argc, char **argv, char **env)
 	{
 		reset_memory(t);
 		t->cmdline = rl_gets("minishell> ", t->cmdline);
-		ft_putstr_fd("READLINE GOT THE LINE :", 2);
-		ft_putendl_fd(t->cmdline, 2);
 		if (!t->cmdline)
 		{
 			ft_putendl_fd("exit", 2);
