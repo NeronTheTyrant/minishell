@@ -1,27 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.h                                            :+:      :+:    :+:   */
+/*   env_builtin.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/13 07:47:03 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/09 17:59:50 by mlebard          ###   ########.fr       */
+/*   Created: 2021/12/09 15:12:44 by mlebard           #+#    #+#             */
+/*   Updated: 2021/12/09 15:13:43 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ERROR_H
-# define ERROR_H
+#include "core.h"
 
-# include "sig.h"
-
-# define ERR_MALLOC			"Error: malloc failed"
-# define ERR_SYNTAX			"Error: Syntax"
-# define ERR_CMDNOTFOUND	"command not found"
-# define ERR_OTHER			"Error: Unknown"
-
-t_sig	error_nonfatal(char *errstr, char *name);
-t_sig	error_fatal(char *errstr, char *name);
-void	error_exit(char *errstr, char *name, void *t);
-
-#endif
+int	ft_env(char **args, t_term *t)
+{
+	(void)args;
+	(void)t;
+	return (0);
+}

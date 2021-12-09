@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/02 19:15:48 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/03 07:19:51 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/09 19:52:59 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int	handle_quotes_limiter(char **limiter, int *flag)
 int	do_expand_heredoc(char **str, char **env)
 {
 	char	*ptr;
-	
+
 	ptr = *str;
 	while (ptr != NULL && *ptr != '\0')
 	{

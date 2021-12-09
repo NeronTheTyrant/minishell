@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 06:51:47 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/03 07:19:21 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/09 18:11:55 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int	do_redir_append(t_redir *redir)
 void	do_redir(t_list *rdirlst, t_process *p, t_term *t)
 {
 	t_redir	*redir;
-	int	ret;
+	int		ret;
 
 	ret = 0;
 	while (rdirlst)
@@ -81,7 +81,7 @@ void	do_redir(t_list *rdirlst, t_process *p, t_term *t)
 		else if (redir->type == OUT)
 			ret = do_redir_out(redir);
 		else if (redir->type == HEREDOC)
-			ret = do_redir_heredoc( p);
+			ret = do_redir_heredoc(p);
 		else if (redir->type == APPEND)
 			ret = do_redir_append(redir);
 		if (ret != 0)

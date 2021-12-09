@@ -1,27 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.h                                            :+:      :+:    :+:   */
+/*   exec.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/13 07:47:03 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/09 17:59:50 by mlebard          ###   ########.fr       */
+/*   Created: 2021/12/09 17:41:24 by mlebard           #+#    #+#             */
+/*   Updated: 2021/12/09 17:42:52 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ERROR_H
-# define ERROR_H
+#ifndef EXEC_H
+# define EXEC_H
 
-# include "sig.h"
+int		fork_cmd(t_list *plist, t_term *t, char **paths, int cmdnum);
+int		exec_cmd(char **cmd, char **env, char **paths);
 
-# define ERR_MALLOC			"Error: malloc failed"
-# define ERR_SYNTAX			"Error: Syntax"
-# define ERR_CMDNOTFOUND	"command not found"
-# define ERR_OTHER			"Error: Unknown"
-
-t_sig	error_nonfatal(char *errstr, char *name);
-t_sig	error_fatal(char *errstr, char *name);
-void	error_exit(char *errstr, char *name, void *t);
+int		make_path(char **env, char ***paths);
+int		try_envpath(char **cmd, char **env, char **paths);
+int		try_relative_path(char **cmd, char **env);
 
 #endif

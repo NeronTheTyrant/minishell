@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/27 16:38:26 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/03 07:21:31 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/09 18:55:35 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,43 +84,46 @@ int	check_grammar(t_token *token, t_token *prevtok, t_list *next)
 	return (0);
 }
 
+int	handle_token(t_list **toklst, t_list *lst, char **env)
+{
+	int			flag;
+	t_toktype	tok;
+	t_token		*currtok;
+	t_token		*prevtok;
+
+	currtok = lst->content;
+	prevtok = NULL;
+	if (lst->prev != NULL)
+		prevtok = lst->prev->content;
+	tok = currtok->toktype;
+	flag = (lst->prev != NULL && prevtok->toktype == RDIR_HEREDOC);
+	if (check_grammar(currtok, prevtok, lst->next) == -1)
+		return (error_nonfatal(ERR_SYNTAX, currtok->tokstr));
+	if (tok != WORD || flag != 0)
+		return (0);
+	if (do_expand(lst->content, currtok->tokstr, env))
+		return (error_fatal(ERR_MALLOC, NULL));
+	if (currtok->tokstr[0] == '\0')
+		ft_lstdelone(toklst, lst, &clear_token);
+	else if (handle_quotes(currtok))
+		return (error_fatal(ERR_MALLOC, NULL));
+	return (0);
+}
+
 int	format(t_list **toklst, char **env)
 {
-	t_toktype	tok;
-	int			flag;
-	t_token		*prevtok;
-	t_token		*currtok;
 	t_list		*lst;
-	t_list		*tmp;
+	t_list		*next;
+	int			ret;
 
-	lst = NULL;
-	if (toklst != NULL)
-		lst = *toklst;
+	lst = *toklst;
 	while (lst)
 	{
-		prevtok = NULL;
-		currtok = lst->content;
-		if (lst->prev != NULL)
-			prevtok = lst->prev->content;
-		if (check_grammar(currtok, prevtok, lst->next) == -1)
-			return (error_nonfatal(ERR_SYNTAX, currtok->tokstr));
-		flag = (lst->prev != NULL && prevtok->toktype == RDIR_HEREDOC);
-		tok = currtok->toktype;
-		if (tok == WORD && !flag
-			&& do_expand(lst->content, currtok->tokstr, env))
-		{
-			return (error_fatal(ERR_MALLOC, NULL));
-		}
-		if (tok == WORD && !flag && currtok->tokstr && currtok->tokstr[0] == '\0')
-		{
-			tmp = lst;
-			lst = lst->next;
-			ft_lstdelone(toklst, tmp, &clear_token);
-			continue ;
-		}
-		if (tok == WORD && !flag && handle_quotes(currtok))
-			return (error_fatal(ERR_MALLOC, NULL));
-		lst = lst->next;
+		next = lst->next;
+		ret = handle_token(toklst, lst, env);
+		if (ret != 0)
+			return (ret);
+		lst = next;
 	}
 	return (0);
 }

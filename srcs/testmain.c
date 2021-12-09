@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   testmain.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/12/09 19:53:46 by mlebard           #+#    #+#             */
+/*   Updated: 2021/12/09 21:00:58 by mlebard          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "../libft/libft.h"
@@ -9,6 +21,8 @@
 #include "env.h"
 #include <limits.h>
 #include "parser.h"
+#include "builtin.h"
+#include <signal.h>
 
 void	print_token_list(t_list *toklst)
 {
@@ -59,13 +73,30 @@ char	*rl_gets(char *prompt, char *prevline)
 	return (line);
 }
 
+void	handle_signals(int sig)
+{	
+	if (sig == SIGINT)
+	{
+		rl_replace_line("", 0);
+		rl_on_new_line();
+		ft_putstr_fd("\n", 1);
+		rl_redisplay();
+	}
+}
+
 int	main(int argc, char **argv, char **env)
 {
 	t_term	*t;
+	struct sigaction	sa;
 
+	sa.sa_handler = &handle_signals;
+	sa.sa_flags = SA_RESTART;
+	sigaction(SIGQUIT, &sa, NULL);
+	sigaction(SIGINT, &sa, NULL);
 	t = malloc(sizeof(*t));
 	if (t == NULL)
 		return (error_fatal(ERR_MALLOC, NULL));
+	
 	ft_bzero(t, sizeof(*t));
 	(void)argc;
 	(void)argv;
@@ -78,37 +109,27 @@ int	main(int argc, char **argv, char **env)
 	{
 		reset_memory(t);
 		t->cmdline = rl_gets("minishell> ", t->cmdline);
-	//	if (!t->cmdline)
-	//	{
-	//		ft_putendl_fd("exit", 2);
-	//		t->cmdline = strdup("exit");
-	//		if (t->cmdline == NULL)
-	//		{
-	//			t->sig = error_fatal(ERR_MALLOC, NULL);
-	//			handle_sig(t);
-	//		}
-	//	}
-	/*	else */if (!t->cmdline || !*t->cmdline)
+		ft_putstr_fd("READLINE GOT THE LINE :", 2);
+		ft_putendl_fd(t->cmdline, 2);
+		if (!t->cmdline)
 		{
-			ft_putendl_fd("CMD NULL", 2);
-			continue ;
+			ft_putendl_fd("exit", 2);
+			exec_builtin(EXIT, NULL, t);
 		}
+		else if (!*t->cmdline)
+			continue ;
 		t->sig = lexer(t->cmdline, &t->toklst);
 		if (t->sig > 0)
 		{
 			handle_sig(t);
 			continue ;
 		}
-//		printf("\nLEXER DEBUG\n");
-//		print_token_list(t->toklst);
 		t->sig = parser(&t->toklst, t->env, &t->plst);
 		if (t->sig > 0)
 		{
 			handle_sig(t);
 			continue ;
 		}
-//		printf("\nPARSER DEBUG\n");
-//		print_token_list(t->toklst);
 		t->sig = exec(t->plst, t);
 		if (t->sig > 0)
 		{

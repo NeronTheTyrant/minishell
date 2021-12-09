@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/23 15:03:58 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/06 14:29:24 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/09 18:12:51 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	free_everything(t_term *t)
 	if (t->env != NULL)
 		ft_freeargs(t->env);
 	if (t->sudoenv != NULL)
-		ft_lstclear(&t->sudoenv, &free_envnode); 
+		ft_lstclear(&t->sudoenv, &free_envnode);
 	free(t->cmdline);
 	free(t);
 	close(t->std[0]);

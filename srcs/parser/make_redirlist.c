@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 17:57:48 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/03 07:22:10 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/09 19:51:45 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,36 +14,6 @@
 #include <stdio.h>
 #include "sig.h"
 #include "error.h"
-
-void	print_rdir_list(t_list *toklst)
-{
-	t_redir	*redir;
-
-	printf("PRINTING REDIR LIST:\n");
-	while (toklst != NULL)
-	{
-		redir = ((t_redir *)toklst->content);
-		printf("redir type = ");
-		switch (redir->type)
-		{
-			case IN:
-				printf("IN\n");
-				break;
-			case OUT:
-				printf("OUT\n");
-				break;
-			case HEREDOC:
-				printf("HEREDOC\n");
-				break;
-			case APPEND:
-				printf("APPEND\n");
-				break;
-		}
-		printf("str = \"%s\"\n", redir->str);
-		toklst = toklst->next;
-	}
-	printf("\n");
-}
 
 void	ft_clear_redir(t_redir *redir)
 {

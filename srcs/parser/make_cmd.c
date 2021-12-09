@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 17:51:46 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/03 07:21:44 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/09 14:42:42 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@
 
 void	print_cmd_list(char **cmd)
 {
-	size_t	i = 0;
+	size_t	i;
 
-	//	printf("PRINTING CMD LIST :\n");
+	i = 0;
 	while (cmd[i])
 	{
 		printf("cmd[%zu] = \"%s\"\n", i, cmd[i]);
@@ -46,7 +46,7 @@ int	get_cmd_size(t_list *toklst)
 		else
 			prevtok = ((t_token *)toklst->prev->content)->toktype;
 		if ((token->toktype == NAME || token->toktype == WORD)
-				&& (prevtok < RDIR_IN || prevtok > RDIR_A_OUT))
+			&& (prevtok < RDIR_IN || prevtok > RDIR_A_OUT))
 			size++;
 		toklst = toklst->next;
 	}
@@ -55,9 +55,9 @@ int	get_cmd_size(t_list *toklst)
 
 int	fill_cmd(t_list **toklst, char **newcmd)
 {
-	t_token	*token;
+	t_token		*token;
 	t_toktype	prevtok;
-	size_t	i;
+	size_t		i;
 
 	i = 0;
 	while (*toklst)
@@ -70,7 +70,7 @@ int	fill_cmd(t_list **toklst, char **newcmd)
 		else
 			prevtok = ((t_token *)(*toklst)->prev->content)->toktype;
 		if ((token->toktype == NAME || token->toktype == WORD)
-				&& (prevtok < RDIR_IN || prevtok > RDIR_A_OUT))
+			&& (prevtok < RDIR_IN || prevtok > RDIR_A_OUT))
 		{
 			newcmd[i] = ft_strdup(token->tokstr);
 			if (newcmd[i] == NULL)

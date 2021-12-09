@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/02 19:50:58 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/02 19:53:58 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/09 18:12:26 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ char	*create_filename(char *prefix, int nb)
 
 char	*create_unique_filename(char *prefix)
 {
-	int	i;
+	int		i;
 	char	*result;
 
 	i = 0;

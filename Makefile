@@ -6,7 +6,7 @@
 #    By: mlebard <mlebard@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/07/27 17:27:08 by mlebard           #+#    #+#              #
-#    Updated: 2021/12/03 07:02:00 by mlebard          ###   ########.fr        #
+#    Updated: 2021/12/09 18:04:50 by mlebard          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,8 +46,17 @@ SOURCES		=	testmain.c \
 				exec/exec.c \
 				exec/heredoc_input.c \
 				exec/heredoc_format.c \
+				exec/paths.c \
 				exec/redir.c \
 				exec/pipe.c \
+				builtin/cd.c \
+				builtin/echo.c \
+				builtin/env.c \
+				builtin/exit.c \
+				builtin/export.c \
+				builtin/pwd.c \
+				builtin/unset.c \
+				builtin/exec_builtin.c \
 				lexer/find_token.c \
 				lexer/make_token.c \
 				lexer/state_cat.c \

@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/02 18:43:05 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/03 07:20:07 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/09 14:45:28 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,8 @@ int	init_heredocs(t_process *process, char **env)
 		redir = ((t_redir *)redirlst->content);
 		if (redir->type == HEREDOC)
 		{
-			redir->fd = open(process->heredoc_filename, O_RDWR | O_CREAT | O_TRUNC, 0777);
+			redir->fd = open(process->heredoc_filename, O_RDWR | O_CREAT
+					| O_TRUNC, 0777);
 			if (redir->fd == -1)
 				return (1);
 			fill_heredoc(redir->fd, &redir->str, env);
