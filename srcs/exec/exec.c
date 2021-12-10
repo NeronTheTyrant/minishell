@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 18:28:39 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/09 22:52:24 by acabiac          ###   ########.fr       */
+/*   Updated: 2021/12/10 14:46:27 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,22 +68,6 @@ int	exec_single(t_list *plist, t_term *t)
 		return (exec_builtin(i, process->cmd, t));
 	}
 	return (0);
-}
-
-int	get_cmdnum(t_list *plist)
-{
-	int	ret;
-	t_process *process;
-
-	ret = 0;
-	while (plist)
-	{
-		process = plist->content;
-		if (process->cmd && process->cmd[0])
-			ret++;
-		plist = plist->next;
-	}
-	return (ret);
 }
 
 int	exec(t_list *plist, t_term *t)

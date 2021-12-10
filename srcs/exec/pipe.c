@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 06:55:09 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/09 23:00:55 by acabiac          ###   ########.fr       */
+/*   Updated: 2021/12/10 14:16:15 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ void	fork_child(t_list *plist, t_term *t, char **paths, int new_pfd[2])
 		exit(exec_builtin(i, process->cmd, t));
 	else if (exec_cmd(process->cmd, t->env, paths) == 0)
 		error_exit(ERR_CMDNOTFOUND, process->cmd[0], t);
+	exit(0);
 }
 
 int	fork_cmd(t_list *plist, t_term *t, char **paths, int cmdnum)
@@ -58,8 +59,7 @@ int	fork_cmd(t_list *plist, t_term *t, char **paths, int cmdnum)
 		if (pipe(new_pfd) < 0)
 			return (error_fatal(NULL, NULL));
 	}
-	if (((t_process *)plist->content)->cmd && ((t_process *)plist->content)->cmd[0])
-		t->pid[cmdnum] = fork();
+	t->pid[cmdnum] = fork();
 	if (t->pid[cmdnum] == -1)
 		return (error_fatal(NULL, NULL));
 	else if (t->pid[cmdnum] == 0)
