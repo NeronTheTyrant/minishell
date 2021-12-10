@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 18:28:39 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/10 14:46:27 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/10 19:37:20 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	exec_cmd(char **cmd, char **env, char **paths)
 
 int	exec_forks(t_list *plist, char **paths, t_term *t, int cmdnum)
 {
-	int			i;
+	int	i;
 
 	i = 0;
 	while (plist)
@@ -75,9 +75,11 @@ int	exec(t_list *plist, t_term *t)
 	int			cmdnum;
 	char		**paths;
 	t_process	*process;
+	int			ret;
 
-	if (create_heredocs(plist, t->env) > 0)
-		return (error_fatal(ERR_MALLOC, NULL));
+	ret = create_heredocs(plist, t->env);
+	if (ret > 0)
+		return (ret);
 	cmdnum = ft_lstsize(plist);
 	t->pid = malloc(sizeof(*t->pid) * cmdnum);
 	if (t->pid == NULL)

@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/23 15:03:58 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/09 18:12:51 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/10 19:11:17 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ void	reset_memory(t_term *t)
 {
 	if (t == NULL)
 		return ;
+	t->lastret = g_ret;
+	g_ret = 0;
 	free_lexer(t);
 	free_parser(t);
 	free_exec(t);

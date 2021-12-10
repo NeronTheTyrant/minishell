@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 18:24:27 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/09 17:54:40 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/10 19:10:03 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@
 ** sig     -> signal returned by core functionalities
 */
 
+extern int g_ret;
+
 typedef struct s_term
 {
 	t_list		*sudoenv;
@@ -41,6 +43,7 @@ typedef struct s_term
 	t_list		*toklst;
 	t_list		*plst;
 	t_sig		sig;
+	int			lastret;
 }	t_term;
 
 /******************************************************************************/

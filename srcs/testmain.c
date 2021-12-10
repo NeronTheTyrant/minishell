@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 19:53:46 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/09 21:18:29 by acabiac          ###   ########.fr       */
+/*   Updated: 2021/12/10 22:09:47 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <errno.h>
+
+int	g_ret;
 
 void	print_token_list(t_list *toklst)
 {
@@ -80,11 +82,36 @@ void	handle_signals(int sig)
 {	
 	if (sig == SIGINT)
 	{
-		rl_replace_line("", 0);
-		rl_on_new_line();
-		ft_putstr_fd("\n", 1);
 		if (waitpid(-1, NULL, 0) == -1 && errno == ECHILD)
+		{
+			rl_replace_line("", 0);
+			rl_on_new_line();
+			ft_putstr_fd("\n", 1);
 			rl_redisplay();
+		}
+		else
+			ft_putstr_fd("\n", 1);
+		g_ret = sig + 128;
+	}
+	else if (sig == SIGQUIT)
+	{
+		if (waitpid(-1, NULL, 0) == -1 && errno == ECHILD)
+		{
+			printf("\r");
+			//rl_replace_line("", 0);
+			rl_on_new_line();
+			rl_redisplay();
+			printf("  ");
+			printf("\r");
+			//rl_replace_line("", 0);
+			rl_on_new_line();
+			rl_redisplay();
+		}
+		else
+		{
+			ft_putendl_fd("Quit (core dumped)", 2);
+			g_ret = sig + 128;
+		}
 	}
 }
 
@@ -100,7 +127,6 @@ int	main(int argc, char **argv, char **env)
 	t = malloc(sizeof(*t));
 	if (t == NULL)
 		return (error_fatal(ERR_MALLOC, NULL));
-	
 	ft_bzero(t, sizeof(*t));
 	(void)argc;
 	(void)argv;
@@ -109,9 +135,11 @@ int	main(int argc, char **argv, char **env)
 		return (1);
 	t->std[0] = dup(STDIN_FILENO);
 	t->std[1] = dup(STDOUT_FILENO);
+	g_ret = 0;
 	while (1)
 	{
 		reset_memory(t);
+		printf("lastret = %d\ng_ret = %d\n", t->lastret, g_ret);
 		t->cmdline = rl_gets("minishell> ", t->cmdline);
 		if (!t->cmdline)
 		{
