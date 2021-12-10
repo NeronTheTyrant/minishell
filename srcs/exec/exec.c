@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 18:28:39 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/10 19:37:20 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/10 23:32:12 by acabiac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 #include <sys/wait.h>
 #include "builtin.h"
 #include "exec.h"
+#include <signal.h>
 
 int	exec_cmd(char **cmd, char **env, char **paths)
 {
@@ -70,6 +71,36 @@ int	exec_single(t_list *plist, t_term *t)
 	return (0);
 }
 
+int	fork_heredocs(t_list *plist, char **env)
+{
+	int	pid;
+	struct sigaction	sa;
+	int	ret;
+
+	ret = 0;
+	pid = fork();
+	if (pid == -1)
+		return (error_fatal(ERR_MALLOC, NULL));
+	else if (pid == 0)
+	{
+		sa.sa_handler = SIG_DFL;
+		sigaction(SIGINT, &sa, NULL);
+		exit(create_heredocs(plist, env));
+	}
+	else
+	{
+//		printf("BEFORE ret = %d\n", ret);
+		waitpid(pid, &ret, 0);
+//		printf("AFTER ret = %d\n", ret);
+		if (ret == SIGINT)
+		{
+//			printf("INTERRUPTED\n");
+			return (SIG_RESTART);
+		}
+	}
+	return (ret);
+}
+
 int	exec(t_list *plist, t_term *t)
 {
 	int			cmdnum;
@@ -77,7 +108,7 @@ int	exec(t_list *plist, t_term *t)
 	t_process	*process;
 	int			ret;
 
-	ret = create_heredocs(plist, t->env);
+	ret = fork_heredocs(plist, t->env);
 	if (ret > 0)
 		return (ret);
 	cmdnum = ft_lstsize(plist);
