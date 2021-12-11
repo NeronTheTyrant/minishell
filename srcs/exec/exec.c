@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 18:28:39 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/10 19:37:20 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/11 18:21:53 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int	exec(t_list *plist, t_term *t)
 	t_process	*process;
 	int			ret;
 
-	ret = create_heredocs(plist, t->env);
+	ret = create_heredocs(plist, t->env, t);
 	if (ret > 0)
 		return (ret);
 	cmdnum = ft_lstsize(plist);

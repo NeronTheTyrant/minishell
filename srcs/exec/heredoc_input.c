@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/02 18:43:05 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/10 22:11:16 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/11 18:23:32 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@
 
 
 #include "core.h"
+#include <sys/types.h>
+#include <sys/wait.h>
 
 int	process_contain_heredoc(t_list *redirlst)
 {
@@ -39,24 +41,19 @@ int	process_contain_heredoc(t_list *redirlst)
 	return (0);
 }
 
-int	fill_heredoc(int fd, char **limiter, char **env)
+int	fill_heredoc(int fd, char **limiter, char **env, void *mem)
 {
 	int		flag;
 	char	*line;
 
 	flag = 0;
 	if (handle_quotes_limiter(limiter, &flag) != 0)
-		return (error_fatal(ERR_MALLOC, NULL));
+		error_exit(ERR_MALLOC, NULL, mem);
 	while (1)
 	{
 		line = readline("> ");
 		if (line == NULL)
 			break ;
-		if (g_ret == 130)
-		{
-			free(line);
-			return (SIG_RESTART);
-		}
 		if (ft_strcmp(line, *limiter) == 0)
 			break ;
 		if (flag == 0)
@@ -64,7 +61,7 @@ int	fill_heredoc(int fd, char **limiter, char **env)
 			if (do_expand_heredoc(&line, env) != 0)
 			{
 				free(line);
-				return (error_fatal(ERR_MALLOC, NULL));
+				error_exit(ERR_MALLOC, NULL, mem);
 			}
 		}
 		ft_putendl_fd(line, fd);
@@ -74,7 +71,36 @@ int	fill_heredoc(int fd, char **limiter, char **env)
 	return (0);
 }
 
-int	init_heredocs(t_process *process, char **env)
+
+int	do_heredoc(t_process *process, t_redir *redir, char **env, void *mem)
+{
+	int		ret;
+	pid_t	pid;
+	struct sigaction sa;
+	
+	redir->fd = open(process->heredoc_filename, O_RDWR | O_CREAT
+			| O_TRUNC, 0777);
+	if (redir->fd == -1)
+		return (error_fatal(NULL, NULL));
+	pid = fork();
+	if (pid == -1)
+		return (error_fatal(NULL, NULL));
+	else if (pid == 0)
+	{
+		sa.sa_handler = SIG_DFL;
+		sigaction(SIGINT, &sa, NULL);
+		fill_heredoc(redir->fd, &redir->str, env, mem);
+		free_everything(mem);
+		exit(0);
+	}
+	else
+		waitpid(pid, NULL, 0);
+	close(redir->fd);
+	ret = 0;
+	return (ret);
+}
+
+int	init_heredocs(t_process *process, char **env, void *mem)
 {
 	t_redir	*redir;
 	t_list	*redirlst;
@@ -86,14 +112,16 @@ int	init_heredocs(t_process *process, char **env)
 		redir = ((t_redir *)redirlst->content);
 		if (redir->type == HEREDOC)
 		{
-			redir->fd = open(process->heredoc_filename, O_RDWR | O_CREAT
+		/*	redir->fd = open(process->heredoc_filename, O_RDWR | O_CREAT
 					| O_TRUNC, 0777);
 			if (redir->fd == -1)
-				return (error_fatal(NULL, NULL));
-			ret = fill_heredoc(redir->fd, &redir->str, env);
+				return (error_fatal(NULL, NULL));*/
+			ret = do_heredoc(process, redir, env, mem);
 			close(redir->fd);
+			if (g_ret >= 128)
+				return (SIG_RESTART);
 			if (ret > 0)
-			return (ret);
+				return (ret);
 		}
 		redirlst = redirlst->next;
 	}
@@ -103,14 +131,10 @@ int	init_heredocs(t_process *process, char **env)
 
 void	handle_signals(int sig);
 
-int	create_heredocs(t_list *plist, char **env)
+int	create_heredocs(t_list *plist, char **env, void *mem)
 {
 	t_process	*process;
 	int			ret;
-//	struct sigaction sa;
-
-//	sa.sa_handler = SIG_DFL;
-//	sigaction(SIGINT, &sa, NULL);
 	while (plist)
 	{
 		process = ((t_process *)plist->content);
@@ -121,13 +145,13 @@ int	create_heredocs(t_list *plist, char **env)
 			{
 				return (error_fatal(ERR_MALLOC, NULL));
 			}
-			ret = init_heredocs(process, env);
+			ret = init_heredocs(process, env, mem);
 			if (ret > 0)
 				return (ret);
 		}
 		plist = plist->next;
 	}
-//	sa.sa_handler = &handle_signals;
-//	sigaction(SIGINT, &sa, NULL);
+	//	sa.sa_handler = &handle_signals;
+	//	sigaction(SIGINT, &sa, NULL);
 	return (0);
 }
