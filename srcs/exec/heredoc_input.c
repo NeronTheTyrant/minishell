@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/02 18:43:05 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/11 18:23:32 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/11 22:27:51 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,24 @@ int	fill_heredoc(int fd, char **limiter, char **env, void *mem)
 	return (0);
 }
 
+void	free_from_signal(void *mem)
+{
+	static void	*ptr = NULL;
+
+	if (mem != NULL)
+		ptr = mem;
+	else
+		free_everything((void *)ptr);
+}
+
+void	handle_signals_heredoc(int sig)
+{
+	if (sig == SIGINT)
+	{
+		free_from_signal(NULL);
+		exit(130);
+	}
+}
 
 int	do_heredoc(t_process *process, t_redir *redir, char **env, void *mem)
 {
@@ -87,7 +105,8 @@ int	do_heredoc(t_process *process, t_redir *redir, char **env, void *mem)
 		return (error_fatal(NULL, NULL));
 	else if (pid == 0)
 	{
-		sa.sa_handler = SIG_DFL;
+		free_from_signal(mem);
+		sa.sa_handler = &handle_signals_heredoc;
 		sigaction(SIGINT, &sa, NULL);
 		fill_heredoc(redir->fd, &redir->str, env, mem);
 		free_everything(mem);
