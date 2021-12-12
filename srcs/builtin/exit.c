@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 15:18:34 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/09 15:18:47 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/12 15:11:58 by acabiac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,5 +16,6 @@ int	ft_exit(char **args, t_term *t)
 {
 	(void)args;
 	(void)t;
+	free_everything(t);
 	exit(0);
 }

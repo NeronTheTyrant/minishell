@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/23 15:03:58 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/12 14:17:51 by acabiac          ###   ########.fr       */
+/*   Updated: 2021/12/12 15:09:08 by acabiac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 #include "lexer.h"
 #include "process.h"
 #include "env.h"
+#include <readline/history.h>
+#include <readline/readline.h>
 
 void	free_lexer(t_term *t)
 {
@@ -60,6 +62,7 @@ void	free_everything_no_unlink(t_term *t)
 {
 	if (t == NULL)
 		return ;
+	rl_clear_history();
 	free_lexer(t);
 	free_parser_no_unlink(t);
 	free_exec(t);
@@ -77,6 +80,7 @@ void	free_everything(t_term *t)
 {
 	if (t == NULL)
 		return ;
+	rl_clear_history();
 	free_lexer(t);
 	free_parser(t);
 	free_exec(t);

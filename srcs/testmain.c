@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 19:53:46 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/12 13:29:58 by acabiac          ###   ########.fr       */
+/*   Updated: 2021/12/12 15:31:55 by acabiac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ char	*rl_gets(char *prompt, char *prevline)
 	char	*line;
 
 	line = readline(prompt);
+	if (line == NULL && prevline != NULL)
+		free(prevline);
 	if (line && *line)
 	{
 		if (prevline && ft_strcmp(line, prevline) == 0)
@@ -120,6 +122,7 @@ int	main(int argc, char **argv, char **env)
 	t_term	*t;
 	struct sigaction	sa;
 
+	ft_memset(&sa, 0, sizeof(sa));
 	sa.sa_handler = &handle_signals;
 	sa.sa_flags = SA_RESTART;
 	sigaction(SIGQUIT, &sa, NULL);
