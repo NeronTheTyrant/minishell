@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 19:53:46 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/12 15:31:55 by acabiac          ###   ########.fr       */
+/*   Updated: 2021/12/12 18:28:43 by acabiac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,7 +147,8 @@ int	main(int argc, char **argv, char **env)
 		if (!t->cmdline)
 		{
 			ft_putendl_fd("exit", 2);
-			exec_builtin(EXIT, NULL, t);
+			free_everything(t);
+			exit(0);
 		}
 		else if (!*t->cmdline)
 			continue ;
