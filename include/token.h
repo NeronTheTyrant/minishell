@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 17:17:04 by mlebard           #+#    #+#             */
-/*   Updated: 2021/11/26 19:21:30 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/12 20:19:15 by acabiac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ typedef struct s_token
 	char		*tokstr;
 	t_toktype	toktype;
 	size_t		toklen;
+	int			ambig_redir;
 }	t_token;
 
 #endif

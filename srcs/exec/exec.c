@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 18:28:39 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/11 18:26:27 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/12 22:41:27 by acabiac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,12 @@ int	exec_single(t_list *plist, t_term *t)
 	t_process	*process;
 
 	process = ((t_process *)plist->content);
+	ft_putendl_fd("PIUTE", 2);
+	if (process->ambig_redir == 1)
+	{
+		ft_putendl_fd("ambiguous redirect", 2);
+		return (1);
+	}
 	i = is_builtin(process->cmd[0]);
 	if (i >= 0)
 	{

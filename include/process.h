@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 17:48:38 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/12 14:21:07 by acabiac          ###   ########.fr       */
+/*   Updated: 2021/12/12 20:57:58 by acabiac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ typedef struct s_process
 	char	**cmd;
 	t_list	*redir;
 	char	*heredoc_filename;
+	int		ambig_redir;
 }	t_process;
 
 int		make_process_list(t_list *toklst, t_list **plst);

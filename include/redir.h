@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 17:55:53 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/11 18:22:14 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/12 21:59:44 by acabiac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,8 @@ typedef struct s_redir
 	int			fd;
 }	t_redir;
 
-t_redir	*tok_to_redir(t_token *tok, t_token *nexttok);
-int		make_redir_list(t_list *toklst, t_list **rdirlst);
+t_redir	*tok_to_redir(t_token *tok, t_token *nexttok, t_process *p);
+int		make_redir_list(t_list *toklst, t_list **rdirlst, t_process *p);
 void	ft_clear_redir(t_redir *redir);
 void	print_rdir_list(t_list *toklst);
 

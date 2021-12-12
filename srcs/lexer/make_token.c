@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/13 08:02:15 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/03 07:22:37 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/12 21:15:57 by acabiac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,5 +65,6 @@ t_token	*generate_token(char *cmdline, t_lexstate state, size_t toklen)
 		return (NULL);
 	}
 	ft_strlcpy(newtoken->tokstr, cmdline - toklen, toklen + 1);
+	newtoken->ambig_redir = 0;
 	return (newtoken);
 }

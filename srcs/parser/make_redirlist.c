@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 17:57:48 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/09 19:51:45 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/12 22:28:54 by acabiac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	ft_clear_redir(t_redir *redir)
 	free(redir);
 }
 
-t_redir	*tok_to_redir(t_token *tok, t_token *nexttok)
+t_redir	*tok_to_redir(t_token *tok, t_token *nexttok, t_process *p)
 {
 	t_redir	*redir;
 
@@ -36,6 +36,8 @@ t_redir	*tok_to_redir(t_token *tok, t_token *nexttok)
 		redir->type = HEREDOC;
 	else if (tok->toktype == RDIR_A_OUT)
 		redir->type = APPEND;
+	if (nexttok->ambig_redir == 1)
+		p->ambig_redir = 1;
 	redir->str = ft_strdup(nexttok->tokstr);
 	if (redir->str == NULL)
 	{
@@ -45,7 +47,7 @@ t_redir	*tok_to_redir(t_token *tok, t_token *nexttok)
 	return (redir);
 }
 
-int	make_redir_list(t_list *toklst, t_list **rdirlst)
+int	make_redir_list(t_list *toklst, t_list **rdirlst, t_process *p)
 {
 	t_redir	*redir;
 	t_token	*token;
@@ -58,7 +60,7 @@ int	make_redir_list(t_list *toklst, t_list **rdirlst)
 			break ;
 		if (token->toktype != WORD && token->toktype != NAME && toklst->next)
 		{
-			redir = tok_to_redir(token, toklst->next->content);
+			redir = tok_to_redir(token, toklst->next->content, p);
 			if (redir == NULL)
 				return (error_fatal(ERR_MALLOC, NULL));
 			new = ft_lstnew(redir);
