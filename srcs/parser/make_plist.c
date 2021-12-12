@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 17:54:11 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/09 19:52:14 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/12 14:20:46 by acabiac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,22 @@
 #include "sig.h"
 #include "token.h"
 #include <stdio.h>
+
+void	ft_clear_process_no_unlink(t_process *p)
+{
+	if (p != NULL)
+	{
+		if (p->redir != NULL)
+			ft_lstclear(&p->redir, &ft_clear_redir);
+		if (p->cmd != NULL)
+			ft_freeargs(p->cmd);
+		if (p->heredoc_filename)
+		{
+			free(p->heredoc_filename);
+		}
+		free(p);
+	}
+}
 
 void	ft_clear_process(t_process *p)
 {

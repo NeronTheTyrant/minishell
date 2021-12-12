@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 19:53:46 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/10 22:09:47 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/12 13:29:58 by acabiac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,7 @@ int	main(int argc, char **argv, char **env)
 	while (1)
 	{
 		reset_memory(t);
-		printf("lastret = %d\ng_ret = %d\n", t->lastret, g_ret);
+//		printf("lastret = %d\ng_ret = %d\n", t->lastret, g_ret);
 		t->cmdline = rl_gets("minishell> ", t->cmdline);
 		if (!t->cmdline)
 		{

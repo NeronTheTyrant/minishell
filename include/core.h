@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 18:24:27 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/10 19:10:03 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/12 14:22:52 by acabiac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,10 +61,12 @@ int		exec(t_list *plist, t_term *t);
 /*                                                                            */
 /******************************************************************************/
 
+void	free_everything_no_unlink(t_term *t);
 void	free_everything(t_term *t);
 void	reset_memory(t_term *t);
 void	free_lexer(t_term *t);
 void	free_parser(t_term *t);
+void	free_parser_no_unlink(t_term *t);
 void	free_exec(t_term *t);
 
 #endif

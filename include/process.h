@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 17:48:38 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/09 17:46:33 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/12 14:21:07 by acabiac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ typedef struct s_process
 int		make_process_list(t_list *toklst, t_list **plst);
 int		make_process(t_process *p, t_list **plst);
 void	ft_clear_process(t_process *p);
+void	ft_clear_process_no_unlink(t_process *p);
 void	print_cmd_list(char **cmd);
 void	print_plist(t_list *p);
 int		make_cmd(t_list **toklst, char ***cmd);

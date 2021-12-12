@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/02 18:43:05 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/11 22:27:51 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/12 14:23:12 by acabiac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,20 @@ void	handle_signals_heredoc(int sig)
 		free_from_signal(NULL);
 		exit(130);
 	}
+	else if (sig == SIGQUIT)
+	{
+		printf("\r");
+		rl_on_new_line();
+		rl_redisplay();
+		printf("  ");
+		printf("\r");
+		rl_on_new_line();
+		rl_redisplay();
+	}
 }
+
+
+void	handle_signals(int sig);
 
 int	do_heredoc(t_process *process, t_redir *redir, char **env, void *mem)
 {
@@ -108,12 +121,18 @@ int	do_heredoc(t_process *process, t_redir *redir, char **env, void *mem)
 		free_from_signal(mem);
 		sa.sa_handler = &handle_signals_heredoc;
 		sigaction(SIGINT, &sa, NULL);
+		sigaction(SIGQUIT, &sa, NULL);
 		fill_heredoc(redir->fd, &redir->str, env, mem);
-		free_everything(mem);
+		free_everything_no_unlink(mem);
 		exit(0);
 	}
 	else
+	{
+		sa.sa_handler = SIG_IGN;
+		sigaction(SIGQUIT, &sa, NULL);
 		waitpid(pid, NULL, 0);
+		sa.sa_handler = &handle_signals;
+	}
 	close(redir->fd);
 	ret = 0;
 	return (ret);
