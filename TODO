@@ -1,0 +1,7 @@
+BONJOUR ET BIENVENUS DANS LE TODO DE minishell
+
+Heredoc:
+-Recuperer tous les input de tous les heredocs avant de lancer les forks etc
+-Verifier si le LIMITER du heredoc a au moins un caractere quoted ou pas, Si il est quoted, ne pas expand les variables
+-avant d'expand les variables dans l'input du heredoc, verifier si la string "pure" est egale au LIMITER
+-apres ca, expand les variables si besoin
