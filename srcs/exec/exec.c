@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 18:28:39 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/13 14:32:18 by acabiac          ###   ########.fr       */
+/*   Updated: 2021/12/13 20:25:43 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,11 @@
 #include "builtin.h"
 #include "exec.h"
 #include <signal.h>
+#include "global.h"
+#include "signals.h"
+
+
+#include <stdio.h>
 
 int	exec_cmd(char **cmd, char **env, char **paths)
 {
@@ -40,6 +45,8 @@ int	exec_forks(t_list *plist, char **paths, t_term *t, int cmdnum)
 {
 	int	i;
 
+	set_sig(&handle_signals_fork, SIGINT);
+	set_sig(&handle_signals_fork, SIGQUIT);
 	i = 0;
 	while (plist)
 	{
@@ -50,9 +57,11 @@ int	exec_forks(t_list *plist, char **paths, t_term *t, int cmdnum)
 	i = 0;
 	while (i < cmdnum)
 	{
-		waitpid(t->pid[i], NULL, 0);
+		waitprocess(t->pid[i]);
 		i++;
 	}
+	set_sig(&handle_signals, SIGINT);
+	set_sig(&handle_signals, SIGQUIT);
 	return (0);
 }
 
@@ -63,17 +72,17 @@ int	exec_single(t_list *plist, t_term *t)
 
 	process = ((t_process *)plist->content);
 	if (process->ambig_redir == 1)
-	{
-		ft_putendl_fd("ambiguous redirect", 2);
-		return (1);
-	}
+		return (error_nonfatal(ERR_AMBIG, NULL));
 	i = is_builtin(process->cmd[0]);
 	if (i >= 0)
 	{
 		if (i == 6)
 			ft_putendl_fd("exit", 2);
-		do_redir(process->redir, process, t);
-		return (exec_builtin(i, process->cmd, t));
+		if (do_redir(process->redir, process) > 0)
+			return (SIG_RESTART);
+		g_ret = exec_builtin(i, process->cmd, t);
+		printf("g_ret = %d\n", g_ret);
+		return (0);
 	}
 	return (0);
 }

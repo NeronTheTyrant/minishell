@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/02 18:43:05 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/12 15:34:37 by acabiac          ###   ########.fr       */
+/*   Updated: 2021/12/13 20:33:39 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,11 @@
 #include "redir.h"
 #include "parser.h"
 #include "utils.h"
+#include "global.h"
+#include "exec.h"
+#include "signals.h"
 
 
-
-#include "core.h"
 #include <sys/types.h>
 #include <sys/wait.h>
 
@@ -48,7 +49,7 @@ int	fill_heredoc(int fd, char **limiter, char **env, void *mem)
 
 	flag = 0;
 	if (handle_quotes_limiter(limiter, &flag) != 0)
-		error_exit(ERR_MALLOC, NULL, mem);
+		error_exit(ERR_MALLOC, NULL, mem, 1);
 	while (1)
 	{
 		line = readline("> ");
@@ -61,7 +62,7 @@ int	fill_heredoc(int fd, char **limiter, char **env, void *mem)
 			if (do_expand_heredoc(&line, env) != 0)
 			{
 				free(line);
-				error_exit(ERR_MALLOC, NULL, mem);
+				error_exit(ERR_MALLOC, NULL, mem, 1);
 			}
 		}
 		ft_putendl_fd(line, fd);
@@ -71,45 +72,11 @@ int	fill_heredoc(int fd, char **limiter, char **env, void *mem)
 	return (0);
 }
 
-void	free_from_signal(void *mem)
-{
-	static void	*ptr = NULL;
-
-	if (mem != NULL)
-		ptr = mem;
-	else
-		free_everything((void *)ptr);
-}
-
-void	handle_signals_heredoc(int sig)
-{
-	if (sig == SIGINT)
-	{
-		free_from_signal(NULL);
-		exit(130);
-	}
-	else if (sig == SIGQUIT)
-	{
-		printf("\r");
-		rl_on_new_line();
-		rl_redisplay();
-		printf("  ");
-		printf("\r");
-		rl_on_new_line();
-		rl_redisplay();
-	}
-}
-
-
-void	handle_signals(int sig);
-
 int	do_heredoc(t_process *process, t_redir *redir, char **env, void *mem)
 {
 	int		ret;
 	pid_t	pid;
-	struct sigaction sa;
-	
-	ft_memset(&sa, 0, sizeof(sa));
+
 	redir->fd = open(process->heredoc_filename, O_RDWR | O_CREAT
 			| O_TRUNC, 0777);
 	if (redir->fd == -1)
@@ -120,19 +87,19 @@ int	do_heredoc(t_process *process, t_redir *redir, char **env, void *mem)
 	else if (pid == 0)
 	{
 		free_from_signal(mem);
-		sa.sa_handler = &handle_signals_heredoc;
-		sigaction(SIGINT, &sa, NULL);
-		sigaction(SIGQUIT, &sa, NULL);
+		set_sig(&handle_signals_heredoc, SIGINT);
+		set_sig(&handle_signals_heredoc, SIGQUIT);
 		fill_heredoc(redir->fd, &redir->str, env, mem);
 		free_everything_no_unlink(mem);
 		exit(0);
 	}
 	else
 	{
-		sa.sa_handler = SIG_IGN;
-		sigaction(SIGQUIT, &sa, NULL);
-		waitpid(pid, NULL, 0);
-		sa.sa_handler = &handle_signals;
+		ignore_sig(SIGQUIT);
+		ignore_sig(SIGINT);
+		waitprocess(pid);
+		set_sig(&handle_signals, SIGQUIT);
+		set_sig(&handle_signals, SIGINT);
 	}
 	close(redir->fd);
 	ret = 0;

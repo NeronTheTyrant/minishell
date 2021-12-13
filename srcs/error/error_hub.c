@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 17:28:22 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/09 18:02:22 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/13 17:52:29 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ t_sig	error_fatal(char *errstr, char *name)
 	return (SIG_FATAL);
 }
 
-void	error_exit(char *errstr, char *name, t_term *t)
+void	error_exit(char *errstr, char *name, t_term *t, int ret)
 {
 	if (name != NULL)
 	{
@@ -53,7 +53,5 @@ void	error_exit(char *errstr, char *name, t_term *t)
 		perror(NULL);
 	else
 		ft_putendl_fd(errstr, 2);
-	if (t != NULL)
-		free_everything(t);
-	exit(1);
+	exit_free(t, ret);
 }

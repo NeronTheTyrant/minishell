@@ -6,10 +6,11 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/23 15:03:58 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/13 14:42:35 by acabiac          ###   ########.fr       */
+/*   Updated: 2021/12/13 17:33:42 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "global.h"
 #include "core.h"
 #include "lexer.h"
 #include "process.h"
@@ -67,4 +68,11 @@ void	free_everything(t_term *t)
 	close(t->std[0]);
 	close(t->std[1]);
 	free(t);
+}
+
+void	exit_free(t_term *t, int ret)
+{
+	if (t != NULL)
+		free_everything(t);
+	exit(ret);
 }

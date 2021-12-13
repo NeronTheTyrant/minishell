@@ -1,25 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec.h                                             :+:      :+:    :+:   */
+/*   global.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/09 17:41:24 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/13 18:21:44 by mlebard          ###   ########.fr       */
+/*   Created: 2021/12/13 16:29:13 by mlebard           #+#    #+#             */
+/*   Updated: 2021/12/13 16:29:46 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef EXEC_H
-# define EXEC_H
+#ifndef GLOBAL_H
+# define GLOBAL_H
 
-int		fork_cmd(t_list *plist, t_term *t, char **paths, int cmdnum);
-int		exec_cmd(char **cmd, char **env, char **paths);
-
-int		make_path(char **env, char ***paths);
-int		try_envpath(char **cmd, char **env, char **paths);
-int		try_relative_path(char **cmd, char **env);
-
-void	waitprocess(int pid);
+extern int	g_ret;
 
 #endif
