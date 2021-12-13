@@ -6,13 +6,14 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/02 19:50:58 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/10 22:05:44 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/13 14:33:17 by acabiac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../libft/libft.h"
 #include <limits.h>
 #include <errno.h>
+
 char	*create_filename(char *prefix, int nb)
 {
 	char	*result;

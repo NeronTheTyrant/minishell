@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 15:18:34 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/12 18:36:42 by acabiac          ###   ########.fr       */
+/*   Updated: 2021/12/13 14:27:06 by acabiac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ int	ft_exit(char **args, t_term *t)
 	long long	ret;
 	char		*ptr;
 
-	ft_putendl_fd("exit", 2);
 	if (args[1] == NULL)
 	{
 		free_everything(t);

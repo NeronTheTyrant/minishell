@@ -6,14 +6,14 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 14:50:09 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/09 18:08:10 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/13 14:35:08 by acabiac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef BUILTIN_H
 # define BUILTIN_H
 
-#include "core.h"
+# include "core.h"
 
 typedef enum e_btindex
 {

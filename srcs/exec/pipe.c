@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 06:55:09 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/12 22:31:44 by acabiac          ###   ########.fr       */
+/*   Updated: 2021/12/13 14:53:03 by acabiac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,12 @@ void	fork_child(t_list *plist, t_term *t, char **paths, int new_pfd[2])
 		close_pipe(new_pfd);
 	}
 	process = ((t_process *)plist->content);
-	do_redir(process->redir, process, t);
 	if (process->ambig_redir == 1)
 	{
 		ft_putendl_fd("ambiguous redirect", 2);
 		exit(1);
 	}
+	do_redir(process->redir, process, t);
 	i = is_builtin(process->cmd[0]);
 	if (i >= 0)
 		exit(exec_builtin(i, process->cmd, t));

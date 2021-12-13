@@ -6,7 +6,7 @@
 #    By: mlebard <mlebard@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/07/27 17:27:08 by mlebard           #+#    #+#              #
-#    Updated: 2021/12/09 18:04:50 by mlebard          ###   ########.fr        #
+#    Updated: 2021/12/13 14:43:01 by acabiac          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,6 +34,7 @@ DEPEND		=	$(LIB_DIR)libft.h
 SOURCES		=	testmain.c \
 				file_utils.c \
 				free.c \
+				free_no_unlink.c \
 				env.c \
 				sudoenv.c \
 				lexer/lexer.c \

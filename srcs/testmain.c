@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 19:53:46 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/12 22:10:15 by acabiac          ###   ########.fr       */
+/*   Updated: 2021/12/13 14:48:21 by acabiac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,12 +100,10 @@ void	handle_signals(int sig)
 		if (waitpid(-1, NULL, 0) == -1 && errno == ECHILD)
 		{
 			printf("\r");
-			//rl_replace_line("", 0);
 			rl_on_new_line();
 			rl_redisplay();
 			printf("  ");
 			printf("\r");
-			//rl_replace_line("", 0);
 			rl_on_new_line();
 			rl_redisplay();
 		}
@@ -119,7 +117,7 @@ void	handle_signals(int sig)
 
 int	main(int argc, char **argv, char **env)
 {
-	t_term	*t;
+	t_term				*t;
 	struct sigaction	sa;
 
 	ft_memset(&sa, 0, sizeof(sa));

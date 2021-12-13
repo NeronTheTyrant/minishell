@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 18:24:27 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/12 14:22:52 by acabiac          ###   ########.fr       */
+/*   Updated: 2021/12/13 14:35:46 by acabiac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@
 ** sig     -> signal returned by core functionalities
 */
 
-extern int g_ret;
+extern int	g_ret;
 
 typedef struct s_term
 {
