@@ -6,28 +6,31 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 19:53:46 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/13 14:48:21 by acabiac          ###   ########.fr       */
+/*   Updated: 2021/12/13 20:18:40 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <readline/readline.h>
 #include <readline/history.h>
-#include "../libft/libft.h"
-#include "token.h"
-#include "lexer.h"
 #include <stdio.h>
-#include "core.h"
-#include "error.h"
-#include "env.h"
 #include <limits.h>
-#include "parser.h"
-#include "builtin.h"
-#include <signal.h>
 #include <sys/types.h>
+#include <signal.h>
 #include <sys/wait.h>
 #include <errno.h>
 
-int	g_ret;
+#include "../libft/libft.h"
+#include "token.h"
+#include "lexer.h"
+#include "core.h"
+#include "error.h"
+#include "env.h"
+#include "parser.h"
+#include "builtin.h"
+#include "global.h"
+#include "signals.h"
+
+int	g_ret = 0;
 
 void	print_token_list(t_list *toklst)
 {
@@ -80,51 +83,12 @@ char	*rl_gets(char *prompt, char *prevline)
 	return (line);
 }
 
-void	handle_signals(int sig)
-{	
-	if (sig == SIGINT)
-	{
-		if (waitpid(-1, NULL, 0) == -1 && errno == ECHILD)
-		{
-			rl_replace_line("", 0);
-			rl_on_new_line();
-			ft_putstr_fd("\n", 1);
-			rl_redisplay();
-		}
-		else
-			ft_putstr_fd("\n", 1);
-		g_ret = sig + 128;
-	}
-	else if (sig == SIGQUIT)
-	{
-		if (waitpid(-1, NULL, 0) == -1 && errno == ECHILD)
-		{
-			printf("\r");
-			rl_on_new_line();
-			rl_redisplay();
-			printf("  ");
-			printf("\r");
-			rl_on_new_line();
-			rl_redisplay();
-		}
-		else
-		{
-			ft_putendl_fd("Quit (core dumped)", 2);
-			g_ret = sig + 128;
-		}
-	}
-}
-
 int	main(int argc, char **argv, char **env)
 {
 	t_term				*t;
-	struct sigaction	sa;
 
-	ft_memset(&sa, 0, sizeof(sa));
-	sa.sa_handler = &handle_signals;
-	sa.sa_flags = SA_RESTART;
-	sigaction(SIGQUIT, &sa, NULL);
-	sigaction(SIGINT, &sa, NULL);
+	set_sig(&handle_signals, SIGINT);
+	set_sig(&handle_signals, SIGQUIT);
 	t = malloc(sizeof(*t));
 	if (t == NULL)
 		return (error_fatal(ERR_MALLOC, NULL));

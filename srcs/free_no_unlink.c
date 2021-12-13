@@ -6,11 +6,11 @@
 /*   By: acabiac <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/13 14:41:04 by acabiac           #+#    #+#             */
-/*   Updated: 2021/12/13 14:45:50 by acabiac          ###   ########.fr       */
+/*   Updated: 2021/12/13 16:26:44 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../libft/libft.h"
 #include <readline/history.h>
 #include <readline/readline.h>
 #include "core.h"

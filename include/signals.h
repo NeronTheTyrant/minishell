@@ -1,25 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec.h                                             :+:      :+:    :+:   */
+/*   signals.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/09 17:41:24 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/13 18:21:44 by mlebard          ###   ########.fr       */
+/*   Created: 2021/12/13 19:55:59 by mlebard           #+#    #+#             */
+/*   Updated: 2021/12/13 20:19:46 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef EXEC_H
-# define EXEC_H
+#ifndef SIGNALS_H
+# define SIGNALS_H
 
-int		fork_cmd(t_list *plist, t_term *t, char **paths, int cmdnum);
-int		exec_cmd(char **cmd, char **env, char **paths);
+void	set_sig(void (*sig_handler)(int), int sig);
+void	unset_sig(int sig);
+void	ignore_sig(int sig);
 
-int		make_path(char **env, char ***paths);
-int		try_envpath(char **cmd, char **env, char **paths);
-int		try_relative_path(char **cmd, char **env);
+void	handle_signals(int sig);
+void	handle_signals_heredoc(int sig);
+void	handle_signals_fork(int sig);
 
-void	waitprocess(int pid);
+void	free_from_signal(void *mem);
 
 #endif

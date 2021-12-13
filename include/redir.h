@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 17:55:53 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/12 21:59:44 by acabiac          ###   ########.fr       */
+/*   Updated: 2021/12/13 18:15:30 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int		fill_heredoc(int fd, char **limiter, char **env, void *mem);
 int		init_heredocs(t_process *process, char **env, void *mem);
 int		create_heredocs(t_list *plist, char **env, void *mem);
 
-void	do_redir(t_list *rdirlst, t_process *p, t_term *t);
+int		do_redir(t_list *rdirlst, t_process *p);
 int		do_redir_in(t_redir *redir);
 int		do_redir_out(t_redir *redir);
 int		do_redir_heredoc(t_process *p);

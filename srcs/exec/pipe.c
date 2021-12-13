@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 06:55:09 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/13 14:53:03 by acabiac          ###   ########.fr       */
+/*   Updated: 2021/12/13 20:26:05 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 #include "redir.h"
 #include "builtin.h"
 #include "exec.h"
+#include "signals.h"
+#include <signal.h>
 
 void	close_pipe(int pfd[2])
 {
@@ -24,35 +26,39 @@ void	close_pipe(int pfd[2])
 	close(pfd[1]);
 }
 
+void	pipe_dup(t_list *plist, t_term *t, int new_pfd[2])
+{
+	if (plist->prev != NULL)
+	{
+		if (dup2(t->pfd[0], STDIN_FILENO) == -1)
+			error_exit(NULL, NULL, t, 1);
+		close_pipe(t->pfd);
+	}
+	if (plist->next != NULL)
+	{
+		if (dup2(new_pfd[1], STDOUT_FILENO) == -1)
+			error_exit(NULL, NULL, t, 1);
+		close_pipe(new_pfd);
+	}
+}
+
 void	fork_child(t_list *plist, t_term *t, char **paths, int new_pfd[2])
 {
 	t_process	*process;
 	int			i;
 
-	if (plist->prev != NULL)
-	{
-		if (dup2(t->pfd[0], STDIN_FILENO) == -1)
-			error_exit(NULL, NULL, t);
-		close_pipe(t->pfd);
-	}
-	if (plist->next != NULL)
-	{
-		dup2(new_pfd[1], STDOUT_FILENO);
-		close_pipe(new_pfd);
-	}
+	pipe_dup(plist, t, new_pfd);
 	process = ((t_process *)plist->content);
 	if (process->ambig_redir == 1)
-	{
-		ft_putendl_fd("ambiguous redirect", 2);
-		exit(1);
-	}
-	do_redir(process->redir, process, t);
+		error_exit(ERR_AMBIG, NULL, t, 1);
+	if (do_redir(process->redir, process) > 0)
+		exit_free(t, 1);
 	i = is_builtin(process->cmd[0]);
 	if (i >= 0)
 		exit(exec_builtin(i, process->cmd, t));
 	else if (exec_cmd(process->cmd, t->env, paths) == 0)
-		error_exit(ERR_CMDNOTFOUND, process->cmd[0], t);
-	exit(0);
+		error_exit(ERR_CMDNOTFOUND, process->cmd[0], t, 127);
+	exit_free(t, 0);
 }
 
 int	fork_cmd(t_list *plist, t_term *t, char **paths, int cmdnum)
