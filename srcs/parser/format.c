@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/27 16:38:26 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/12 22:10:31 by acabiac          ###   ########.fr       */
+/*   Updated: 2021/12/13 15:08:05 by acabiac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ int	handle_token(t_list **toklst, t_list *lst, char **env)
 		return (0);
 	if (do_expand(lst->content, currtok->tokstr, env))
 		return (error_fatal(ERR_MALLOC, NULL));
-	if (currtok->tokstr[0] == '\0' && prevtok && prevtok->toktype > NAME && prevtok->toktype < PIPE && prevtok->toktype != RDIR_HEREDOC)
+	if (currtok->tokstr[0] == '\0' && prevtok && prevtok->toktype > NAME && prevtok->toktype < PIPE)
 	{
 		((t_token *)lst->content)->ambig_redir = 1;
 	}

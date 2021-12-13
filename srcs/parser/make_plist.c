@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 17:54:11 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/12 22:47:25 by acabiac          ###   ########.fr       */
+/*   Updated: 2021/12/13 15:17:15 by acabiac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,10 +78,6 @@ int	make_process_list(t_list *toklst, t_list **plst)
 		{
 			ft_clear_process(p);
 			return (SIG_FATAL);
-		}
-		if (p->ambig_redir == 1)
-		{
-			ft_lstclear(&p->redir, &ft_clear_redir);
 		}
 		if (make_cmd(&toklst, &p->cmd) > 0)
 		{
