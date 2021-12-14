@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/02 19:15:48 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/09 19:52:59 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/14 18:38:57 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int	handle_quotes_limiter(char **limiter, int *flag)
 	return (0);
 }
 
-int	do_expand_heredoc(char **str, char **env)
+int	do_expand_heredoc(char **str, char **env, int lastret)
 {
 	char	*ptr;
 
@@ -66,11 +66,13 @@ int	do_expand_heredoc(char **str, char **env)
 		{
 			if (*ptr == '$' && (ft_isalpha(*(ptr + 1)) || *(ptr + 1) == '_'))
 				break ;
+			else if (*ptr == '$' && *(ptr + 1) == '?')
+				break ;
 			ptr++;
 		}
 		if (*ptr == '\0')
 			return (0);
-		*str = expand_var(*str, &ptr, env);
+		*str = expand_var(*str, &ptr, env, lastret);
 		if (*str == NULL)
 			return (-1);
 	}

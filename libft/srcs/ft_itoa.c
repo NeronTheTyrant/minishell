@@ -6,37 +6,11 @@
 /*   By: mlebard <mlebard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 12:11:42 by mlebard           #+#    #+#             */
-/*   Updated: 2021/06/27 19:57:34 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/14 17:52:45 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-
-/*
-** return: length of number "nbr". returns 1 if nbr = 0
-*/
-
-static int	ft_getnbrlen(int nbr)
-{
-	int			i;
-	long int	n;
-
-	i = 0;
-	n = nbr;
-	if (n < 0)
-	{
-		n *= -1;
-		i++;
-	}
-	if (n == 0)
-		return (1);
-	while (n)
-	{
-		n /= 10;
-		i++;
-	}
-	return (i);
-}
 
 /*
 ** usage: converts int "n" to malloc'd, null-terminated string

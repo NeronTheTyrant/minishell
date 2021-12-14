@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/27 16:38:26 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/13 15:08:05 by acabiac          ###   ########.fr       */
+/*   Updated: 2021/12/14 17:46:48 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ int	check_grammar(t_token *token, t_token *prevtok, t_list *next)
 	return (0);
 }
 
-int	handle_token(t_list **toklst, t_list *lst, char **env)
+int	handle_token(t_list **toklst, t_list *lst, char **env, int lastret)
 {
 	int			flag;
 	t_toktype	tok;
@@ -101,12 +101,10 @@ int	handle_token(t_list **toklst, t_list *lst, char **env)
 		return (error_nonfatal(ERR_SYNTAX, currtok->tokstr));
 	if (tok != WORD || flag != 0)
 		return (0);
-	if (do_expand(lst->content, currtok->tokstr, env))
+	if (do_expand(lst->content, currtok->tokstr, env, lastret))
 		return (error_fatal(ERR_MALLOC, NULL));
 	if (currtok->tokstr[0] == '\0' && prevtok && prevtok->toktype > NAME && prevtok->toktype < PIPE)
-	{
 		((t_token *)lst->content)->ambig_redir = 1;
-	}
 	else if (currtok->tokstr[0] == '\0')
 		ft_lstdelone(toklst, lst, &clear_token);
 	else if (handle_quotes(currtok))
@@ -114,7 +112,7 @@ int	handle_token(t_list **toklst, t_list *lst, char **env)
 	return (0);
 }
 
-int	format(t_list **toklst, char **env)
+int	format(t_list **toklst, char **env, int lastret)
 {
 	t_list		*lst;
 	t_list		*next;
@@ -124,7 +122,7 @@ int	format(t_list **toklst, char **env)
 	while (lst)
 	{
 		next = lst->next;
-		ret = handle_token(toklst, lst, env);
+		ret = handle_token(toklst, lst, env, lastret);
 		if (ret != 0)
 			return (ret);
 		lst = next;

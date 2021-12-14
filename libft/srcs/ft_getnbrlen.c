@@ -1,34 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   wait.c                                             :+:      :+:    :+:   */
+/*   ft_getnbrlen.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/13 16:26:57 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/14 15:26:07 by mlebard          ###   ########.fr       */
+/*   Created: 2021/12/14 17:49:37 by mlebard           #+#    #+#             */
+/*   Updated: 2021/12/14 17:50:38 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <stddef.h>
-#include "global.h"
-#include "error.h"
-#include <stdio.h>
-
-void	waitprocess(int pid)
+int	ft_getnbrlen(int n)
 {
-	int	status;
+	int	i;
 
-	if (waitpid(pid, &status, 0) == -1)
-		error_nonfatal(NULL, NULL);
-	if (WIFEXITED(status) == 1)
+	i = 0;
+	if (n == 0)
+		return (1);
+	if (n < 0)
 	{
-		g_ret = WEXITSTATUS(status);
+		i++;
+		n *= -1;
 	}
-	else if (WIFSIGNALED(status) == 1)
+	while (n != 0)
 	{
-		g_ret = 128 + WTERMSIG(status);
+		n /= 10;
+		i++;
 	}
+	return (i);
 }

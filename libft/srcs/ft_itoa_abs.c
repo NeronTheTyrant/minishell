@@ -6,30 +6,11 @@
 /*   By: mlebard <mlebard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 12:11:42 by mlebard           #+#    #+#             */
-/*   Updated: 2021/06/27 21:50:52 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/14 17:53:22 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-
-/*
-** return: length of number "nbr". returns 1 if nbr = 0
-*/
-
-static int	ft_getnbrlen(intmax_t n)
-{
-	int	i;
-
-	i = 0;
-	if (n == 0)
-		return (1);
-	while (n)
-	{
-		n /= 10;
-		i++;
-	}
-	return (i);
-}
 
 /*
 ** usage: converts absolute value of int "n" to malloc'd,
@@ -42,7 +23,7 @@ char	*ft_itoa_abs(intmax_t n)
 	int			i;
 	char		*s;
 
-	i = ft_getnbrlen(n);
+	i = ft_getnbrlen_us(n);
 	s = malloc(sizeof(*s) * (i + 1));
 	if (s == NULL)
 		return (NULL);
