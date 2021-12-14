@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 19:53:46 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/14 18:53:03 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/14 22:28:02 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ int	main(int argc, char **argv, char **env)
 	set_sig(&handle_signals, SIGQUIT);
 	t = malloc(sizeof(*t));
 	if (t == NULL)
-		return (error_fatal(ERR_MALLOC, NULL));
+		return (error_fatal(ERR_MALLOC, NULL, 1));
 	ft_bzero(t, sizeof(*t));
 	(void)argc;
 	(void)argv;
@@ -106,7 +106,8 @@ int	main(int argc, char **argv, char **env)
 		printf("lastret = %d\ng_ret = %d\n", t->lastret, g_ret);
 		reset_memory(t);
 		t->cmdline = rl_gets("minishell> ", t->cmdline);
-		t->lastret = g_ret;
+		if (g_ret >= 128)
+			t->lastret = g_ret;
 		if (!t->cmdline)
 		{
 			ft_putendl_fd("exit", 2);

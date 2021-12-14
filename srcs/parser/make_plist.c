@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 17:54:11 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/13 15:17:15 by acabiac          ###   ########.fr       */
+/*   Updated: 2021/12/14 22:00:02 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int	make_process(t_process *p, t_list **plst)
 	if (new == NULL)
 	{
 		ft_clear_process(p);
-		return (error_fatal(ERR_MALLOC, NULL));
+		return (error_fatal(ERR_MALLOC, NULL, 1));
 	}
 	ft_lstadd_back(plst, new);
 	return (0);
@@ -72,7 +72,7 @@ int	make_process_list(t_list *toklst, t_list **plst)
 	{
 		p = malloc(sizeof(*p));
 		if (p == NULL)
-			return (error_fatal(ERR_MALLOC, NULL));
+			return (error_fatal(ERR_MALLOC, NULL, 1));
 		ft_bzero(p, sizeof(*p));
 		if (make_redir_list(toklst, &p->redir, p) > 0)
 		{

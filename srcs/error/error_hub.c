@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 17:28:22 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/14 15:38:10 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/14 22:10:13 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <stdio.h>
 #include "global.h"
 
-t_sig	error_nonfatal(char *errstr, char *name)
+t_sig	error_nonfatal(char *errstr, char *name, int ret)
 {
 	if (name != NULL)
 	{
@@ -26,11 +26,12 @@ t_sig	error_nonfatal(char *errstr, char *name)
 		perror(NULL);
 	else
 		ft_putendl_fd(errstr, 2);
-	g_ret = 1;
+	if (ret >= 0)
+		g_ret = ret;
 	return (SIG_RESTART);
 }
 
-t_sig	error_fatal(char *errstr, char *name)
+t_sig	error_fatal(char *errstr, char *name, int ret)
 {
 	if (name != NULL)
 	{
@@ -41,7 +42,8 @@ t_sig	error_fatal(char *errstr, char *name)
 		perror(NULL);
 	else
 		ft_putendl_fd(errstr, 2);
-	g_ret = 1;
+	if (ret >= 0)
+		g_ret = ret;
 	return (SIG_FATAL);
 }
 

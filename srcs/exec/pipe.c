@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 06:55:09 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/14 16:35:51 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/14 22:02:21 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,11 +68,11 @@ int	fork_cmd(t_list *plist, t_term *t, char **paths, int cmdnum)
 	if (plist->next != NULL)
 	{
 		if (pipe(new_pfd) < 0)
-			return (error_fatal(NULL, NULL));
+			return (error_fatal(NULL, NULL, 1));
 	}
 	t->pid[cmdnum] = fork();
 	if (t->pid[cmdnum] == -1)
-		return (error_fatal(NULL, NULL));
+		return (error_fatal(NULL, NULL, 1));
 	else if (t->pid[cmdnum] == 0)
 		fork_child(plist, t, paths, new_pfd);
 	else

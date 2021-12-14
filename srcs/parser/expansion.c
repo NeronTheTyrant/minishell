@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/27 16:35:07 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/14 17:53:51 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/14 21:59:10 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,19 +98,7 @@ char	*expand_var(char *word, char **var, char **env, int lastret)
 		return (NULL);
 	return (result);
 }
-/*
-int	do_expand_ret(t_token *token, char *tokstr, char **env)
-{
-	int		flag_single;
-	int		flag_double;
-	char	*ptr;
 
-	flag_single = 0;
-	flag_double = 0;
-	ptr = tokstr;
-	while (ptr != NULL 
-}
-*/
 int	do_expand(t_token *token, char *tokstr, char **env, int lastret)
 {
 	int		flag_single;

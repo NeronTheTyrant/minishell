@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 06:51:47 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/13 18:15:47 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/14 22:02:34 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ int	do_redir(t_list *rdirlst, t_process *p)
 		else if (redir->type == APPEND)
 			ret = do_redir_append(redir);
 		if (ret != 0)
-			return (error_nonfatal(NULL, redir->str));
+			return (error_nonfatal(NULL, redir->str, 1));
 		rdirlst = rdirlst->next;
 	}
 	return (0);

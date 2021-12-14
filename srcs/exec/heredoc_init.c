@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/14 17:10:35 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/14 18:34:38 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/14 22:01:52 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	create_heredocs(t_list *plist, char **env, void *mem)
 			process->heredoc_filename = create_unique_filename("/tmp/.heredoc");
 			if (process->heredoc_filename == NULL)
 			{
-				return (error_fatal(ERR_MALLOC, NULL));
+				return (error_fatal(ERR_MALLOC, NULL, 1));
 			}
 			ret = init_heredocs(process, env, mem);
 			if (ret > 0)

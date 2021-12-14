@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 18:28:39 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/14 18:36:41 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/14 22:01:41 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int	exec_single(t_list *plist, t_term *t)
 
 	process = ((t_process *)plist->content);
 	if (process->ambig_redir == 1)
-		return (error_nonfatal(ERR_AMBIG, NULL));
+		return (error_nonfatal(ERR_AMBIG, NULL, 1));
 	i = is_builtin(process->cmd[0]);
 	if (i >= 0)
 	{
@@ -99,14 +99,14 @@ int	exec(t_list *plist, t_term *t)
 	cmdnum = ft_lstsize(plist);
 	t->pid = malloc(sizeof(*t->pid) * cmdnum);
 	if (t->pid == NULL)
-		return (error_fatal(ERR_MALLOC, NULL));
+		return (error_fatal(ERR_MALLOC, NULL, 1));
 	process = plist->content;
 	if (cmdnum == 1 && process->cmd && is_builtin(process->cmd[0]) != -1)
 		exec_single(plist, t);
 	else
 	{
 		if (make_path(t->env, &paths) > 0)
-			return (error_fatal(ERR_MALLOC, NULL));
+			return (error_fatal(ERR_MALLOC, NULL, 1));
 		exec_forks(plist, paths, t, cmdnum);
 		ft_freeargs(paths);
 	}

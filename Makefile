@@ -6,7 +6,7 @@
 #    By: mlebard <mlebard@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/07/27 17:27:08 by mlebard           #+#    #+#              #
-#    Updated: 2021/12/14 17:28:50 by mlebard          ###   ########.fr        #
+#    Updated: 2021/12/14 21:06:11 by mlebard          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,23 @@ CFLAGS		=	-Werror -Wextra -Wall -I$(I_DIR) -I$(LIB_DIR)
 LDFLAGS		=	-L $(LIB_DIR) -lft -lreadline
 DBGFLAGS	=	-g3
 FDBGFLAGS	=	-g3 -fsanitize=address
-DEPEND		=	$(LIB_DIR)libft.h
+DEPEND		=	$(LIB_DIR)libft.h \
+
+DEPEND		+=	$(addprefix include/, \
+				builtin.h \
+				core.h \
+				env.h \
+				error.h \
+				exec.h \
+				global.h \
+				lexer.h \
+				parser.h \
+				process.h \
+				redir.h \
+				sig.h \
+				signals.h \
+				token.h \
+				utils.h)
 
 # SRCS
 SOURCES		=	testmain.c \
@@ -88,7 +104,6 @@ $(OBJS)			:	$(O_DIR)%.o: $(S_DIR)%.c $(DEPEND)
 				@echo "Compiling $<"
 				@mkdir -p $(@D)
 				@$(CC) $(CFLAGS) -c $< -o $@
-
 debug			:	libft
 				@echo "[DEBUG] Building $(NAME):"
 				@make --no-print-directory build_debug

@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/02 18:43:05 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/14 18:37:49 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/14 22:01:59 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int	do_heredoc(char *heredoc_file, t_redir *redir, char **env, void *mem)
 		| O_CREAT, 0644);
 	pid = fork();
 	if (pid == -1)
-		return (error_fatal(NULL, NULL));
+		return (error_fatal(NULL, NULL, 1));
 	else if (pid == 0)
 		fork_heredoc(redir, env, mem);
 	else

@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/13 16:26:57 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/14 15:26:07 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/14 22:09:00 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	waitprocess(int pid)
 	int	status;
 
 	if (waitpid(pid, &status, 0) == -1)
-		error_nonfatal(NULL, NULL);
+		error_nonfatal(NULL, NULL, 1);
 	if (WIFEXITED(status) == 1)
 	{
 		g_ret = WEXITSTATUS(status);

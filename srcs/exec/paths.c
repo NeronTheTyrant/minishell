@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 17:38:48 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/09 17:39:49 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/14 22:02:10 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	try_envpath(char **cmd, char **env, char **paths)
 		cmd_len = ft_strlen(paths[i]) + ft_strlen(cmd[0]) + 1;
 		cmd_path = malloc(sizeof(*cmd_path) * (cmd_len + 1));
 		if (cmd_path == NULL)
-			return (error_fatal(ERR_MALLOC, NULL));
+			return (error_fatal(ERR_MALLOC, NULL, 1));
 		ft_bzero(cmd_path, sizeof(*cmd_path) * cmd_len + 1);
 		ft_strlcat(cmd_path, paths[i], cmd_len + 1);
 		ft_strlcat(cmd_path, "/", cmd_len + 1);
@@ -62,7 +62,7 @@ int	try_relative_path(char **cmd, char **env)
 	cmd_len = ft_strlen(cmd[0]) + 2;
 	cmd_path = malloc(sizeof(*cmd_path) * (cmd_len) + 1);
 	if (cmd_path == NULL)
-		return (error_fatal(ERR_MALLOC, NULL));
+		return (error_fatal(ERR_MALLOC, NULL, 1));
 	ft_bzero(cmd_path, sizeof(*cmd_path) * cmd_len + 1);
 	ft_strlcat(cmd_path, "./", cmd_len + 1);
 	ft_strlcat(cmd_path, cmd[0], cmd_len + 1);
