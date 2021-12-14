@@ -6,7 +6,7 @@
 /*   By: mlebard <mlebard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/24 02:00:40 by mlebard           #+#    #+#             */
-/*   Updated: 2021/07/31 17:07:27 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/14 21:56:27 by acabiac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,8 @@ void	ft_lstdelone(t_list **begin, t_list *lst, void (*del)())
 		}
 		else
 			*begin = NULL;
-		del(lst->content);
+		if (del)
+			del(lst->content);
 		free(lst);
 	}
 }

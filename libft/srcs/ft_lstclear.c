@@ -6,7 +6,7 @@
 /*   By: mlebard <mlebard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/24 02:44:42 by mlebard           #+#    #+#             */
-/*   Updated: 2021/07/28 00:53:29 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/14 21:51:40 by acabiac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ void	ft_lstclear(t_list **lst, void (*del)())
 	while (current)
 	{
 		next = current->next;
-		del(current->content);
+		if (del)
+			del(current->content);
 		free(current);
 		current = next;
 	}
