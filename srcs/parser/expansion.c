@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/27 16:35:07 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/09 18:13:21 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/14 17:53:51 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,9 @@ char	*find_var(char *current_ptr, int *flag_single, int *flag_double)
 			*flag_double = (*flag_double == 0);
 		else if (current_ptr[i] == '$' && *flag_single == 0
 			&& (ft_isalpha(current_ptr[i + 1]) || current_ptr[i + 1] == '_'))
+			return (current_ptr + i);
+		else if(current_ptr[i] == '$' && *flag_single == 0
+			&& current_ptr[i + 1] == '?')
 			return (current_ptr + i);
 		i++;
 	}
@@ -59,7 +62,21 @@ char	*insert_expansion(char *word, char **var, char *expanded, size_t len)
 	}
 }
 
-char	*expand_var(char *word, char **var, char **env)
+char	*expand_ret(char *word, char **var, int lastret)
+{
+	char	*expanded;
+	char	*result;
+
+	expanded = ft_itoa(lastret);
+	if (expanded == NULL)
+		return (NULL);
+	result = insert_expansion(word, var, expanded, ft_getnbrlen(lastret));
+	if (result == NULL)
+		return (NULL);
+	return (result);
+}
+
+char	*expand_var(char *word, char **var, char **env, int lastret)
 {
 	size_t	var_len;
 	char	*expanded;
@@ -67,6 +84,8 @@ char	*expand_var(char *word, char **var, char **env)
 	char	*result;
 
 	var_len = 0;
+	if ((*var)[1] == '?')
+		return (expand_ret(word, var, lastret));
 	while (ft_isalnum((*var)[var_len + 1]) || (*var)[var_len + 1] == '_')
 		var_len++;
 	tmp = ft_strndup(*var + 1, var_len);
@@ -79,8 +98,20 @@ char	*expand_var(char *word, char **var, char **env)
 		return (NULL);
 	return (result);
 }
+/*
+int	do_expand_ret(t_token *token, char *tokstr, char **env)
+{
+	int		flag_single;
+	int		flag_double;
+	char	*ptr;
 
-int	do_expand(t_token *token, char *tokstr, char **env)
+	flag_single = 0;
+	flag_double = 0;
+	ptr = tokstr;
+	while (ptr != NULL 
+}
+*/
+int	do_expand(t_token *token, char *tokstr, char **env, int lastret)
 {
 	int		flag_single;
 	int		flag_double;
@@ -94,7 +125,7 @@ int	do_expand(t_token *token, char *tokstr, char **env)
 		ptr = find_var(ptr, &flag_single, &flag_double);
 		if (ptr == NULL)
 			return (0);
-		tokstr = expand_var(tokstr, &ptr, env);
+		tokstr = expand_var(tokstr, &ptr, env, lastret);
 		if (tokstr == NULL)
 			return (-1);
 		token->tokstr = tokstr;

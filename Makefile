@@ -6,7 +6,7 @@
 #    By: mlebard <mlebard@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/07/27 17:27:08 by mlebard           #+#    #+#              #
-#    Updated: 2021/12/13 20:22:52 by mlebard          ###   ########.fr        #
+#    Updated: 2021/12/14 17:28:50 by mlebard          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,6 +48,7 @@ SOURCES		=	testmain.c \
 				parser/make_plist.c \
 				parser/make_redirlist.c \
 				exec/exec.c \
+				exec/heredoc_init.c \
 				exec/heredoc_input.c \
 				exec/heredoc_format.c \
 				exec/paths.c \

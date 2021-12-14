@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 17:55:53 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/13 18:15:30 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/14 18:36:17 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,11 @@ void	ft_clear_redir(t_redir *redir);
 void	print_rdir_list(t_list *toklst);
 
 int		handle_quotes_limiter(char **limiter, int *flag);
-int		do_expand_heredoc(char **str, char **env);
+int		do_expand_heredoc(char **str, char **env, int lastret);
 int		fill_heredoc(int fd, char **limiter, char **env, void *mem);
 int		init_heredocs(t_process *process, char **env, void *mem);
 int		create_heredocs(t_list *plist, char **env, void *mem);
+int		do_heredoc(char *heredoc_file, t_redir *redir, char **env, void *mem);
 
 int		do_redir(t_list *rdirlst, t_process *p);
 int		do_redir_in(t_redir *redir);

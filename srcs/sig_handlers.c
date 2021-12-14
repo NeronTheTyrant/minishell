@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/13 19:58:49 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/13 20:19:51 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/14 18:51:20 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,14 @@
 #include <signal.h>
 #include <stdio.h>
 
+#include "global.h"
+
 #include "core.h"
 
 void	handle_signals(int sig)
-{	
+{
+	g_ret = 128 + sig;
+	printf("\ng_ret = %d\n", g_ret);
 	if (sig == SIGINT)
 	{
 		rl_replace_line("", 0);

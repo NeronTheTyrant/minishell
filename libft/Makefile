@@ -6,7 +6,7 @@
 #    By: mlebard <mlebard@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/01/05 16:05:10 by mlebard           #+#    #+#              #
-#    Updated: 2021/11/27 16:06:28 by mlebard          ###   ########.fr        #
+#    Updated: 2021/12/14 17:50:55 by mlebard          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -64,6 +64,7 @@ LIBFT_SRCS	=	ft_atoi.c \
 				ft_abs.c \
 				ft_absd.c \
 				ft_pow.c \
+				ft_getnbrlen.c \
 				ft_getnbrlen_us.c \
 				ft_bzero.c \
 				ft_memccpy.c \

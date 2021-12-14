@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 18:28:39 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/13 20:25:43 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/14 18:36:41 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,6 @@ int	exec_single(t_list *plist, t_term *t)
 		if (do_redir(process->redir, process) > 0)
 			return (SIG_RESTART);
 		g_ret = exec_builtin(i, process->cmd, t);
-		printf("g_ret = %d\n", g_ret);
 		return (0);
 	}
 	return (0);
