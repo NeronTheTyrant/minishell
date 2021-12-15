@@ -6,7 +6,7 @@
 #    By: mlebard <mlebard@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/07/27 17:27:08 by mlebard           #+#    #+#              #
-#    Updated: 2021/12/14 21:06:11 by mlebard          ###   ########.fr        #
+#    Updated: 2021/12/15 14:42:47 by mlebard          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -104,6 +104,7 @@ $(OBJS)			:	$(O_DIR)%.o: $(S_DIR)%.c $(DEPEND)
 				@echo "Compiling $<"
 				@mkdir -p $(@D)
 				@$(CC) $(CFLAGS) -c $< -o $@
+
 debug			:	libft
 				@echo "[DEBUG] Building $(NAME):"
 				@make --no-print-directory build_debug

@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/23 14:25:33 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/13 14:34:43 by acabiac          ###   ########.fr       */
+/*   Updated: 2021/12/15 17:41:52 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,24 @@ typedef struct s_envnode
 }	t_envnode;
 
 char		**make_env(char **env);
-int			ft_setenv(char *var, char *val, char ***env);
-char		*make_envvar(char *var, char *val);
+
 int			ft_getenvi(char *var, char **env);
 char		*ft_getenv(char	*var, char **env);
+
+char		*make_envvar(char *var, char *val);
+int			ft_setenv(char *var, char *val, char ***env);
+
 int			make_sudoenv(char **env, t_list **sudoenv);
+
+void		free_envnode(t_envnode *node);
+
 t_envnode	*make_envnode_from_env(char *envstr);
 t_envnode	*make_envnode(char *var, char *val);
-void		free_envnode(t_envnode *node);
+
+t_list	*get_envnode(t_list *sudoenv, char *var);
+
+int	set_sudoenv(t_list **sudoenv, char *var, char *val);
+int set_sudoenv_from_env(t_list	**sudoenv, char *envstr);
+void	print_sudoenv(t_list *sudoenv);
 
 #endif

@@ -6,7 +6,7 @@
 #    By: mlebard <mlebard@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/01/05 16:05:10 by mlebard           #+#    #+#              #
-#    Updated: 2021/12/14 17:50:55 by mlebard          ###   ########.fr        #
+#    Updated: 2021/12/15 13:51:01 by mlebard          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -147,7 +147,7 @@ $(NAME)		:	$(OBJS) $(DEPEND)
 			@ranlib $(NAME)
 			@echo "$(NAME) built successfully!"
 
-$(OBJS)		:	$(O_DIR)%.o: $(S_DIR)%.c
+$(OBJS)		:	$(O_DIR)%.o: $(S_DIR)%.c $(DEPEND)
 			@echo "Compiling $<"
 			@mkdir -p $(@D)
 			@$(CC) $(CFLAGS) -c $< -o $@
