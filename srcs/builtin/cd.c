@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 15:10:16 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/14 22:10:16 by acabiac          ###   ########.fr       */
+/*   Updated: 2021/12/15 22:07:33 by acabiac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,9 @@
 #include <sys/types.h>
 #include <dirent.h>
 #include <unistd.h>
+#include <stdio.h>
 
-int	search_in_cdpath(char **curpath, char *arg, t_term *t) //step 5
+int	search_in_cdpath(char **curpath, char *arg, int *output, t_term *t) //step 5
 {
 	char	*cdpaths;
 	char	**cdpaths_split;
@@ -27,20 +28,7 @@ int	search_in_cdpath(char **curpath, char *arg, t_term *t) //step 5
 
 	cdpaths = ft_getenv("CDPATH", t->env);
 	if (cdpaths == NULL)
-	{
-		*curpath = ft_strjoin("./", arg);
-		if (*curpath == NULL)
-			return (-1);
-		dir = opendir(*curpath);
-		if (dir == NULL)
-		{
-			free(*curpath);
-			*curpath = NULL;
-			return (0);
-		}
-		closedir(dir);
-		return (1);
-	}
+		return (0);
 	else
 	{
 		cdpaths_split = ft_split(cdpaths, ':');
@@ -67,6 +55,7 @@ int	search_in_cdpath(char **curpath, char *arg, t_term *t) //step 5
 			{
 				closedir(dir);
 				ft_freeargs(cdpaths_split);
+				*output = 1;
 				return (1);
 			}
 			free(*curpath);
@@ -78,7 +67,7 @@ int	search_in_cdpath(char **curpath, char *arg, t_term *t) //step 5
 	return (0);
 }
 
-char	*init_curpath(char *arg, t_term *t)
+char	*init_curpath(char *arg, int *output, t_term *t)
 {
 	char	*curpath;
 	char	*pwd;
@@ -91,7 +80,7 @@ char	*init_curpath(char *arg, t_term *t)
 	} // step 3
 	else if (ft_strncmp(arg, "./", 2) != 0 && ft_strncmp(arg, "../", 3) != 0) // step 4
 	{
-		if (search_in_cdpath(&curpath, arg, t) != 0) // step 5
+		if (search_in_cdpath(&curpath, arg, output, t) != 0) // step 5
 			return (curpath);
 	}
 	// step 6
@@ -249,8 +238,12 @@ int	ft_cd(char **args, t_term *t)
 {
 	char	*curpath;
 	char	*arg;
+	char	*var;
+	char	*val;
+	int		output;
 
 	arg = NULL;
+	output = 0;
 	if (args[1] == NULL)
 	{
 		arg = ft_getenv("HOME", t->env);
@@ -267,14 +260,73 @@ int	ft_cd(char **args, t_term *t)
 	}
 	else
 		arg = args[1];
-	curpath = init_curpath(arg, t); // step 3 to 6
-	if (curpath == NULL)
+	if (ft_strcmp(arg, "-") == 0)
+	{
+		output = 1;
+		arg = ft_getenv("OLDPWD", t->env);
+		if (arg == NULL)
+		{
+			ft_putendl_fd("cd: OLDPWD not set", 2);
+			return (1);
+		}
+	}
+	val = getcwd(NULL, 0);
+	if (val == NULL)
 		return (1);
+	curpath = init_curpath(arg, &output, t); // step 3 to 6
+	ft_putendl_fd("CD AFTER INIT_CURPATH:", 2);
+	ft_putendl_fd(curpath, 2);
+	if (curpath == NULL)
+	{
+		free(val);
+		return (1);
+	}
 	// step 7 option we dont have to handle
 	//step 8
 	curpath = set_curpath_canonical(curpath);
+	if (curpath == NULL)
+	{
+		free(val);
+		return (1);
+	}
 	ft_putendl_fd("CD BEFORE CHDIR :", 2);
 	ft_putendl_fd(curpath, 2);
-	free(curpath);
+	if (chdir(curpath) != 0)
+	{
+		ft_putstr_fd("cd: ", 2);
+		ft_putstr_fd(arg, 2);
+		ft_putstr_fd(": ", 2);
+		perror(NULL);
+		free(val);
+		free(curpath);
+		return (1);
+	}
+	var = ft_strdup("PWD");
+	if (var == NULL)
+	{
+		free(val);
+		free(curpath);
+		return (1);
+	}
+	if (set_sudoenv(&t->sudoenv, var, curpath) != 0)
+	{
+		free(val);
+		free(curpath);
+		return (1);
+	}
+	if (ft_setenv(var, curpath, &t->env) != 0)
+		return (1);	
+	var = ft_strdup("OLDPWD");
+	if (set_sudoenv(&t->sudoenv, var, val) != 0)
+	{
+		free(val);
+		free(var);
+		return (1);
+	}
+	if (ft_setenv(var, val, &t->env) != 0)
+		return (1);	
+	ft_putendl_fd("CD AFTER CHDIR :", 2);
+	if (output != 0)
+		ft_putendl_fd(curpath, 1);
 	return (0);
 }
