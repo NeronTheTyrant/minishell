@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/23 14:25:33 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/15 17:41:52 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/15 19:21:38 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ char		*ft_getenv(char	*var, char **env);
 char		*make_envvar(char *var, char *val);
 int			ft_setenv(char *var, char *val, char ***env);
 
+int			ft_addenv(char *var, char *val, char ***env);
+
 int			make_sudoenv(char **env, t_list **sudoenv);
 
 void		free_envnode(t_envnode *node);
@@ -36,10 +38,13 @@ void		free_envnode(t_envnode *node);
 t_envnode	*make_envnode_from_env(char *envstr);
 t_envnode	*make_envnode(char *var, char *val);
 
-t_list	*get_envnode(t_list *sudoenv, char *var);
+t_list		*get_envnode(t_list *sudoenv, char *var);
 
-int	set_sudoenv(t_list **sudoenv, char *var, char *val);
-int set_sudoenv_from_env(t_list	**sudoenv, char *envstr);
-void	print_sudoenv(t_list *sudoenv);
+int			set_sudoenv(t_list **sudoenv, char *var, char *val);
+int			set_sudoenv_from_env(t_list	**sudoenv, char *envstr);
+
+int			add_sudoenv(t_list **sudoenv, char *var, char *val);
+
+void		print_sudoenv(t_list *sudoenv);
 
 #endif

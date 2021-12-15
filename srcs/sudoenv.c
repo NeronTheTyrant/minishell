@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/25 20:51:54 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/15 17:41:29 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/15 20:11:55 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,29 @@ int	set_sudoenv(t_list **sudoenv, char *var, char *val)
 	return (0);
 }
 
+int	add_sudoenv(t_list **sudoenv, char *var, char *val)
+{
+	t_list	*lst;
+	t_envnode	*node;
+	char	*envval;
+
+	lst = get_envnode(*sudoenv, var);
+	if (lst == NULL)
+		return (set_sudoenv(sudoenv, var, val));
+	node = lst->content;
+	if (node->val == NULL)
+		envval = ft_strdup(val);
+	else
+		envval = ft_strjoin(node->val, val);
+	if (envval == NULL)
+		return (-1);
+	node = make_envnode(var, envval);
+	free_envnode(lst->content);
+	lst->content = node;
+	free(val);
+	return (0);
+}
+
 int	set_sudoenv_from_env(t_list	**sudoenv, char *envstr)
 {
 	t_envnode	*node;
@@ -145,20 +168,4 @@ int	make_sudoenv(char **env, t_list **sudoenv)
 		env++;
 	}
 	return (0);
-}
-
-#include <stdio.h>
-
-void	print_sudoenv(t_list *sudoenv)
-{
-	t_list		*ptr;
-	t_envnode	*node;
-
-	ptr = sudoenv;
-	while (ptr)
-	{
-		node = ptr->content;
-		printf("%s=\"%s\"\n", node->var, node->val);
-		ptr = ptr->next;
-	}
 }

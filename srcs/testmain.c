@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 19:53:46 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/15 17:18:12 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/15 19:34:12 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,13 +103,7 @@ int	main(int argc, char **argv, char **env)
 	g_ret = 0;
 	while (1)
 	{
-		char	c;
-		c = 0;
 		printf("lastret = %d\ng_ret = %d\n", t->lastret, g_ret);
-		printf("print sudoenv?\n");
-		scanf("%c", &c);
-		if (c == 'y' || c == 'Y')
-			print_sudoenv(t->sudoenv);
 		reset_memory(t);
 		t->cmdline = rl_gets("minishell> ", t->cmdline);
 		if (g_ret >= 128)

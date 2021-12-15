@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/23 14:28:41 by mlebard           #+#    #+#             */
-/*   Updated: 2021/11/29 18:10:17 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/15 19:31:48 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,18 +78,37 @@ int	ft_setenv(char *var, char *val, char ***env)
 		return (-1);
 	if (varindex == -1)
 	{
-		*env = ft_realloc(*env, sizeof(**env) * (envlen),
-				sizeof(**env) * (envlen + 1));
+		*env = ft_realloc(*env, sizeof(**env) * (envlen + 1),
+				sizeof(**env) * (envlen + 2));
 		if (*env == NULL)
 			return (-1);
-		*env[envlen] = envvar;
-		*env[envlen + 1] = NULL;
+		(*env)[envlen] = envvar;
+		(*env)[envlen + 1] = NULL;
 	}
 	else
 	{
-		free(*env[varindex]);
-		*env[varindex] = envvar;
+		free((*env)[varindex]);
+		(*env)[varindex] = envvar;
 	}
+	return (0);
+}
+
+int	ft_addenv(char *var, char *val, char ***env)
+{
+	int		varindex;
+	char	*envval;
+	char	*envstr;
+
+	varindex = ft_getenvi(var, *env);
+	if (varindex == -1)
+		return (ft_setenv(var, val, env));
+	envval = ft_strchr((*env)[varindex], '=') + 1;
+	envval = ft_strjoin(envval, val);
+	envstr = make_envvar(var, envval);
+	if (envstr == NULL)
+		return (-1);
+	free((*env)[varindex]);
+	(*env)[varindex] = envstr;
 	return (0);
 }
 
