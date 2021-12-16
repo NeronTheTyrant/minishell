@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 15:10:16 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/15 22:07:33 by acabiac          ###   ########.fr       */
+/*   Updated: 2021/12/16 23:08:49 by acabiac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,89 +18,89 @@
 #include <unistd.h>
 #include <stdio.h>
 
+int	check_cdpath_dir(char *path, int *output)
+{
+	DIR		*dir;
+
+	dir = opendir(path);
+	if (dir != NULL)
+	{
+		closedir(dir);
+		*output = 1;
+		return (1);
+	}
+	return (0);
+}
+
+int	search_cdpath_cycle(char *cdpath, char *arg, char **curpath, int *output)
+{
+	char	*prefix;
+
+	prefix = ft_strjoin(cdpath, "/");
+	if (prefix == NULL)
+		return (-1);
+	*curpath = ft_strjoin(prefix, arg);
+	free(prefix);
+	if (*curpath == NULL)
+		return (-1);
+	if (check_cdpath_dir(*curpath, output) == 1)
+		return (1);
+	free(*curpath);
+	return (0);
+}
+
 int	search_in_cdpath(char **curpath, char *arg, int *output, t_term *t) //step 5
 {
 	char	*cdpaths;
 	char	**cdpaths_split;
-	char	*prefix;
-	DIR		*dir;
+	int		ret;
 	size_t	i;
 
 	cdpaths = ft_getenv("CDPATH", t->env);
 	if (cdpaths == NULL)
 		return (0);
-	else
+	cdpaths_split = ft_split(cdpaths, ':');
+	if (cdpaths_split == NULL)
+		return (-1);
+	i = 0;
+	while (cdpaths_split[i] != NULL)
 	{
-		cdpaths_split = ft_split(cdpaths, ':');
-		if (cdpaths_split == NULL)
-			return (-1);
-		i = 0;
-		while (cdpaths_split[i] != NULL)
-		{
-			prefix = ft_strjoin(cdpaths_split[i], "/");
-			if (prefix == NULL)
-			{
-				ft_freeargs(cdpaths_split);
-				return (-1);
-			}
-			*curpath = ft_strjoin(prefix, arg);
-			free(prefix);
-			if (*curpath == NULL)
-			{
-				ft_freeargs(cdpaths_split);
-				return (-1);
-			}
-			dir = opendir(*curpath);
-			if (dir != NULL)
-			{
-				closedir(dir);
-				ft_freeargs(cdpaths_split);
-				*output = 1;
-				return (1);
-			}
-			free(*curpath);
-			i++;
-		}
-		ft_freeargs(cdpaths_split);
-		*curpath = NULL;
+		ret = search_cdpath_cycle(cdpaths_split[i], arg, curpath, output);
+		if (ret != 0)
+			ft_freeargs(cdpaths_split);
+		if (ret != 0)
+			return (ret);
+		i++;
 	}
+	ft_freeargs(cdpaths_split);
+	*curpath = NULL;
 	return (0);
 }
 
 char	*init_curpath(char *arg, int *output, t_term *t)
 {
 	char	*curpath;
-	char	*pwd;
 	char 	*prefix;
 
-	curpath = NULL;
 	if (arg[0] == '/')
-	{
 		return (ft_strdup(arg));
-	} // step 3
-	else if (ft_strncmp(arg, "./", 2) != 0 && ft_strncmp(arg, "../", 3) != 0) // step 4
+	else if (ft_strncmp(arg, "./", 2) != 0 && ft_strncmp(arg, "../", 3) != 0)
 	{
-		if (search_in_cdpath(&curpath, arg, output, t) != 0) // step 5
+		if (search_in_cdpath(&curpath, arg, output, t) != 0)
 			return (curpath);
 	}
-	// step 6
-	pwd = ft_getenv("PWD", t->env);
-	if (pwd == NULL)
-	{
-		curpath = getcwd(NULL, 0);
-		if (curpath == NULL)
-			return (NULL);
-		prefix = ft_strjoin(curpath, "/");
-		free(curpath);
-	}
-	else
-		prefix = ft_strjoin(pwd, "/");
+	curpath = ft_getenv("PWD", t->env);
+	if (curpath == NULL)
+		return (NULL);
+	prefix = ft_strjoin(curpath, "/");
 	if (prefix == NULL)
 		return (NULL);
 	curpath = ft_strjoin(prefix, arg);
+	free(prefix);
 	return (curpath);
 }
 
+/*
 char	*handle_dotdot(char *curpath)
 {
 	char	*result;
@@ -174,7 +174,8 @@ char	*handle_dotdot(char *curpath)
 	}
 	return (result);
 }
-
+*/
+/*
 char	*set_curpath_canonical(char *curpath)
 {
 	char	*result;
@@ -184,10 +185,14 @@ char	*set_curpath_canonical(char *curpath)
 
 	result = ft_strdup("");
 	if (result == NULL)
+	{
+		free(curpath);
 		return (NULL);
+	}
 	curpath_split = ft_split(curpath, '/');
 	if (curpath_split == NULL)
 	{
+		free(curpath);
 		free(result);
 		return (NULL);
 	}
@@ -202,6 +207,7 @@ char	*set_curpath_canonical(char *curpath)
 				free(result);
 				if (tmp == NULL)
 				{
+					free(curpath);
 					ft_freeargs(curpath_split);
 					return (NULL);
 				}
@@ -215,6 +221,7 @@ char	*set_curpath_canonical(char *curpath)
 			}
 			if (result == NULL)
 			{
+				free(curpath);
 				ft_freeargs(curpath_split);
 				return (NULL);
 			}
@@ -231,7 +238,147 @@ char	*set_curpath_canonical(char *curpath)
 		free(result);
 		result = tmp;
 	}
+	free(curpath);
 	return (result);
+}*/
+
+int	get_list_from_split(t_list **lst, char **split)
+{
+	size_t	i;
+	t_list	*node;
+	
+	*lst = NULL;
+	i = 0;
+	while (split && split[i])
+	{
+		node = ft_lstnew(split[i]);
+		if (node == NULL)
+		{
+			ft_lstclear(lst, NULL);
+			return (-1);
+		}
+		ft_lstadd_back(lst, node);
+		i++;
+	}
+	return (0);
+}
+
+void	handle_dots(t_list **head)
+{
+	t_list	*lst;
+	t_list	*prev;
+	t_list	*next;
+
+	lst = *head;
+	while (lst)
+	{
+		prev = lst->prev;
+		next = lst->next;
+		if (ft_strcmp(lst->content, ".") == 0)
+			ft_lstdelone(head, lst, NULL);
+		else if (ft_strcmp(lst->content, "..") == 0)
+		{
+			if (prev)
+				ft_lstdelone(head, prev, NULL);	
+			ft_lstdelone(head, lst, NULL);	
+		}
+		lst = next;
+	}
+}
+
+char	*get_final_curpath(t_list **head, char *curpath)
+{
+	char	*tmp;
+	t_list	*lst;
+
+	lst = *head;
+	while (lst)
+	{
+		tmp = ft_strjoin(curpath, "/");
+		free(curpath);
+		if (tmp == NULL)
+		{
+			ft_lstclear(head, NULL);
+			return (NULL);
+		}
+		curpath = ft_strjoin(tmp, lst->content);
+		free(tmp);
+		if (curpath == NULL)
+		{
+			ft_lstclear(head, NULL);
+			return (NULL);
+		}
+		lst = lst->next;
+	}
+	ft_lstclear(head, NULL);
+	return (curpath);
+}
+
+char	*set_curpath_canonical(char *curpath, char *arg)
+{
+	char	**split;
+	t_list	*lst;
+	int		ret;
+	char	*result;
+
+	split = ft_split(curpath, '/');
+	if (split == NULL)
+	{
+		free(curpath);
+		return (NULL);
+	}
+	ret = get_list_from_split(&lst, split);
+	if (ret != 0)
+	{
+		free(curpath);
+		return (NULL);
+	}
+	handle_dots(&lst);
+	if (ft_strncmp(arg, "//", 2) == 0 && arg[2] != '/')
+	{
+		ft_putendl_fd("CUL", 2);
+		result = ft_strdup("//");
+	}
+	else if (lst == NULL)
+		result = ft_strdup("/");
+	else
+		result = ft_strdup("");
+	free(curpath);
+	if (result != NULL)
+		result = get_final_curpath(&lst, result);
+	if (result)
+		ft_putendl_fd(result, 2);
+	ft_freeargs(split);
+	return (result);
+}
+
+int	init_cd_arg(char **arg, char **args, int *output, t_term *t)
+{
+	if (args[1] == NULL)
+	{
+		*arg = ft_getenv("HOME", t->env);
+		if (*arg == NULL)
+			ft_putendl_fd("cd: HOME not set", 2);
+		if (*arg == NULL)
+			return (1);
+	}
+	else if (args[2] != NULL)
+	{
+		ft_putendl_fd("cd: too many arguments", 2);
+		return (1);
+	}
+	else if (ft_strcmp(args[1], "-") == 0)
+	{
+		*output = 1;
+		*arg = ft_getenv("OLDPWD", t->env);
+		if (*arg == NULL)
+			ft_putendl_fd("cd: OLDPWD not set", 2);
+		if (*arg == NULL)
+			return (1);
+	}
+	else
+		*arg = args[1];
+	return (0);
 }
 
 int	ft_cd(char **args, t_term *t)
@@ -242,90 +389,54 @@ int	ft_cd(char **args, t_term *t)
 	char	*val;
 	int		output;
 
-	arg = NULL;
 	output = 0;
-	if (args[1] == NULL)
-	{
-		arg = ft_getenv("HOME", t->env);
-		if (arg == NULL)
-		{
-			ft_putendl_fd("cd: HOME not set", 2);
-			return (1);
-		}
-	} // step 1 and 2
-	else if (args[2] != NULL)
-	{
-		ft_putendl_fd("cd: too many arguments", 2);
+	if (init_cd_arg(&arg, args, &output, t) != 0)
 		return (1);
-	}
-	else
-		arg = args[1];
-	if (ft_strcmp(arg, "-") == 0)
-	{
-		output = 1;
-		arg = ft_getenv("OLDPWD", t->env);
-		if (arg == NULL)
-		{
-			ft_putendl_fd("cd: OLDPWD not set", 2);
-			return (1);
-		}
-	}
-	val = getcwd(NULL, 0);
+	ft_putendl_fd(arg, 2);
+	curpath = init_curpath(arg, &output, t);
+	if (curpath == NULL)
+		return (1);
+	curpath = set_curpath_canonical(curpath, arg);
+	if (curpath == NULL)
+		return (1);
+	val = ft_getenv("PWD", t->env);
 	if (val == NULL)
-		return (1);
-	curpath = init_curpath(arg, &output, t); // step 3 to 6
-	ft_putendl_fd("CD AFTER INIT_CURPATH:", 2);
-	ft_putendl_fd(curpath, 2);
-	if (curpath == NULL)
 	{
-		free(val);
+		free(curpath);
 		return (1);
 	}
-	// step 7 option we dont have to handle
-	//step 8
-	curpath = set_curpath_canonical(curpath);
-	if (curpath == NULL)
-	{
-		free(val);
-		return (1);
-	}
-	ft_putendl_fd("CD BEFORE CHDIR :", 2);
-	ft_putendl_fd(curpath, 2);
 	if (chdir(curpath) != 0)
 	{
 		ft_putstr_fd("cd: ", 2);
 		ft_putstr_fd(arg, 2);
 		ft_putstr_fd(": ", 2);
 		perror(NULL);
-		free(val);
 		free(curpath);
 		return (1);
 	}
-	var = ft_strdup("PWD");
-	if (var == NULL)
+	var = "OLDPWD";
+	if (set_sudoenv(&t->sudoenv, var, val) != 0)
 	{
-		free(val);
 		free(curpath);
 		return (1);
 	}
+	if (ft_setenv(var, val, &t->env) != 0)
+	{
+		free(curpath);
+		return (1);	
+	}
+	var = "PWD";
 	if (set_sudoenv(&t->sudoenv, var, curpath) != 0)
 	{
-		free(val);
 		free(curpath);
 		return (1);
 	}
 	if (ft_setenv(var, curpath, &t->env) != 0)
-		return (1);	
-	var = ft_strdup("OLDPWD");
-	if (set_sudoenv(&t->sudoenv, var, val) != 0)
 	{
-		free(val);
-		free(var);
-		return (1);
-	}
-	if (ft_setenv(var, val, &t->env) != 0)
+		free(curpath);
 		return (1);	
-	ft_putendl_fd("CD AFTER CHDIR :", 2);
+	}
+	free(curpath);
 	if (output != 0)
 		ft_putendl_fd(curpath, 1);
 	return (0);
