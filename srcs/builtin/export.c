@@ -6,15 +6,15 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 15:11:57 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/15 22:02:24 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/16 17:08:30 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+//#include "builtin.h"
+#include "export.h"
 #include "core.h"
 #include "../libft/libft.h"
 #include "env.h"
-
-#include <stdio.h>
 
 int	check_valid(char *arg)
 {
@@ -51,9 +51,6 @@ char	*get_export_var(char *arg)
 	var = ft_strndup(arg, ptr - arg);
 	return (var);
 }
-#define NOOP	0
-#define EQ		1
-#define PLUSEQ	2
 
 int	get_export_op(char *arg)
 {
@@ -61,7 +58,7 @@ int	get_export_op(char *arg)
 
 	ptr = ft_strchr(arg, '=');
 	if (ptr == NULL)
-		return (NOOP);
+		return (NONE);
 	if (*ptr == '=' && *(ptr - 1) == '+')
 		return (PLUSEQ);
 	else
@@ -78,75 +75,27 @@ char	*get_export_val(char *arg)
 	return (ft_strdup(ptr + 1));
 }
 
-int	print_export(t_list *sudoenv)
-{
-	t_list		*lst;
-	t_envnode	*node;
-
-	lst = sudoenv;
-	while (lst)
-	{
-		node = lst->content;
-		ft_putstr_fd("declare -x ", 1);
-		ft_putstr_fd(node->var, 1);
-		if (node->val != NULL)
-		{
-			ft_putstr_fd("=\"", 1);
-			ft_putstr_fd(node->val, 1);
-			ft_putstr_fd("\"\n", 1);
-		}
-		else
-			ft_putstr_fd("\n", 1);
-		lst = lst->next;
-	}
-	return (0);
-}
-
 int	ft_export(char **args, t_term *t)
 {
 	int	i;
-	char	*var;
-	int		op;
-	char	*val;
+	int	ret;
 
 	i = 1;
+	ret = 0;
 	if (ft_argcount(args) == 1)
 		return (print_export(t->sudoenv));
-	while (args[i] && ft_strcmp(args[i], "--") != 0)
+	while (args[i])
 	{
-		if (check_valid(args[i]) == 1)
+		if (check_valid(args[i]) == 0)
 		{
-			var = get_export_var(args[i]);
-			op = get_export_op(args[i]);
-			val = get_export_val(args[i]);
-			printf("var = %s\n", var);
-			printf("op type = %d\n", op);
-			printf("val = %s\n", val);
-			if (op != 2)
-			{
-				set_sudoenv(&t->sudoenv, var, val);
-				if (val != NULL)
-					ft_setenv(var, val, &t->env);
-			}
-			else
-			{
-				if (ft_addenv(var, val, &t->env))
-				{
-					free(var);
-					free(val);
-					return (1);
-				}
-				if (add_sudoenv(&t->sudoenv, var, val))
-				{
-					free(var);
-					free(val);
-					return (1);
-				}
-			}
+			ft_putstr_fd("export: ", 2);
+			ft_putstr_fd(args[i], 2);
+			ft_putstr_fd(": not a valid identifier", 2);
+			ret = 1;
 		}
-		else
-			printf("export: %s: not a valid identifier", args[i]);
+		else if (export_var(args[i], t))
+			return (1);
 		i++;
 	}
-	return (0);
+	return (ret);
 }

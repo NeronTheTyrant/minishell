@@ -1,33 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   unset.c                                            :+:      :+:    :+:   */
+/*   export.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/09 15:12:15 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/16 18:01:44 by mlebard          ###   ########.fr       */
+/*   Created: 2021/12/16 17:06:50 by mlebard           #+#    #+#             */
+/*   Updated: 2021/12/16 17:10:21 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "core.h"
-#include "env.h"
+#ifndef EXPORT_H
+# define EXPORT_H
 
-int	ft_unset(char **args, t_term *t)
-{
-	int	i;
+# include "../libft/libft.h"
+# include "core.h"
 
-	if (ft_argcount(args) == 1)
-	{
-		ft_putstr_fd("unset: not enough arguments\n", 2);
-		return (1);
-	}
-	i = 0;
-	while (args[i])
-	{
-		ft_unsetenv(args[i], &t->env);
-		unset_sudoenv(&t->sudoenv, args[i]);
-		i++;
-	}
-	return (0);
-}
+# define NONE	0
+# define EQ		1
+# define PLUSEQ	2
+
+int		print_export(t_list *sudoenv);
+int		export_var(char *arg, t_term *t);
+char	*get_export_val(char *arg);
+int		get_export_op(char *arg);
+char	*get_export_var(char *arg);
+#endif

@@ -6,7 +6,7 @@
 #    By: mlebard <mlebard@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/07/27 17:27:08 by mlebard           #+#    #+#              #
-#    Updated: 2021/12/15 14:42:47 by mlebard          ###   ########.fr        #
+#    Updated: 2021/12/16 17:05:16 by mlebard          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -53,6 +53,7 @@ SOURCES		=	testmain.c \
 				free_no_unlink.c \
 				env.c \
 				sudoenv.c \
+				sudoenv_utils.c \
 				wait.c \
 				signals.c \
 				sig_handlers.c \
@@ -75,6 +76,7 @@ SOURCES		=	testmain.c \
 				builtin/env.c \
 				builtin/exit.c \
 				builtin/export.c \
+				builtin/export_var.c \
 				builtin/pwd.c \
 				builtin/unset.c \
 				builtin/exec_builtin.c \

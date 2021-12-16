@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 14:50:09 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/16 17:10:39 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/16 16:39:16 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,17 @@ typedef enum e_btindex
 int		ft_echo(char **args, void *t);
 int		ft_cd(char **args, void *t);
 int		ft_pwd(char **args, void *t);
-int		ft_export(char **args, void *t);
+
+# define NONE	0
+# define EQ		1
+# define PLUSEQ	2
+
+int		ft_export(char **args, t_term *t);
+int		print_export(t_list *sudoenv);
+char	*get_export_val(char *arg);
+int		get_export_op(char *arg);
+char	*get_export_var(char *arg);
+
 int		ft_unset(char **args, void *t);
 int		ft_env(char **args, void *t);
 int		ft_exit(char **args, void *t);

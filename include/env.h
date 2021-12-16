@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/23 14:25:33 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/15 19:21:38 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/16 17:53:51 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,11 @@ int			ft_setenv(char *var, char *val, char ***env);
 
 int			ft_addenv(char *var, char *val, char ***env);
 
+int			ft_unsetenv(char *var, char ***env);
+
+
+
+
 int			make_sudoenv(char **env, t_list **sudoenv);
 
 void		free_envnode(t_envnode *node);
@@ -44,6 +49,8 @@ int			set_sudoenv(t_list **sudoenv, char *var, char *val);
 int			set_sudoenv_from_env(t_list	**sudoenv, char *envstr);
 
 int			add_sudoenv(t_list **sudoenv, char *var, char *val);
+
+int			unset_sudoenv(t_list **sudoenv, char *var);
 
 void		print_sudoenv(t_list *sudoenv);
 
