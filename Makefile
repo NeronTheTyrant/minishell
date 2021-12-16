@@ -6,7 +6,7 @@
 #    By: mlebard <mlebard@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/07/27 17:27:08 by mlebard           #+#    #+#              #
-#    Updated: 2021/12/16 17:05:16 by mlebard          ###   ########.fr        #
+#    Updated: 2021/12/16 20:32:20 by mlebard          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -52,6 +52,7 @@ SOURCES		=	testmain.c \
 				free.c \
 				free_no_unlink.c \
 				env.c \
+				env_utils.c \
 				sudoenv.c \
 				sudoenv_utils.c \
 				wait.c \

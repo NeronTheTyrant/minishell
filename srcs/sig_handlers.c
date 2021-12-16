@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/13 19:58:49 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/14 22:23:35 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/16 20:30:07 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@
 
 void	handle_signals(int sig)
 {
-//	printf("\ng_ret = %d\n", g_ret);
 	if (sig == SIGINT)
 	{
 		rl_replace_line("", 0);

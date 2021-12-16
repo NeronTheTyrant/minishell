@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 18:28:39 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/14 22:01:41 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/16 22:38:40 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,6 @@
 #include <signal.h>
 #include "global.h"
 #include "signals.h"
-
-
-#include <stdio.h>
 
 int	exec_cmd(char **cmd, char **env, char **paths)
 {
@@ -89,7 +86,6 @@ int	exec_single(t_list *plist, t_term *t)
 int	exec(t_list *plist, t_term *t)
 {
 	int			cmdnum;
-	char		**paths;
 	t_process	*process;
 	int			ret;
 
@@ -105,10 +101,9 @@ int	exec(t_list *plist, t_term *t)
 		exec_single(plist, t);
 	else
 	{
-		if (make_path(t->env, &paths) > 0)
+		if (make_path(t->env, &t->paths) > 0)
 			return (error_fatal(ERR_MALLOC, NULL, 1));
-		exec_forks(plist, paths, t, cmdnum);
-		ft_freeargs(paths);
+		exec_forks(plist, t->paths, t, cmdnum);
 	}
 	return (0);
 }

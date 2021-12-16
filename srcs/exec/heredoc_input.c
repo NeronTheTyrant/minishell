@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/02 18:43:05 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/14 22:01:59 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/16 20:40:08 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,8 @@ int	fill_heredoc(int fd, char **limiter, char **env, void *mem)
 			break ;
 		if (ft_strcmp(line, *limiter) == 0)
 			break ;
-		if (flag == 0 && do_expand_heredoc(&line, env, ((t_term *)mem)->lastret) != 0)
+		if (flag == 0 && do_expand_heredoc(&line, env, ((t_term *)mem)->lastret)
+			!= 0)
 		{
 			free(line);
 			error_exit(ERR_MALLOC, NULL, mem, 1);
@@ -68,7 +69,7 @@ int	do_heredoc(char *heredoc_file, t_redir *redir, char **env, void *mem)
 	pid_t	pid;
 
 	redir->fd = open(heredoc_file, O_RDONLY | O_WRONLY | O_TRUNC
-		| O_CREAT, 0644);
+			| O_CREAT, 0644);
 	pid = fork();
 	if (pid == -1)
 		return (error_fatal(NULL, NULL, 1));

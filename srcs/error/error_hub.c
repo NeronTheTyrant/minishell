@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 17:28:22 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/14 22:10:13 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/16 21:27:27 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,4 +59,11 @@ void	error_exit(char *errstr, char *name, t_term *t, int ret)
 	else
 		ft_putendl_fd(errstr, 2);
 	exit_free(t, ret);
+}
+
+void	exit_free(t_term *t, int ret)
+{
+	if (t != NULL)
+		free_everything(t);
+	exit(ret);
 }

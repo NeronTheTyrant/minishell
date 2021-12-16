@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 18:24:27 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/13 17:53:21 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/16 22:38:29 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ typedef struct s_term
 {
 	t_list		*sudoenv;
 	char		**env;
+	char		**paths;
 	char		*cmdline;
 	int			pfd[2];
 	int			std[2];

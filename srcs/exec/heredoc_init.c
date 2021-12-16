@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/14 17:10:35 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/14 22:01:52 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/16 20:39:06 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ int	create_heredocs(t_list *plist, char **env, void *mem)
 {
 	t_process	*process;
 	int			ret;
+
 	while (plist)
 	{
 		process = ((t_process *)plist->content);
