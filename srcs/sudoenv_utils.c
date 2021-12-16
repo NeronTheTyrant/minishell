@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 17:04:29 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/16 17:38:08 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/16 20:34:16 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,9 +69,9 @@ int	set_sudoenv(t_list **sudoenv, char *var, char *val)
 
 int	add_sudoenv(t_list **sudoenv, char *var, char *val)
 {
-	t_list	*lst;
+	t_list		*lst;
 	t_envnode	*node;
-	char	*envval;
+	char		*envval;
 
 	lst = get_envnode(*sudoenv, var);
 	if (lst == NULL)

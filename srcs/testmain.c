@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 19:53:46 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/15 19:34:12 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/16 21:44:31 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,7 @@ void	handle_sig(t_term *t)
 	}
 	else if (t->sig == SIG_FATAL)
 	{
-		free_everything(t);
-		exit(1);
+		exit_free(t, 1);
 	}
 }
 
@@ -83,24 +82,50 @@ char	*rl_gets(char *prompt, char *prevline)
 	return (line);
 }
 
-int	main(int argc, char **argv, char **env)
+void	init_minishell(t_term **t, char **env)
 {
-	t_term				*t;
+	t_term	*terminal;
 
+	terminal = malloc(sizeof(*terminal));
+	if (terminal == NULL)
+		return (error_exit(ERR_MALLOC, NULL, NULL, 1));
+	ft_bzero(terminal, sizeof(*terminal));
+	terminal->env = make_env(env);
+	if (make_sudoenv(terminal->env, &terminal->sudoenv) == -1)
+		return (error_exit(ERR_MALLOC, NULL, terminal, 1));
+	terminal->std[0] = dup(STDIN_FILENO);
+	terminal->std[1] = dup(STDOUT_FILENO);
+	*t = terminal;
 	set_sig(&handle_signals, SIGINT);
 	set_sig(&handle_signals, SIGQUIT);
-	t = malloc(sizeof(*t));
-	if (t == NULL)
-		return (error_fatal(ERR_MALLOC, NULL, 1));
-	ft_bzero(t, sizeof(*t));
-	(void)argc;
-	(void)argv;
-	t->env = make_env(env);
-	if (make_sudoenv(t->env, &t->sudoenv) == -1)
-		return (1);
-	t->std[0] = dup(STDIN_FILENO);
-	t->std[1] = dup(STDOUT_FILENO);
 	g_ret = 0;
+}
+
+void		do_shellcmd(t_term *t)
+{
+		t->sig = lexer(t->cmdline, &t->toklst);
+		if (t->sig > 0)
+		{
+			handle_sig(t);
+			return ;
+		}
+		t->sig = parser(&t->toklst, t->env, &t->plst, t->lastret);
+		if (t->sig > 0)
+		{
+			handle_sig(t);
+			return ;
+		}
+		t->sig = exec(t->plst, t);
+		if (t->sig > 0)
+		{
+			handle_sig(t);
+			return ;
+		}
+		return ;
+}
+
+void	minishell(t_term *t)
+{
 	while (1)
 	{
 		printf("lastret = %d\ng_ret = %d\n", t->lastret, g_ret);
@@ -116,24 +141,17 @@ int	main(int argc, char **argv, char **env)
 		}
 		else if (!*t->cmdline)
 			continue ;
-		t->sig = lexer(t->cmdline, &t->toklst);
-		if (t->sig > 0)
-		{
-			handle_sig(t);
-			continue ;
-		}
-		t->sig = parser(&t->toklst, t->env, &t->plst, t->lastret);
-		if (t->sig > 0)
-		{
-			handle_sig(t);
-			continue ;
-		}
-		t->sig = exec(t->plst, t);
-		if (t->sig > 0)
-		{
-			handle_sig(t);
-			continue ;
-		}
+		do_shellcmd(t);
 	}
+}
+
+int	main(int argc, char **argv, char **env)
+{
+	t_term	*t;
+
+	(void)argc;
+	(void)argv;
+	init_minishell(&t, env);
+	minishell(t);
 	return (0);
 }

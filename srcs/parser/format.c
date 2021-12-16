@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/27 16:38:26 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/14 21:59:32 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/16 20:36:32 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,8 @@ int	handle_token(t_list **toklst, t_list *lst, char **env, int lastret)
 		return (0);
 	if (do_expand(lst->content, currtok->tokstr, env, lastret))
 		return (error_fatal(ERR_MALLOC, NULL, 1));
-	if (currtok->tokstr[0] == '\0' && prevtok && prevtok->toktype > NAME && prevtok->toktype < PIPE)
+	if (currtok->tokstr[0] == '\0' && prevtok && prevtok->toktype > NAME
+		&& prevtok->toktype < PIPE)
 		((t_token *)lst->content)->ambig_redir = 1;
 	else if (currtok->tokstr[0] == '\0')
 		ft_lstdelone(toklst, lst, &clear_token);

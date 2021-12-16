@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/23 15:03:58 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/14 22:28:04 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/16 22:38:10 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ void	free_exec(t_term *t)
 	if (t->pid)
 		free(t->pid);
 	t->pid = NULL;
+	if (t->paths)
+		ft_freeargs(t->paths);
 }
 
 void	reset_memory(t_term *t)
@@ -68,11 +70,4 @@ void	free_everything(t_term *t)
 	close(t->std[0]);
 	close(t->std[1]);
 	free(t);
-}
-
-void	exit_free(t_term *t, int ret)
-{
-	if (t != NULL)
-		free_everything(t);
-	exit(ret);
 }

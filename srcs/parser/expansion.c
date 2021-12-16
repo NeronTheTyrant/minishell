@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/27 16:35:07 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/14 21:59:10 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/16 20:35:42 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ char	*find_var(char *current_ptr, int *flag_single, int *flag_double)
 		else if (current_ptr[i] == '$' && *flag_single == 0
 			&& (ft_isalpha(current_ptr[i + 1]) || current_ptr[i + 1] == '_'))
 			return (current_ptr + i);
-		else if(current_ptr[i] == '$' && *flag_single == 0
+		else if (current_ptr[i] == '$' && *flag_single == 0
 			&& current_ptr[i + 1] == '?')
 			return (current_ptr + i);
 		i++;
