@@ -6,14 +6,12 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 14:50:09 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/16 17:10:39 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/17 15:43:20 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef BUILTIN_H
 # define BUILTIN_H
-
-# include "core.h"
 
 typedef enum e_btindex
 {
@@ -34,6 +32,5 @@ int		ft_unset(char **args, void *t);
 int		ft_env(char **args, void *t);
 int		ft_exit(char **args, void *t);
 int		is_builtin(char *cmd);
-int		exec_builtin(int i, char **args, t_term *t);
 
 #endif

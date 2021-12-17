@@ -6,13 +6,13 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/13 07:56:52 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/03 07:22:41 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/17 15:49:15 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 #include <stdio.h>
-#include "../../libft/libft.h"
+#include "../libft/libft.h"
 
 t_lexstate	get_statetab(t_lexstate state, t_lexchar cat)
 {

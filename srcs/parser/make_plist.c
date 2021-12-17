@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 17:54:11 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/14 22:00:02 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/17 15:50:46 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 #include "error.h"
 #include "sig.h"
 #include "token.h"
-#include <stdio.h>
 
 void	ft_clear_process_no_unlink(t_process *p)
 {

@@ -6,12 +6,12 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 17:57:48 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/14 22:01:02 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/17 15:51:04 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "lexer.h"
 #include "redir.h"
-#include <stdio.h>
 #include "sig.h"
 #include "error.h"
 

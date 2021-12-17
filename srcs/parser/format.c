@@ -6,13 +6,14 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/27 16:38:26 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/16 20:36:32 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/17 15:50:05 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "token.h"
+#include <stddef.h>
+
 #include "../libft/libft.h"
-#include <stdlib.h>
+#include "token.h"
 #include "error.h"
 #include "parser.h"
 #include "lexer.h"

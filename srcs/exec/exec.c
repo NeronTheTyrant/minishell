@@ -6,22 +6,18 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 18:28:39 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/16 22:38:40 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/17 15:43:07 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "error.h"
-#include "../libft/libft.h"
 #include <stddef.h>
-#include <unistd.h>
-#include "process.h"
+#include <signal.h>
+
+#include "error.h"
 #include "redir.h"
 #include "core.h"
-#include <sys/types.h>
-#include <sys/wait.h>
 #include "builtin.h"
 #include "exec.h"
-#include <signal.h>
 #include "global.h"
 #include "signals.h"
 

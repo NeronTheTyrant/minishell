@@ -6,7 +6,7 @@
 #    By: mlebard <mlebard@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/07/27 17:27:08 by mlebard           #+#    #+#              #
-#    Updated: 2021/12/16 20:32:20 by mlebard          ###   ########.fr        #
+#    Updated: 2021/12/17 15:57:43 by mlebard          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,6 +48,7 @@ DEPEND		+=	$(addprefix include/, \
 
 # SRCS
 SOURCES		=	testmain.c \
+				minishell.c \
 				file_utils.c \
 				free.c \
 				free_no_unlink.c \
@@ -59,6 +60,10 @@ SOURCES		=	testmain.c \
 				signals.c \
 				sig_handlers.c \
 				lexer/lexer.c \
+				lexer/find_token.c \
+				lexer/make_token.c \
+				lexer/state_cat.c \
+				lexer/token_utils.c \
 				parser/parser.c \
 				parser/expansion.c \
 				parser/format.c \
@@ -81,10 +86,6 @@ SOURCES		=	testmain.c \
 				builtin/pwd.c \
 				builtin/unset.c \
 				builtin/exec_builtin.c \
-				lexer/find_token.c \
-				lexer/make_token.c \
-				lexer/state_cat.c \
-				lexer/token_utils.c \
 				error/error_hub.c
 SRCS		=	$(addprefix $(S_DIR),$(SOURCES))
 

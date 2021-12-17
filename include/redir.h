@@ -6,17 +6,16 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 17:55:53 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/14 18:36:17 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/17 15:59:42 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef REDIR_H
 # define REDIR_H
 
-# include "token.h"
 # include "process.h"
+# include "token.h"
 # include "../libft/libft.h"
-# include "core.h"
 
 typedef enum e_redirtype
 {

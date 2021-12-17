@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 18:24:27 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/16 23:15:19 by acabiac          ###   ########.fr       */
+/*   Updated: 2021/12/17 15:09:59 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ typedef struct s_term
 /*                                                                            */
 /******************************************************************************/
 
+void	minishell(t_term *t);
 int		lexer(char *cmdline, t_list **toklst);
 int		exec(t_list *plist, t_term *t);
 

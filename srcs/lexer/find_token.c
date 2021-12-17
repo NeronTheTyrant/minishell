@@ -6,14 +6,13 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/13 07:47:03 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/14 21:58:39 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/17 15:48:52 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 #include "sig.h"
 #include "error.h"
-#include <stdio.h>
 
 int	check_token_end(t_lexstate state, t_lexstate next_state, size_t toklen)
 {

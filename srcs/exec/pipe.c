@@ -6,19 +6,16 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 06:55:09 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/16 21:48:24 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/17 15:47:45 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../libft/libft.h"
 #include "core.h"
 #include "process.h"
 #include "error.h"
 #include "redir.h"
 #include "builtin.h"
 #include "exec.h"
-#include "signals.h"
-#include <signal.h>
 
 void	close_pipe(int pfd[2])
 {

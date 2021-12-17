@@ -6,12 +6,13 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 17:51:46 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/14 21:59:50 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/17 15:50:30 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "process.h"
 #include <stdio.h>
+
+#include "process.h"
 #include "token.h"
 #include "sig.h"
 #include "error.h"

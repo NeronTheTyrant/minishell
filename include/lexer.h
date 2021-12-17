@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 18:24:27 by mlebard           #+#    #+#             */
-/*   Updated: 2021/11/23 17:26:31 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/17 15:14:49 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,5 +98,6 @@ void		clear_token(t_token *token);
 /******************************************************************************/
 
 void		print_token(t_token token);
+void		print_token_list(t_list *toklst);
 
 #endif

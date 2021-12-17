@@ -6,11 +6,10 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/23 14:28:41 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/16 20:31:38 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/17 15:15:29 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
 #include "../libft/libft.h"
 
 char	*ft_getenv(char	*var, char **env)

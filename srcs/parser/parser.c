@@ -6,12 +6,11 @@
 /*   By: acabiac <acabiac@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/27 20:59:41 by acabiac           #+#    #+#             */
-/*   Updated: 2021/12/14 17:47:04 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/17 15:51:14 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../libft/libft.h"
-#include <stdio.h>
 #include "parser.h"
 #include "process.h"
 #include "sig.h"
