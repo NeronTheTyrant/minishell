@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/27 16:35:07 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/16 20:35:42 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/17 15:49:34 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include "env.h"
 #include "../libft/libft.h"
 #include <stddef.h>
-#include <stdlib.h>
 
 char	*find_var(char *current_ptr, int *flag_single, int *flag_double)
 {

@@ -6,12 +6,12 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/13 08:02:15 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/12 21:15:57 by acabiac          ###   ########.fr       */
+/*   Updated: 2021/12/17 15:49:07 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
-#include "../../libft/libft.h"
+#include "../libft/libft.h"
 
 t_toktype	get_token_type(t_lexstate state, size_t toklen)
 {

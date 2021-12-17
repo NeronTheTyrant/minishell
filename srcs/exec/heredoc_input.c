@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/02 18:43:05 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/16 20:40:08 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/17 15:46:04 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,9 @@
 #include <signal.h>
 
 #include "core.h"
-
 #include "../libft/libft.h"
-
 #include "error.h"
-
 #include "signals.h"
-
 #include "redir.h"
 #include "exec.h"
 

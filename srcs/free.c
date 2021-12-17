@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/23 15:03:58 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/16 22:38:10 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/17 15:58:16 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 #include "lexer.h"
 #include "process.h"
 #include "env.h"
-#include <readline/history.h>
 #include <readline/readline.h>
 
 void	free_lexer(t_term *t)
@@ -39,6 +38,7 @@ void	free_exec(t_term *t)
 	t->pid = NULL;
 	if (t->paths)
 		ft_freeargs(t->paths);
+	t->paths = NULL;
 }
 
 void	reset_memory(t_term *t)

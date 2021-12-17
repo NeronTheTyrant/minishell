@@ -6,13 +6,12 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 06:51:47 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/14 22:02:34 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/17 15:48:35 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "process.h"
 #include "redir.h"
-#include "core.h"
 #include "error.h"
 
 int	do_redir_in(t_redir *redir)

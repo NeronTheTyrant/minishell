@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 17:48:38 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/13 14:33:47 by acabiac          ###   ########.fr       */
+/*   Updated: 2021/12/17 15:41:05 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define PROCESS_H
 
 # include "../libft/libft.h"
-# include "core.h"
 
 typedef struct s_process
 {

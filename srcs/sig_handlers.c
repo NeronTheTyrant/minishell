@@ -6,17 +6,16 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/13 19:58:49 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/16 20:30:07 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/17 15:20:58 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <readline/readline.h>
-#include <readline/history.h>
 #include <signal.h>
 #include <stdio.h>
 
 #include "global.h"
-
+#include "../libft/libft.h"
 #include "core.h"
 
 void	handle_signals(int sig)

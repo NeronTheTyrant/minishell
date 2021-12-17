@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/13 16:26:57 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/14 22:09:00 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/17 15:22:51 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 #include <stddef.h>
 #include "global.h"
 #include "error.h"
-#include <stdio.h>
 
 void	waitprocess(int pid)
 {
