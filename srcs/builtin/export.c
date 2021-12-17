@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 15:11:57 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/17 15:24:45 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/17 21:43:03 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,9 +87,9 @@ int	ft_export(char **args, t_term *t)
 	{
 		if (check_valid(args[i]) == 0)
 		{
-			ft_putstr_fd("export: ", 2);
+			ft_putstr_fd("export: '", 2);
 			ft_putstr_fd(args[i], 2);
-			ft_putstr_fd(": not a valid identifier", 2);
+			ft_putstr_fd("': not a valid identifier\n", 2);
 			ret = 1;
 		}
 		else if (export_var(args[i], t))

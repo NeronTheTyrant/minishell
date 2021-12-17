@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/13 19:58:49 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/17 15:20:58 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/17 22:14:46 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ void	handle_signals_heredoc(int sig)
 {
 	if (sig == SIGINT)
 	{
+		ft_putstr_fd("\n", 1);
 		free_from_signal(NULL);
 		exit(130);
 	}

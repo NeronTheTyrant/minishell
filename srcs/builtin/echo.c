@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 14:48:43 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/13 14:47:04 by acabiac          ###   ########.fr       */
+/*   Updated: 2021/12/17 21:12:35 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ size_t	check_echo_flags(char **args, int *newline)
 			j++;
 		if (args[i][j] != '\0')
 			break ;
-		if (j > 1 && *newline == 0)
-			*newline = 1;
+		if (j > 1)
+			*newline += 1;
 		i++;
 	}
 	return (i);

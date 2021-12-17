@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 19:53:46 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/17 20:34:23 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/17 21:45:31 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ char	*get_new_shlvl(char **env)
 	char	*shlvl;
 	char	*newlvl;
 	int		atoi;
-	
+
 	shlvl = ft_getenv("SHLVL", env);
 	if (shlvl == NULL || ft_strcheck_each(shlvl, &ft_isdigit) == 0)
 		newlvl = ft_strdup("0");

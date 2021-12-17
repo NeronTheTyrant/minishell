@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 16:35:25 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/16 17:09:33 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/17 21:38:37 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,14 @@ int	export_add_var(char *var, char *val, t_term *t)
 	return (0);
 }
 
-int	export_set_var(char *var, char *val, t_term *t)
+int	export_set_var(char *var, char *val, int op, t_term *t)
 {
-	int	ret;
+	int		ret;
+	t_list	*lst;
 
+	lst = get_envnode(t->sudoenv, var);
+	if (lst != NULL && op == NONE)
+		return (0);
 	ret = set_sudoenv(&t->sudoenv, var, val);
 	if (val != NULL)
 		ret = ft_setenv(var, val, &t->env);
@@ -76,7 +80,7 @@ int	export_var(char *arg, t_term *t)
 		return (1);
 	}
 	if (op != PLUSEQ)
-		ret = export_set_var(var, val, t);
+		ret = export_set_var(var, val, op, t);
 	else
 		ret = export_add_var(var, val, t);
 	free(var);
