@@ -6,7 +6,7 @@
 #    By: mlebard <mlebard@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/07/27 17:27:08 by mlebard           #+#    #+#              #
-#    Updated: 2021/12/16 20:32:20 by mlebard          ###   ########.fr        #
+#    Updated: 2021/12/17 16:11:43 by acabiac          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -73,6 +73,8 @@ SOURCES		=	testmain.c \
 				exec/redir.c \
 				exec/pipe.c \
 				builtin/cd.c \
+				builtin/cd_curpath.c \
+				builtin/cd_cdpath.c \
 				builtin/echo.c \
 				builtin/env.c \
 				builtin/exit.c \
