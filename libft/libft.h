@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/17 10:54:00 by user42            #+#    #+#             */
-/*   Updated: 2021/12/14 17:51:19 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/17 20:31:28 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ double			ft_pow(double d, int power);
 intmax_t		ft_abs(intmax_t n);
 double			ft_absd(double d);
 int				ft_atoi(const char *str);
+long long		ft_strtoll(const char *str, char **end);
 int				ft_getnbrlen(int n);
 int				ft_getnbrlen_us(intmax_t n);
 double			ft_atof(char *str);

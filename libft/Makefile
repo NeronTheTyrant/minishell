@@ -6,7 +6,7 @@
 #    By: mlebard <mlebard@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/01/05 16:05:10 by mlebard           #+#    #+#              #
-#    Updated: 2021/12/15 13:51:01 by mlebard          ###   ########.fr        #
+#    Updated: 2021/12/17 20:31:59 by mlebard          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,6 +36,7 @@ CC			=	clang
 CFLAGS		=	-Werror -Wextra -Wall -I./
 
 LIBFT_SRCS	=	ft_atoi.c \
+				strtoll.c \
 				ft_atof.c \
 				ft_swap.c \
 				ft_itoa.c \

@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 06:55:09 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/17 15:47:45 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/17 20:05:53 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,9 @@
 #include "redir.h"
 #include "builtin.h"
 #include "exec.h"
+
+#include "env.h"
+#include "../libft/libft.h"
 
 void	close_pipe(int pfd[2])
 {

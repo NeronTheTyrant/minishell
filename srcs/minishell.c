@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 15:05:30 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/17 15:07:43 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/17 19:15:20 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void	minishell(t_term *t)
 {
 	while (1)
 	{
-		printf("lastret = %d\ng_ret = %d\n", t->lastret, g_ret);
+//		printf("lastret = %d\ng_ret = %d\n", t->lastret, g_ret);
 		reset_memory(t);
 		t->cmdline = rl_gets("minishell> ", t->cmdline);
 		if (g_ret >= 128)
