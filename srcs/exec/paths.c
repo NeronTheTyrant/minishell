@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 17:38:48 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/14 22:02:10 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/18 14:30:16 by acabiac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	try_envpath(char **cmd, char **env, char **paths)
 	size_t	cmd_len;
 
 	i = 0;
-	while (paths[i])
+	while (paths && paths[i])
 	{
 		cmd_len = ft_strlen(paths[i]) + ft_strlen(cmd[0]) + 1;
 		cmd_path = malloc(sizeof(*cmd_path) * (cmd_len + 1));

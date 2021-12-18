@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 17:28:22 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/16 21:27:27 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/18 14:58:31 by acabiac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,19 @@
 #include "core.h"
 #include <stdio.h>
 #include "global.h"
+#include "error.h"
+#include "libft.h"
 
 t_sig	error_nonfatal(char *errstr, char *name, int ret)
 {
+	if (errstr && ft_strcmp(errstr, ERR_SYNTAX) == 0)
+	{
+		ft_putstr_fd("syntax error near unexpected token `", 2);
+		if (name)
+			ft_putstr_fd(name, 2);
+		ft_putendl_fd("'", 2);
+		return (SIG_RESTART);
+	}
 	if (name != NULL)
 	{
 		ft_putstr_fd(name, 2);

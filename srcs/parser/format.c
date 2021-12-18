@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/27 16:38:26 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/17 15:50:05 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/18 15:05:15 by acabiac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,23 +64,27 @@ int	check_grammar(t_token *token, t_token *prevtok, t_list *next)
 {
 	t_toktype	currtype;
 	t_toktype	nexttype;
+	t_token		*nexttok;
 
 	currtype = token->toktype;
 	if (prevtok == NULL && token->toktype == PIPE)
-		return (-1);
-	if (next == NULL)
-		nexttype = END;
-	else
-		nexttype = ((t_token *)next->content)->toktype;
+		return (error_nonfatal(ERR_SYNTAX, token->tokstr, 2));
+	nexttok = NULL;
+	nexttype = END;
+	if (next != NULL)
+	{
+		nexttok = ((t_token *)next->content);
+		nexttype = nexttok->toktype;
+	}
 	if (currtype != WORD && currtype != NAME && currtype != PIPE)
 	{
 		if (nexttype != WORD && nexttype != NAME)
-			return (-1);
+			return (error_nonfatal(ERR_SYNTAX, nexttok->tokstr, 2));
 	}
 	else if (currtype == PIPE)
 	{
 		if (nexttype == PIPE || nexttype == END)
-			return (-1);
+			return (error_nonfatal(ERR_SYNTAX, token->tokstr, 2));
 	}
 	return (0);
 }
@@ -98,8 +102,8 @@ int	handle_token(t_list **toklst, t_list *lst, char **env, int lastret)
 		prevtok = lst->prev->content;
 	tok = currtok->toktype;
 	flag = (lst->prev != NULL && prevtok->toktype == RDIR_HEREDOC);
-	if (check_grammar(currtok, prevtok, lst->next) == -1)
-		return (error_nonfatal(ERR_SYNTAX, currtok->tokstr, 2));
+	if (check_grammar(currtok, prevtok, lst->next) != 0)
+		return (SIG_RESTART);
 	if (tok != WORD || flag != 0)
 		return (0);
 	if (do_expand(lst->content, currtok->tokstr, env, lastret))

@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/13 07:47:03 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/14 21:36:36 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/18 15:00:02 by acabiac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define ERROR_H
 
 # include "sig.h"
+# include "core.h"
 
 # define ERR_MALLOC			"Error: malloc failed"
 # define ERR_SYNTAX			"syntax error"
@@ -25,6 +26,6 @@
 
 t_sig	error_nonfatal(char *errstr, char *name, int ret);
 t_sig	error_fatal(char *errstr, char *name, int ret);
-void	error_exit(char *errstr, char *name, void *t, int ret);
+void	error_exit(char *errstr, char *name, t_term *t, int ret);
 
 #endif
