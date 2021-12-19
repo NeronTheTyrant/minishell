@@ -6,7 +6,7 @@
 /*   By: acabiac <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 15:40:21 by acabiac           #+#    #+#             */
-/*   Updated: 2021/12/17 16:00:05 by acabiac          ###   ########.fr       */
+/*   Updated: 2021/12/19 14:34:30 by acabiac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 # include "core.h"
 # include "libft.h"
 
+int		cd_return_error(int ret, char *err_msg);
 char	*get_curpath(char **arg, char **args, int *output, t_term *t);
 int		init_cd_arg(char **arg, char **args, int *output, t_term *t);
 char	*init_curpath(char *arg, int *output, t_term *t);

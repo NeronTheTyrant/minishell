@@ -6,7 +6,7 @@
 /*   By: acabiac <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 16:09:51 by acabiac           #+#    #+#             */
-/*   Updated: 2021/12/17 16:15:00 by acabiac          ###   ########.fr       */
+/*   Updated: 2021/12/19 14:43:46 by acabiac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,29 +18,28 @@
 #include "core.h"
 #include "cd.h"
 
+int	cd_return_error(int ret, char *err_msg)
+{
+	ft_putendl_fd(err_msg, 2);
+	return (ret);
+}
+
 int	init_cd_arg(char **arg, char **args, int *output, t_term *t)
 {
 	if (args[1] == NULL)
 	{
 		*arg = ft_getenv("HOME", t->env);
 		if (*arg == NULL)
-			ft_putendl_fd("cd: HOME not set", 2);
-		if (*arg == NULL)
-			return (1);
+			return (cd_return_error(1, "cd: HOME not set"));
 	}
 	else if (args[2] != NULL)
-	{
-		ft_putendl_fd("cd: too many arguments", 2);
-		return (1);
-	}
+		return (cd_return_error(1, "cd: too many arguments"));
 	else if (ft_strcmp(args[1], "-") == 0)
 	{
 		*output = 1;
 		*arg = ft_getenv("OLDPWD", t->env);
 		if (*arg == NULL)
-			ft_putendl_fd("cd: OLDPWD not set", 2);
-		if (*arg == NULL)
-			return (1);
+			return (cd_return_error(1, "cd: OLDPWD not set"));
 	}
 	else
 		*arg = args[1];
@@ -59,7 +58,7 @@ int	search_in_cdpath(char **curpath, char *arg, int *output, t_term *t)
 		return (0);
 	cdpaths_split = ft_split(cdpaths, ':');
 	if (cdpaths_split == NULL)
-		return (-1);
+		return (cd_return_error(-1, "Memory allocation failed"));
 	i = 0;
 	while (cdpaths_split[i] != NULL)
 	{
@@ -81,11 +80,11 @@ int	srch_cdpath_cycle(char *cdpath, char *arg, char **curpath, int *output)
 
 	prefix = ft_strjoin(cdpath, "/");
 	if (prefix == NULL)
-		return (-1);
+		return (cd_return_error(-1, "Memory allocation failed"));
 	*curpath = ft_strjoin(prefix, arg);
 	free(prefix);
 	if (*curpath == NULL)
-		return (-1);
+		return (cd_return_error(-1, "Memory allocation failed"));
 	if (check_cdpath_dir(*curpath, output) == 1)
 		return (1);
 	free(*curpath);

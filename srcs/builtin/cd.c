@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 15:10:16 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/17 16:11:14 by acabiac          ###   ########.fr       */
+/*   Updated: 2021/12/19 14:57:39 by acabiac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,22 +68,22 @@ int	swap_pwd_vars(char *pwd, char *oldpwd, t_term *t)
 	if (set_sudoenv(&t->sudoenv, "OLDPWD", oldpwd) != 0)
 	{
 		free(pwd);
-		return (1);
+		return (cd_return_error(1, "Memory allocation failed"));
 	}
 	if (ft_setenv("OLDPWD", oldpwd, &t->env) != 0)
 	{
 		free(pwd);
-		return (1);
+		return (cd_return_error(1, "Memory allocation failed"));
 	}
 	if (set_sudoenv(&t->sudoenv, "PWD", pwd) != 0)
 	{
 		free(pwd);
-		return (1);
+		return (cd_return_error(1, "Memory allocation failed"));
 	}
 	if (ft_setenv("PWD", pwd, &t->env) != 0)
 	{
 		free(pwd);
-		return (1);
+		return (cd_return_error(1, "Memory allocation failed"));
 	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/17 10:54:00 by user42            #+#    #+#             */
-/*   Updated: 2021/12/19 17:27:46 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/19 20:43:03 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,8 +169,8 @@ int				ft_check_base(char *base, int base_len);
 ** Outputting to fd
 */
 
-void			ft_putstr_fd(char *s, int fd);
-void			ft_putendl_fd(char *s, int fd);
+int				ft_putstr_fd(char *s, int fd);
+int				ft_putendl_fd(char *s, int fd);
 void			ft_putnbr_fd(int n, int fd);
 void			ft_putchar_fd(char c, int fd);
 

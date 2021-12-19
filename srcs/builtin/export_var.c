@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 16:35:25 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/17 21:38:37 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/19 20:05:10 by acabiac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,12 @@
 #include "core.h"
 #include "../libft/libft.h"
 #include "env.h"
+
+int	export_err_msg(int ret, char *msg)
+{
+	ft_putendl_fd(msg, 2);
+	return (ret);
+}
 
 int	print_export(t_list *sudoenv)
 {
@@ -24,16 +30,17 @@ int	print_export(t_list *sudoenv)
 	while (lst)
 	{
 		node = lst->content;
-		ft_putstr_fd("declare -x ", 1);
-		ft_putstr_fd(node->var, 1);
+		if (ft_putstr_fd("declare -x ", 1) == -1
+			|| ft_putstr_fd(node->var, 1) == -1)
+			return (export_err_msg(1, ERR_WRITE_EXPORT));
 		if (node->val != NULL)
 		{
-			ft_putstr_fd("=\"", 1);
-			ft_putstr_fd(node->val, 1);
-			ft_putstr_fd("\"\n", 1);
+			if (ft_putstr_fd("=\"", 1) == -1 || ft_putstr_fd(node->val, 1) == -1
+				|| ft_putstr_fd("\"\n", 1) == -1)
+				return (export_err_msg(1, ERR_WRITE_EXPORT));
 		}
-		else
-			ft_putstr_fd("\n", 1);
+		else if (ft_putstr_fd("\n", 1) == -1)
+			return (export_err_msg(1, ERR_WRITE_EXPORT));
 		lst = lst->next;
 	}
 	return (0);

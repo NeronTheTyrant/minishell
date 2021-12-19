@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 17:06:50 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/16 17:10:21 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/19 20:43:37 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 # define NONE	0
 # define EQ		1
 # define PLUSEQ	2
+
+# define ERR_WRITE_EXPORT "export: write error: No space left on device"
 
 int		print_export(t_list *sudoenv);
 int		export_var(char *arg, t_term *t);

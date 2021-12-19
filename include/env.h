@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/23 14:25:33 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/16 20:41:17 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/19 20:46:16 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,24 @@
 
 # include "../libft/libft.h"
 
+/*
+**  t_envnode: node for sudoenv linked list
+**
+** var     -> variable name
+** val     -> variable value (may be an emtpy string, or NULL)
+*/
+
 typedef struct s_envnode
 {
 	char	*var;
 	char	*val;
 }	t_envnode;
+
+/******************************************************************************/
+/*                                                                            */
+/*                              Environment                                   */
+/*                                                                            */
+/******************************************************************************/
 
 char		**make_env(char **env);
 
@@ -29,6 +42,12 @@ char		*make_envvar(char *var, char *val);
 int			ft_setenv(char *var, char *val, char ***env);
 int			ft_addenv(char *var, char *val, char ***env);
 int			ft_unsetenv(char *var, char ***env);
+
+/******************************************************************************/
+/*                                                                            */
+/*                               Sudo Env                                     */
+/*                                                                            */
+/******************************************************************************/
 
 int			make_sudoenv(char **env, t_list **sudoenv);
 

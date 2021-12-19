@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/27 16:35:07 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/17 15:49:34 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/19 21:23:54 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,10 @@ char	*expand_ret(char *word, char **var, int lastret)
 	if (expanded == NULL)
 		return (NULL);
 	result = insert_expansion(word, var, expanded, ft_getnbrlen(lastret));
+	free(expanded);
 	if (result == NULL)
 		return (NULL);
+	free(word);
 	return (result);
 }
 
@@ -95,6 +97,7 @@ char	*expand_var(char *word, char **var, char **env, int lastret)
 	result = insert_expansion(word, var, expanded, var_len);
 	if (result == NULL)
 		return (NULL);
+	free(word);
 	return (result);
 }
 
