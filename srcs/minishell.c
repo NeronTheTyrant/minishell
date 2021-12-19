@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 15:05:30 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/19 13:13:57 by acabiac          ###   ########.fr       */
+/*   Updated: 2021/12/19 20:35:01 by mlebard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,96 +79,17 @@ char	*rl_gets(char *prompt, char *prevline)
 	return (line);
 }
 
-#define BUFFER_SIZE 4096
-
-int	gnl_nontty(int fd, char **line)
-{
-	char	buffer[BUFFER_SIZE];
-	int		i;
-	int		ret;
-	char	*res;
-	char	*tmp;
-
-	res = NULL;
-	i = 0;
-	ft_memset(buffer, 0, BUFFER_SIZE);
-	ret = read(fd, buffer + i, 1);
-	if (ret == 0)
-		return (0);
-	res = ft_strdup("");
-	if (res == NULL)
-		return (-1);
-	else if (buffer[i] == '\n')
-	{
-		*line = res;
-		return (1);
-	}
-	while (ret == 1)
-	{
-		if (buffer[i] == '\n')
-		{
-			buffer[i] = 0;
-			tmp = ft_strjoin(res, buffer);
-			free(res);
-			if (tmp == NULL)
-				return (-1);
-			res = tmp;
-			break ;
-		}
-		else if (buffer[i] == 0 || ft_isprint(buffer[i]) == 0)
-		{
-			free(res);
-			return (-1);
-		}
-		if (i == BUFFER_SIZE - 2)
-		{
-			tmp = ft_strjoin(res, buffer);
-			free(res);
-			if (tmp == NULL)
-				return (-1);
-			res = tmp;
-			ft_memset(buffer, 0, BUFFER_SIZE);
-			i = -1;
-		}
-		i++;
-		ret = read(fd, buffer + i, 1);
-	}
-	if (ret == -1)
-	{
-		free(res);
-		return (-1);
-	}
-	*line = res;
-	return (1);
-}
-
-char	*get_nontty_line(t_term *t)
-{
-	char	*line;
-	int		ret;
-
-	line = NULL;
-	ret = gnl_nontty(STDIN_FILENO, &line);
-	if (ret == -1)
-	{
-		free(line);
-		ft_putendl_fd("An error occured in the stdin passed to minishell", 2);
-		free_everything(t);
-		exit(1);
-	}
-	return (line);
-}
-
 void	minishell(t_term *t)
 {
 	int	ret;
+
 	while (1)
 	{
 		reset_memory(t);
-//		if (isatty(STDIN_FILENO) == 1)
+		if (isatty(STDIN_FILENO) == 1)
 			t->cmdline = rl_gets("minishell> ", t->cmdline);
-//		else
-//			t->cmdline = get_nontty_line(t);
+		else
+			t->cmdline = get_nontty_line(t, t->cmdline);
 		if (g_ret >= 128)
 			t->lastret = g_ret;
 		if (!t->cmdline)

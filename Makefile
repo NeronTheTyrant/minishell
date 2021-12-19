@@ -6,7 +6,7 @@
 #    By: mlebard <mlebard@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/07/27 17:27:08 by mlebard           #+#    #+#              #
-#    Updated: 2021/12/17 19:14:31 by mlebard          ###   ########.fr        #
+#    Updated: 2021/12/19 20:34:39 by mlebard          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,6 +49,7 @@ DEPEND		+=	$(addprefix include/, \
 # SRCS
 SOURCES		=	main.c \
 				minishell.c \
+				nontty.c \
 				file_utils.c \
 				free.c \
 				free_no_unlink.c \
