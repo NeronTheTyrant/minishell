@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/27 16:38:26 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/18 15:05:15 by acabiac          ###   ########.fr       */
+/*   Updated: 2021/12/19 13:09:24 by acabiac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,22 +64,22 @@ int	check_grammar(t_token *token, t_token *prevtok, t_list *next)
 {
 	t_toktype	currtype;
 	t_toktype	nexttype;
-	t_token		*nexttok;
+	char		*next_tokstr;
 
 	currtype = token->toktype;
 	if (prevtok == NULL && token->toktype == PIPE)
 		return (error_nonfatal(ERR_SYNTAX, token->tokstr, 2));
-	nexttok = NULL;
+	next_tokstr = NULL;
 	nexttype = END;
 	if (next != NULL)
 	{
-		nexttok = ((t_token *)next->content);
-		nexttype = nexttok->toktype;
+		next_tokstr = ((t_token *)next->content)->tokstr;
+		nexttype = ((t_token *)next->content)->toktype;
 	}
 	if (currtype != WORD && currtype != NAME && currtype != PIPE)
 	{
 		if (nexttype != WORD && nexttype != NAME)
-			return (error_nonfatal(ERR_SYNTAX, nexttok->tokstr, 2));
+			return (error_nonfatal(ERR_SYNTAX, next_tokstr, 2));
 	}
 	else if (currtype == PIPE)
 	{

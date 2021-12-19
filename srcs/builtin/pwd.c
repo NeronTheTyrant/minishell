@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 15:11:34 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/16 20:37:37 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/18 16:20:07 by acabiac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	ft_pwd(char **args, t_term *t)
 	dir_name = getcwd(NULL, 0);
 	if (dir_name == NULL)
 	{
-		error_fatal(ERR_MALLOC, NULL, -1);
+		error_nonfatal(NULL, NULL, -1);
 		return (1);
 	}
 	ft_putendl_fd(dir_name, 1);

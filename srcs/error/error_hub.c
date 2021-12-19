@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 17:28:22 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/18 14:58:31 by acabiac          ###   ########.fr       */
+/*   Updated: 2021/12/19 13:06:13 by acabiac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ t_sig	error_nonfatal(char *errstr, char *name, int ret)
 		ft_putstr_fd("syntax error near unexpected token `", 2);
 		if (name)
 			ft_putstr_fd(name, 2);
+		else
+			ft_putstr_fd("\\n", 2);
 		ft_putendl_fd("'", 2);
 		return (SIG_RESTART);
 	}
