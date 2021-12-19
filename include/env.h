@@ -6,12 +6,13 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/23 14:25:33 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/16 20:41:17 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/19 20:04:42 by acabiac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef ENV_H
 # define ENV_H
+# define ERR_WRITE_EXPORT "export: write error: No space left on device"
 
 # include "../libft/libft.h"
 

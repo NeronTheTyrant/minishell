@@ -6,10 +6,11 @@
 /*   By: acabiac <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 16:02:10 by acabiac           #+#    #+#             */
-/*   Updated: 2021/12/17 16:08:53 by acabiac          ###   ########.fr       */
+/*   Updated: 2021/12/19 15:04:30 by acabiac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdint.h>
 #include <stddef.h>
 #include "libft.h"
 #include "core.h"
@@ -46,12 +47,14 @@ char	*init_curpath(char *arg, int *output, t_term *t)
 	}
 	curpath = ft_getenv("PWD", t->env);
 	if (curpath == NULL)
-		return (NULL);
+		return ((void *)((uintptr_t)cd_return_error(0, "cd: OLDPWD not set")));
 	prefix = ft_strjoin(curpath, "/");
 	if (prefix == NULL)
-		return (NULL);
+		return ((void *)((uintptr_t)cd_return_error(0, "Allocation failed")));
 	curpath = ft_strjoin(prefix, arg);
 	free(prefix);
+	if (curpath == NULL)
+		return ((void *)((uintptr_t)cd_return_error(0, "Allocation failed")));
 	return (curpath);
 }
 
@@ -73,6 +76,8 @@ char	*set_curpath_canonical(char *curpath, char *arg)
 	if (result != NULL)
 		result = get_final_curpath(&lst, result);
 	ft_freeargs(split);
+	if (result == NULL)
+		return ((void *)((uintptr_t)cd_return_error(0, "Allocation failed")));
 	return (result);
 }
 
@@ -84,14 +89,14 @@ int	init_canonical(char *curpath, char ***split, t_list **lst)
 	if (*split == NULL)
 	{
 		free(curpath);
-		return (-1);
+		return (cd_return_error(-1, "Memory allocation failed"));
 	}
 	ret = get_list_from_split(lst, *split);
 	if (ret != 0)
 	{
 		ft_freeargs(*split);
 		free(curpath);
-		return (-1);
+		return (cd_return_error(-1, "Memory allocation failed"));
 	}
 	handle_dots(lst);
 	return (0);

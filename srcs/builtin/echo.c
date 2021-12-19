@@ -6,12 +6,18 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 14:48:43 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/17 21:12:35 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/19 15:11:11 by acabiac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "core.h"
 #include "../libft/libft.h"
+
+int	return_err(void)
+{
+	ft_putendl_fd("echo: write error: No space left on device", 2);
+	return (1);
+}
 
 size_t	check_echo_flags(char **args, int *newline)
 {
@@ -45,13 +51,13 @@ int	ft_echo(char **args, t_term *t)
 	while (args[i])
 	{
 		if (i > 1 + (size_t)newline && write(1, " ", 1) != 1)
-			return (1);
+			return (return_err());
 		len = ft_strlen(args[i]);
 		if (write(1, args[i], len) != (int)len)
-			return (1);
+			return (return_err());
 		i++;
 	}
 	if (newline == 0 && write(1, "\n", 1) != 1)
-		return (1);
+		return (return_err());
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 15:12:44 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/14 22:08:42 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/19 15:54:51 by acabiac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,15 @@ int	ft_env(char **args, t_term *t)
 	int		i;
 
 	(void)args;
-	(void)t;
 	env = t->env;
 	i = 0;
 	while (env[i])
 	{
-		ft_putendl_fd(env[i], 1);
+		if (ft_putendl_fd(env[i], 1) == -1)
+		{
+			ft_putendl_fd("env: write error: No space left on device", 2);
+			return (125);
+		}
 		i++;
 	}
 	return (0);
