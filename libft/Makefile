@@ -6,7 +6,7 @@
 #    By: mlebard <mlebard@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/01/05 16:05:10 by mlebard           #+#    #+#              #
-#    Updated: 2021/12/17 20:31:59 by mlebard          ###   ########.fr        #
+#    Updated: 2021/12/21 22:56:49 by mlebard          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,7 +32,7 @@ OW3			=	\r\033[3A\033[K# OverWrite previous 3 lines
 
 
 # COMPILE
-CC			=	clang
+CC			=	cc
 CFLAGS		=	-Werror -Wextra -Wall -I./
 
 LIBFT_SRCS	=	ft_atoi.c \
