@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 16:35:25 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/19 20:05:10 by acabiac          ###   ########.fr       */
+/*   Updated: 2021/12/21 18:13:30 by acabiac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int	export_set_var(char *var, char *val, int op, t_term *t)
 	if (lst != NULL && op == NONE)
 		return (0);
 	ret = set_sudoenv(&t->sudoenv, var, val);
-	if (val != NULL)
+	if (ret == 0 && val != NULL)
 		ret = ft_setenv(var, val, &t->env);
 	return (ret);
 }

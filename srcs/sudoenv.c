@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/25 20:51:54 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/17 20:11:02 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/21 18:24:56 by acabiac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ t_envnode	*make_envnode(char *var, char *val)
 	node->var = ft_strdup(var);
 	if (val != NULL)
 		node->val = ft_strdup(val);
+	else
+		node->val = NULL;
 	if (node->var == NULL || (val != NULL && node->val == NULL))
 	{
 		free_envnode(node);

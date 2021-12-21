@@ -6,7 +6,7 @@
 /*   By: mlebard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/02 18:43:05 by mlebard           #+#    #+#             */
-/*   Updated: 2021/12/17 22:15:47 by mlebard          ###   ########.fr       */
+/*   Updated: 2021/12/21 16:47:03 by acabiac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,14 @@
 #include "redir.h"
 #include "exec.h"
 
+void	print_heredoc_eof_msg(char *limiter)
+{
+	ft_putstr_fd("warning: here-document delimited by end-of-file (wanted `" \
+		, 2);
+	ft_putstr_fd(limiter, 2);
+	ft_putendl_fd("')", 2);
+}
+
 int	fill_heredoc(int fd, char **limiter, char **env, void *mem)
 {
 	int		flag;
@@ -33,11 +41,12 @@ int	fill_heredoc(int fd, char **limiter, char **env, void *mem)
 	{
 		line = readline("> ");
 		if (line == NULL)
+			print_heredoc_eof_msg(*limiter);
+		if (line == NULL)
 			break ;
 		if (ft_strcmp(line, *limiter) == 0)
 			break ;
-		if (flag == 0 && do_expand_heredoc(&line, env, ((t_term *)mem)->lastret)
-			!= 0)
+		if (!flag && do_expand_heredoc(&line, env, ((t_term *)mem)->lastret))
 		{
 			free(line);
 			error_exit(ERR_MALLOC, NULL, mem, 1);
